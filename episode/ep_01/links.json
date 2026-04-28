@@ -1,0 +1,23 @@
+[
+  {
+    "id": "server1",
+    "name": "Server 1 (HD)",
+    "url": "https://tvcine.me/player.php?id=2853423"
+  },
+  {
+    "id": "server2",
+    "name": "Server 2 (Full HD)",
+    "url": "https://tvcine.me/player.php?id=2853422"
+  },
+  {
+    "id": "server2",
+    "name": "Server 2 (Full HD)",
+    "url": "https://tvcine.me/player.php?id=2853421"
+  },
+  {
+    "id": "server2",
+    "name": "Server 2 (Full HD)",
+    "url": "https://tvcine.me/player.php?id=2853420"
+  }
+]
+ 
