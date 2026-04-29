@@ -1,6 +1,5 @@
-# FULL SCRAPER + GENERATOR + AUTO-PUBLISH SCRIPT
-# YO DESI → MULTI CHANNEL WITH PROGRESS LOGS
-# SCHEMA FROZEN
+# YO DESI SCRAPER + PUBLISHER
+# WORKS LOCALLY AND ON GITHUB ACTIONS
 
 import json
 import re
@@ -14,9 +13,12 @@ import requests
 from bs4 import BeautifulSoup
 from requests.exceptions import HTTPError
 
+# ---------------- CONFIG ----------------
+
 BASE_URL = "https://www.yodesi.net"
 
-SITE_ID, SITE_NAME = "yodesi", "YoDesi"
+SITE_ID = "yodesi"
+SITE_NAME = "YoDesi"
 
 CHANNELS = {
     "sony_tv": ("Sony TV", f"{BASE_URL}/sony-tv/"),
@@ -27,7 +29,9 @@ CHANNELS = {
     "mtv_india": ("MTV India", f"{BASE_URL}/mtv-india/"),
 }
 
+# ✅ THIS IS THE CRITICAL FIX
 REPO_ROOT = Path(__file__).resolve().parent
+
 HEADERS = {"User-Agent": "Strimio-Indexer/1.0"}
 
 MONTHS = {
@@ -39,8 +43,10 @@ MONTHS = {
 session = requests.Session()
 session.headers.update(HEADERS)
 
+# ---------------- HELPERS ----------------
+
 def log(msg):
-    print(f"[{datetime.now().strftime('%H:%M:%S')}] {msg}")
+    print(f"[{datetime.utcnow().isoformat()}] {msg}")
 
 def soup(url):
     time.sleep(1)
@@ -58,17 +64,23 @@ def write_json(path, data):
 def git(*args):
     subprocess.run(["git", "-C", str(REPO_ROOT), *args], check=True)
 
-# ---------- SITE ----------
+# ---------------- SITE ----------------
+
 log("Writing site metadata")
-write_json(REPO_ROOT / "sites.json", [{"id": SITE_ID, "name": SITE_NAME}])
 
-channels_payload = [{"id": cid, "name": c[0]} for cid, c in CHANNELS.items()]
+write_json(
+    REPO_ROOT / "sites.json",
+    [{"id": SITE_ID, "name": SITE_NAME}]
+)
 
-# ---------- SCRAPE ----------
-for CHANNEL_ID, (CHANNEL_NAME, CHANNEL_URL) in CHANNELS.items():
-    log(f"Scraping channel: {CHANNEL_NAME}")
+channels_payload = [{"id": cid, "name": name} for cid, (name, _) in CHANNELS.items()]
 
-    s = soup(CHANNEL_URL)
+# ---------------- SCRAPE ----------------
+
+for channel_id, (channel_name, channel_url) in CHANNELS.items():
+    log(f"Scraping channel: {channel_name}")
+
+    s = soup(channel_url)
     series = []
 
     for a in s.select("#tab-0-title-1 p.small-title a"):
@@ -79,15 +91,15 @@ for CHANNEL_ID, (CHANNEL_NAME, CHANNEL_URL) in CHANNELS.items():
             "url": a["href"]
         })
 
-    log(f"  Found {len(series)} series")
+    log(f"Found {len(series)} series")
 
     write_json(
-        REPO_ROOT / "channel" / CHANNEL_ID / "series.json",
-        [{"id": s["id"], "name": s["name"]} for s in series]
+        REPO_ROOT / "channel" / channel_id / "series.json",
+        [{"id": x["id"], "name": x["name"]} for x in series]
     )
 
     for show in series:
-        log(f"    Scraping episodes: {show['name']}")
+        log(f"Scraping episodes: {show['name']}")
         page = 1
         episode_urls = []
 
@@ -110,6 +122,7 @@ for CHANNEL_ID, (CHANNEL_NAME, CHANNEL_URL) in CHANNELS.items():
             page += 1
 
         episodes = []
+
         for ep_url in dict.fromkeys(episode_urls):
             sp = soup(ep_url)
             h1 = sp.select_one("h1.title.entry-title")
@@ -120,7 +133,9 @@ for CHANNEL_ID, (CHANNEL_NAME, CHANNEL_URL) in CHANNELS.items():
             if not m or m.group(2) not in MONTHS:
                 continue
 
-            day, month, year = int(m.group(1)), MONTHS[m.group(2)], m.group(3)
+            day = int(m.group(1))
+            month = MONTHS[m.group(2)]
+            year = m.group(3)
             eid = f"{show['id']}_{year}_{month}_{day:02d}"
 
             links = [
@@ -138,7 +153,7 @@ for CHANNEL_ID, (CHANNEL_NAME, CHANNEL_URL) in CHANNELS.items():
                 "links": links
             })
 
-        log(f"      Found {len(episodes)} episodes")
+        log(f"Found {len(episodes)} episodes")
 
         write_json(
             REPO_ROOT / "series" / show["id"] / "episodes.json",
@@ -151,20 +166,26 @@ for CHANNEL_ID, (CHANNEL_NAME, CHANNEL_URL) in CHANNELS.items():
                 e["links"]
             )
 
-# ---------- FORCE CHANNELS ----------
-log("Writing channels.json")
-write_json(REPO_ROOT / "site" / SITE_ID / "channels.json", channels_payload)
+# ---------------- CHANNELS ----------------
 
-# ---------- PUBLISH ----------
+write_json(
+    REPO_ROOT / "site" / SITE_ID / "channels.json",
+    channels_payload
+)
+
+# ---------------- PUBLISH ----------------
+
 log("Publishing to GitHub")
+
 git("add", ".")
 status = subprocess.run(
     ["git", "-C", str(REPO_ROOT), "status", "--porcelain"],
-    capture_output=True, text=True
+    capture_output=True,
+    text=True
 )
 
 if status.stdout.strip():
-    git("commit", "-m", f"Auto update {datetime.now()}")
+    git("commit", "-m", f"Auto update {datetime.utcnow().isoformat()}")
     git("push", "origin", "main")
     log("Publish complete")
 else:
