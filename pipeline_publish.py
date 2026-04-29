@@ -27,7 +27,7 @@ CHANNELS = {
     "mtv_india": ("MTV India", f"{BASE_URL}/mtv-india/"),
 }
 
-REPO_ROOT = Path.home() / "Desktop" / "strimio-data"
+REPO_ROOT = Path(__file__).resolve().parent
 HEADERS = {"User-Agent": "Strimio-Indexer/1.0"}
 
 MONTHS = {
