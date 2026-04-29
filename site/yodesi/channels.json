@@ -1,5 +1,6 @@
 [
-  { "id": "sony_tv", "name": "Sony TV" }
- 
+  {
+    "id": "sony_tv",
+    "name": "Sony TV"
+  }
 ]
- 
