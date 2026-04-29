@@ -36,4 +36,3 @@ jobs:
       - name: Run scraper
         run: |
           python pipeline_publish.py
-``
