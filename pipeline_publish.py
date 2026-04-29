@@ -1,5 +1,6 @@
-# YO DESI SCRAPER + PUBLISHER
-# WORKS LOCALLY AND ON GITHUB ACTIONS
+# YO DESI SCRAPER + AUTO PUBLISH
+# FINAL VERSION – ORDINAL DATE SAFE (1st, 2nd, 26th, etc.)
+# WORKS LOCALLY + GITHUB ACTIONS
 
 import json
 import re
@@ -29,15 +30,15 @@ CHANNELS = {
     "mtv_india": ("MTV India", f"{BASE_URL}/mtv-india/"),
 }
 
-# ✅ THIS IS THE CRITICAL FIX
+# ✅ CRITICAL: repo root works locally + GitHub Actions
 REPO_ROOT = Path(__file__).resolve().parent
 
 HEADERS = {"User-Agent": "Strimio-Indexer/1.0"}
 
 MONTHS = {
-    "january": "01","february": "02","march": "03","april": "04",
-    "may": "05","june": "06","july": "07","august": "08",
-    "september": "09","october": "10","november": "11","december": "12"
+    "january": "01", "february": "02", "march": "03", "april": "04",
+    "may": "05", "june": "06", "july": "07", "august": "08",
+    "september": "09", "october": "10", "november": "11", "december": "12"
 }
 
 session = requests.Session()
@@ -129,13 +130,21 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
             if not h1:
                 continue
 
-            m = re.search(r"(\d{1,2})\s+([a-z]+)\s+(\d{4})", h1.text.lower())
+            title_text = h1.get_text(strip=True).lower()
+
+            # ✅ FIX: supports 1st / 2nd / 26th etc.
+            m = re.search(
+                r"(\d{1,2})(?:st|nd|rd|th)?\s+([a-z]+)\s+(\d{4})",
+                title_text
+            )
+
             if not m or m.group(2) not in MONTHS:
                 continue
 
             day = int(m.group(1))
             month = MONTHS[m.group(2)]
             year = m.group(3)
+
             eid = f"{show['id']}_{year}_{month}_{day:02d}"
 
             links = [
@@ -144,7 +153,9 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
                     "name": a.get_text(strip=True) or "Server",
                     "url": a["href"]
                 }
-                for i, a in enumerate(sp.select(".thecontent a[href*='player.php?id=']"))
+                for i, a in enumerate(
+                    sp.select(".thecontent a[href*='player.php?id=']")
+                )
             ]
 
             episodes.append({
@@ -178,6 +189,7 @@ write_json(
 log("Publishing to GitHub")
 
 git("add", ".")
+
 status = subprocess.run(
     ["git", "-C", str(REPO_ROOT), "status", "--porcelain"],
     capture_output=True,
