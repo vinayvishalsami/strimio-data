@@ -1,5 +1,5 @@
 # YO DESI SCRAPER + AUTO PUBLISH
-# FINAL VERSION – ORDINAL DATE SAFE (1st, 2nd, 26th, etc.)
+# INCREMENTAL VERSION (5-EPISODE CONFIRMATION)
 # WORKS LOCALLY + GITHUB ACTIONS
 
 import json
@@ -30,10 +30,12 @@ CHANNELS = {
     "mtv_india": ("MTV India", f"{BASE_URL}/mtv-india/"),
 }
 
-# ✅ CRITICAL: repo root works locally + GitHub Actions
+# ✅ repo root (local + GitHub Actions safe)
 REPO_ROOT = Path(__file__).resolve().parent
 
 HEADERS = {"User-Agent": "Strimio-Indexer/1.0"}
+
+CONFIRM_EPISODES = 5   # ✅ incremental confirmation count
 
 MONTHS = {
     "january": "01", "february": "02", "march": "03", "april": "04",
@@ -64,6 +66,16 @@ def write_json(path, data):
 
 def git(*args):
     subprocess.run(["git", "-C", str(REPO_ROOT), *args], check=True)
+
+def load_existing_episode_ids(series_id):
+    path = REPO_ROOT / "series" / series_id / "episodes.json"
+    if not path.exists():
+        return set()
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        return {e["id"] for e in data}
+    except Exception:
+        return set()
 
 # ---------------- SITE ----------------
 
@@ -101,10 +113,15 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
 
     for show in series:
         log(f"Scraping episodes: {show['name']}")
+
+        existing_ids = load_existing_episode_ids(show["id"])
+
         page = 1
         episode_urls = []
+        confirmed_seen = 0
+        should_continue = True
 
-        while True:
+        while should_continue:
             try:
                 url = show["url"] if page == 1 else f"{show['url']}page/{page}/"
                 sp = soup(url)
@@ -113,13 +130,27 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
                     break
                 raise
 
-            found = False
-            for a in sp.select("article.latestPost h2.title.front-view-title > a"):
-                episode_urls.append(a["href"])
-                found = True
-
-            if not found:
+            links = sp.select("article.latestPost h2.title.front-view-title > a")
+            if not links:
                 break
+
+            for a in links:
+                ep_url = a["href"]
+                episode_urls.append(ep_url)
+
+                slug = ep_url.rstrip("/").split("/")[-1]
+                inferred_id = f"{show['id']}_{slug}"
+
+                if inferred_id in existing_ids:
+                    confirmed_seen += 1
+                else:
+                    confirmed_seen = 0
+
+                # ✅ 5-episode confirmation → stop series
+                if confirmed_seen >= CONFIRM_EPISODES:
+                    should_continue = False
+                    break
+
             page += 1
 
         episodes = []
@@ -132,7 +163,6 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
 
             title_text = h1.get_text(strip=True).lower()
 
-            # ✅ FIX: supports 1st / 2nd / 26th etc.
             m = re.search(
                 r"(\d{1,2})(?:st|nd|rd|th)?\s+([a-z]+)\s+(\d{4})",
                 title_text
@@ -177,7 +207,7 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
                 e["links"]
             )
 
-# ---------------- CHANNELS ----------------
+# ---------------- CHANNEL LIST ----------------
 
 write_json(
     REPO_ROOT / "site" / SITE_ID / "channels.json",
