@@ -1,26 +1,6 @@
 [
   {
-    "id": "sony_tv",
-    "name": "Sony TV"
-  },
-  {
     "id": "star_plus",
     "name": "Star Plus"
-  },
-  {
-    "id": "colors",
-    "name": "Colors"
-  },
-  {
-    "id": "zee_tv",
-    "name": "Zee TV"
-  },
-  {
-    "id": "sab_tv",
-    "name": "Sab TV"
-  },
-  {
-    "id": "mtv_india",
-    "name": "MTV India"
   }
 ]
