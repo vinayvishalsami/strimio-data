@@ -219,3 +219,142 @@ if status.stdout.strip():
     log("Publish complete")
 else:
     log("No changes to publish")
+
+# ================= PLAYDESI – NETFLIX =================
+# ================= PLAYDESI – NETFLIX =================
+# ================= PLAYDESI – NETFLIX =================
+# ================= PLAYDESI – NETFLIX =================
+# ================= PLAYDESI – NETFLIX =================
+
+PLAYDESI_BASE = "https://www.playdesi.net"
+PLAYDESI_SITE_ID = "playdesi"
+
+def scrape_playdesi_netflix():
+    log("Scraping PlayDesi – Netflix")
+
+    CHANNEL_ID = "netflix"
+    CHANNEL_NAME = "Netflix"
+    CHANNEL_URL = f"{PLAYDESI_BASE}/netflix/"
+
+    # ----- Write channel list (once per run) -----
+    write_json(
+        REPO_ROOT / "site" / PLAYDESI_SITE_ID / "channels.json",
+        [{"id": CHANNEL_ID, "name": CHANNEL_NAME}],
+    )
+
+    # ----- Discover series (Netflix shows) -----
+    s = soup(CHANNEL_URL)
+
+    # ⚠️ SELECTOR WILL BE VERIFIED IN FIRST RUN
+    show_links = s.select("article h2 a")
+
+    series_entries = []
+
+    for a in show_links:
+        show_url = a["href"]
+        show_name = a.get_text(strip=True)
+
+        # Visit show page to find seasons
+        sp = soup(show_url)
+
+        season_links = sp.select("a[href*='season']")
+
+        for season_a in season_links:
+            season_url = season_a["href"]
+            season_text = season_a.get_text(strip=True)
+
+            # Extract season number
+            m = re.search(r"season\s*(\d+)", season_text.lower())
+            if not m:
+                continue
+
+            season_num = int(m.group(1))
+
+            show_slug = slug_to_id(show_name.lower().replace(" ", "-"))
+            series_id = f"{show_slug}__season_{season_num}"
+
+            series_entries.append({
+                "id": series_id,
+                "name": f"{show_name} – Season {season_num}",
+                "url": season_url,
+            })
+
+    # Alphabetical stability
+    series_entries = sorted(series_entries, key=lambda x: x["id"])
+
+    write_json(
+        REPO_ROOT / "channel" / CHANNEL_ID / "series.json",
+        [{"id": s["id"], "name": s["name"]} for s in series_entries],
+    )
+
+    # ----- Scrape episodes per season -----
+    for series in series_entries:
+        log(f"Scraping PlayDesi Netflix series: {series['name']}")
+
+        existing_eps, existing_ids = load_existing_series_data(series["id"])
+
+        new_eps = []
+        confirmed_seen = 0
+        found_new = False
+
+        sp = soup(series["url"])
+
+        # ⚠️ SELECTOR TO VERIFY
+        episode_links = sp.select("article h2 a")
+
+        for ep_num, a in enumerate(episode_links, start=1):
+            eid = f"{series['id']}_ep{ep_num:02d}"
+
+            if eid in existing_ids:
+                if found_new:
+                    confirmed_seen += 1
+            else:
+                found_new = True
+                confirmed_seen = 0
+
+                ep_url = a["href"]
+                ep_page = soup(ep_url)
+
+                stream_links = [
+                    {
+                        "id": f"server{i+1}",
+                        "name": link.get_text(strip=True) or "Server",
+                        "url": link["href"],
+                    }
+                    for i, link in enumerate(
+                        ep_page.select(".thecontent a[href^='http']")
+                    )
+                ]
+
+                new_eps.append({
+                    "id": eid,
+                    "name": f"Episode {ep_num}",
+                    "links": stream_links,
+                })
+
+                write_json(
+                    REPO_ROOT / "episode" / eid / "links.json",
+                    stream_links,
+                )
+
+            # ✅ Incremental stop condition
+            if found_new and confirmed_seen >= 5:
+                break
+
+        if new_eps:
+            merged = new_eps + existing_eps
+            seen = set()
+            final = []
+            for e in merged:
+                if e["id"] not in seen:
+                    final.append(e)
+                    seen.add(e["id"])
+
+            write_json(
+                REPO_ROOT / "series" / series["id"] / "episodes.json",
+                [{"id": e["id"], "name": e["name"]} for e in final],
+            )
+
+            log(f"Added {len(new_eps)} new episodes to {series['name']}")
+        else:
+            log(f"No new episodes for {series['name']}")
