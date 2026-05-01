@@ -1,22 +1,302 @@
 [
   {
     "id": "server1",
-    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Full Episode",
-    "url": "https://tvcine.me/player.php?id=2877308"
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 1",
+    "url": "https://tvcine.me/player.php?id=2877236"
   },
   {
     "id": "server2",
-    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Full Episode",
-    "url": "https://tvcine.me/player.php?id=2877309"
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 2",
+    "url": "https://tvcine.me/player.php?id=2877237"
   },
   {
     "id": "server3",
-    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Full Episode",
-    "url": "https://tvcine.me/player.php?id=2877310"
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 3",
+    "url": "https://tvcine.me/player.php?id=2877238"
   },
   {
     "id": "server4",
-    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Full Episode",
-    "url": "https://tvcine.me/player.php?id=2877311"
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 4",
+    "url": "https://tvcine.me/player.php?id=2877239"
+  },
+  {
+    "id": "server5",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 5",
+    "url": "https://tvcine.me/player.php?id=2877240"
+  },
+  {
+    "id": "server6",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 6",
+    "url": "https://tvcine.me/player.php?id=2877241"
+  },
+  {
+    "id": "server7",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 7",
+    "url": "https://tvcine.me/player.php?id=2877242"
+  },
+  {
+    "id": "server8",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 8",
+    "url": "https://tvcine.me/player.php?id=2877243"
+  },
+  {
+    "id": "server9",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 9",
+    "url": "https://tvcine.me/player.php?id=2877244"
+  },
+  {
+    "id": "server10",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 10",
+    "url": "https://tvcine.me/player.php?id=2877245"
+  },
+  {
+    "id": "server11",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 11",
+    "url": "https://tvcine.me/player.php?id=2877246"
+  },
+  {
+    "id": "server12",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 12",
+    "url": "https://tvcine.me/player.php?id=2877247"
+  },
+  {
+    "id": "server13",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 13",
+    "url": "https://tvcine.me/player.php?id=2877248"
+  },
+  {
+    "id": "server14",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 14",
+    "url": "https://tvcine.me/player.php?id=2877249"
+  },
+  {
+    "id": "server15",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 15",
+    "url": "https://tvcine.me/player.php?id=2877250"
+  },
+  {
+    "id": "server16",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 16",
+    "url": "https://tvcine.me/player.php?id=2877251"
+  },
+  {
+    "id": "server17",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 17",
+    "url": "https://tvcine.me/player.php?id=2877252"
+  },
+  {
+    "id": "server18",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 18",
+    "url": "https://tvcine.me/player.php?id=2877253"
+  },
+  {
+    "id": "server19",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 19",
+    "url": "https://tvcine.me/player.php?id=2877254"
+  },
+  {
+    "id": "server20",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 20",
+    "url": "https://tvcine.me/player.php?id=2877255"
+  },
+  {
+    "id": "server21",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 1",
+    "url": "https://tvcine.me/player.php?id=2877256"
+  },
+  {
+    "id": "server22",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 2",
+    "url": "https://tvcine.me/player.php?id=2877257"
+  },
+  {
+    "id": "server23",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 3",
+    "url": "https://tvcine.me/player.php?id=2877258"
+  },
+  {
+    "id": "server24",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 4",
+    "url": "https://tvcine.me/player.php?id=2877259"
+  },
+  {
+    "id": "server25",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 5",
+    "url": "https://tvcine.me/player.php?id=2877260"
+  },
+  {
+    "id": "server26",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 6",
+    "url": "https://tvcine.me/player.php?id=2877261"
+  },
+  {
+    "id": "server27",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 7",
+    "url": "https://tvcine.me/player.php?id=2877262"
+  },
+  {
+    "id": "server28",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 8",
+    "url": "https://tvcine.me/player.php?id=2877263"
+  },
+  {
+    "id": "server29",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 9",
+    "url": "https://tvcine.me/player.php?id=2877264"
+  },
+  {
+    "id": "server30",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 10",
+    "url": "https://tvcine.me/player.php?id=2877265"
+  },
+  {
+    "id": "server31",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 11",
+    "url": "https://tvcine.me/player.php?id=2877266"
+  },
+  {
+    "id": "server32",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 12",
+    "url": "https://tvcine.me/player.php?id=2877267"
+  },
+  {
+    "id": "server33",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 13",
+    "url": "https://tvcine.me/player.php?id=2877268"
+  },
+  {
+    "id": "server34",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 14",
+    "url": "https://tvcine.me/player.php?id=2877269"
+  },
+  {
+    "id": "server35",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 15",
+    "url": "https://tvcine.me/player.php?id=2877270"
+  },
+  {
+    "id": "server36",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 16",
+    "url": "https://tvcine.me/player.php?id=2877271"
+  },
+  {
+    "id": "server37",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 17",
+    "url": "https://tvcine.me/player.php?id=2877272"
+  },
+  {
+    "id": "server38",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 18",
+    "url": "https://tvcine.me/player.php?id=2877273"
+  },
+  {
+    "id": "server39",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 19",
+    "url": "https://tvcine.me/player.php?id=2877274"
+  },
+  {
+    "id": "server40",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 20",
+    "url": "https://tvcine.me/player.php?id=2877275"
+  },
+  {
+    "id": "server41",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 1",
+    "url": "https://tvcine.me/player.php?id=2877276"
+  },
+  {
+    "id": "server42",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 2",
+    "url": "https://tvcine.me/player.php?id=2877277"
+  },
+  {
+    "id": "server43",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 3",
+    "url": "https://tvcine.me/player.php?id=2877278"
+  },
+  {
+    "id": "server44",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 4",
+    "url": "https://tvcine.me/player.php?id=2877279"
+  },
+  {
+    "id": "server45",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 5",
+    "url": "https://tvcine.me/player.php?id=2877280"
+  },
+  {
+    "id": "server46",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 6",
+    "url": "https://tvcine.me/player.php?id=2877281"
+  },
+  {
+    "id": "server47",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 7",
+    "url": "https://tvcine.me/player.php?id=2877282"
+  },
+  {
+    "id": "server48",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 8",
+    "url": "https://tvcine.me/player.php?id=2877283"
+  },
+  {
+    "id": "server49",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 9",
+    "url": "https://tvcine.me/player.php?id=2877284"
+  },
+  {
+    "id": "server50",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 10",
+    "url": "https://tvcine.me/player.php?id=2877285"
+  },
+  {
+    "id": "server51",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 11",
+    "url": "https://tvcine.me/player.php?id=2877286"
+  },
+  {
+    "id": "server52",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 12",
+    "url": "https://tvcine.me/player.php?id=2877287"
+  },
+  {
+    "id": "server53",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 13",
+    "url": "https://tvcine.me/player.php?id=2877288"
+  },
+  {
+    "id": "server54",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 14",
+    "url": "https://tvcine.me/player.php?id=2877289"
+  },
+  {
+    "id": "server55",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 15",
+    "url": "https://tvcine.me/player.php?id=2877290"
+  },
+  {
+    "id": "server56",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 16",
+    "url": "https://tvcine.me/player.php?id=2877291"
+  },
+  {
+    "id": "server57",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 17",
+    "url": "https://tvcine.me/player.php?id=2877292"
+  },
+  {
+    "id": "server58",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 18",
+    "url": "https://tvcine.me/player.php?id=2877293"
+  },
+  {
+    "id": "server59",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 19",
+    "url": "https://tvcine.me/player.php?id=2877294"
+  },
+  {
+    "id": "server60",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026 \u2013 Part 20",
+    "url": "https://tvcine.me/player.php?id=2877295"
   }
 ]
