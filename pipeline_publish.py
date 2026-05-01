@@ -1,5 +1,6 @@
 # YO DESI SCRAPER + AUTO PUBLISH
 # INCREMENTAL (5-EPISODE CONFIRMATION ENABLED)
+# SAFE FOR ALL CHANNELS INCLUDING &TV
 
 import json
 import re
@@ -27,14 +28,11 @@ CHANNELS = {
     "zee_tv": ("Zee TV", f"{BASE_URL}/zee-tv/"),
     "sab_tv": ("Sab TV", f"{BASE_URL}/sab-tv/"),
     "mtv_india": ("MTV India", f"{BASE_URL}/mtv-india/"),
-
-    # ✅ NEW CHANNEL ADDED
-    "tv_and_tv": ("TV and TV", "https://www.yodesi.net/tv-and-tv/multiple%20show/")
+    "tv_and_tv": ("&TV", f"{BASE_URL}/tv-and-tv/"),
 }
 
 REPO_ROOT = Path(__file__).resolve().parent
 HEADERS = {"User-Agent": "Strimio-Indexer/1.0"}
-
 CONFIRM_EPISODES = 5
 
 MONTHS = {
@@ -90,7 +88,12 @@ channels_payload = [{"id": cid, "name": name} for cid, (name, _) in CHANNELS.ite
 for channel_id, (channel_name, channel_url) in CHANNELS.items():
     log(f"Channel: {channel_name}")
 
-    s = soup(channel_url)
+    try:
+        s = soup(channel_url)
+    except HTTPError:
+        log(f"Skipping {channel_name} (failed to load)")
+        continue
+
     series = []
 
     for a in s.select("#tab-0-title-1 p.small-title a"):
@@ -108,7 +111,6 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
 
     for show in series:
         existing_ids = load_existing_episode_ids(show["id"])
-
         page = 1
         episode_urls = []
         seen = 0
