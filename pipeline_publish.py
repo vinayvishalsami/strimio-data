@@ -120,7 +120,7 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
         new_urls = []
         confirmed_seen = 0
         should_continue = True
-
+        found_new = False   # ✅ NEW: prevents early stop before seeing new episodes
         # Phase 1: Collect only NEW URLs
         while should_continue:
             try:
@@ -134,20 +134,23 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
             if not links: break
 
             for a in links:
-                ep_url = a["href"]
-                slug = ep_url.rstrip("/").split("/")[-1]
-                inferred_id = infer_id_from_slug(show["id"], slug)
+    ep_url = a["href"]
+    slug = ep_url.rstrip("/").split("/")[-1]
+    inferred_id = infer_id_from_slug(show["id"], slug)
 
-                if inferred_id in existing_ids:
-                    confirmed_seen += 1
-                else:
-                    confirmed_seen = 0
-                    if ep_url not in new_urls:
-                        new_urls.append(ep_url)
+    if inferred_id in existing_ids:
+        if found_new:
+            confirmed_seen += 1
+    else:
+        found_new = True
+        confirmed_seen = 0
+        if ep_url not in new_urls:
+            new_urls.append(ep_url)
 
-                if confirmed_seen >= CONFIRM_EPISODES:
-                    should_continue = False
-                    break
+    # ✅ STOP ONLY AFTER WE HAVE SEEN AT LEAST ONE NEW EPISODE
+    if found_new and confirmed_seen >= CONFIRM_EPISODES:
+        should_continue = False
+        break
 
             if not should_continue: break
             page += 1
