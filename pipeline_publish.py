@@ -28,6 +28,7 @@ CHANNELS = {
     "zee_tv": ("Zee TV", f"{BASE_URL}/zee-tv/"),
     "sab_tv": ("Sab TV", f"{BASE_URL}/sab-tv/"),
     "mtv_india": ("MTV India", f"{BASE_URL}/mtv-india/"),
+    "and_tv": ("&TV", f"{BASE_URL}/tv-and-tv/"),
 }
 
 REPO_ROOT = Path(__file__).resolve().parent
