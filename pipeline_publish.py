@@ -1,6 +1,5 @@
 # YO DESI SCRAPER + AUTO PUBLISH
-# INCREMENTAL VERSION (5-EPISODE CONFIRMATION)
-# WORKS LOCALLY + GITHUB ACTIONS
+# INCREMENTAL (5-EPISODE CONFIRMATION ENABLED)
 
 import json
 import re
@@ -28,14 +27,15 @@ CHANNELS = {
     "zee_tv": ("Zee TV", f"{BASE_URL}/zee-tv/"),
     "sab_tv": ("Sab TV", f"{BASE_URL}/sab-tv/"),
     "mtv_india": ("MTV India", f"{BASE_URL}/mtv-india/"),
+
+    # ✅ NEW CHANNEL ADDED
+    "tv_and_tv": ("TV and TV", "https://www.yodesi.net/tv-and-tv/multiple%20show/")
 }
 
-# ✅ repo root (local + GitHub Actions safe)
 REPO_ROOT = Path(__file__).resolve().parent
-
 HEADERS = {"User-Agent": "Strimio-Indexer/1.0"}
 
-CONFIRM_EPISODES = 5   # ✅ incremental confirmation count
+CONFIRM_EPISODES = 5
 
 MONTHS = {
     "january": "01", "february": "02", "march": "03", "april": "04",
@@ -72,14 +72,11 @@ def load_existing_episode_ids(series_id):
     if not path.exists():
         return set()
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-        return {e["id"] for e in data}
+        return {e["id"] for e in json.loads(path.read_text())}
     except Exception:
         return set()
 
 # ---------------- SITE ----------------
-
-log("Writing site metadata")
 
 write_json(
     REPO_ROOT / "sites.json",
@@ -91,7 +88,7 @@ channels_payload = [{"id": cid, "name": name} for cid, (name, _) in CHANNELS.ite
 # ---------------- SCRAPE ----------------
 
 for channel_id, (channel_name, channel_url) in CHANNELS.items():
-    log(f"Scraping channel: {channel_name}")
+    log(f"Channel: {channel_name}")
 
     s = soup(channel_url)
     series = []
@@ -104,52 +101,45 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
             "url": a["href"]
         })
 
-    log(f"Found {len(series)} series")
-
     write_json(
         REPO_ROOT / "channel" / channel_id / "series.json",
         [{"id": x["id"], "name": x["name"]} for x in series]
     )
 
     for show in series:
-        log(f"Scraping episodes: {show['name']}")
-
         existing_ids = load_existing_episode_ids(show["id"])
 
         page = 1
         episode_urls = []
-        confirmed_seen = 0
-        should_continue = True
+        seen = 0
 
-        while should_continue:
+        while True:
             try:
                 url = show["url"] if page == 1 else f"{show['url']}page/{page}/"
                 sp = soup(url)
-            except HTTPError as e:
-                if e.response.status_code == 404:
-                    break
-                raise
+            except HTTPError:
+                break
 
             links = sp.select("article.latestPost h2.title.front-view-title > a")
             if not links:
                 break
 
             for a in links:
-                ep_url = a["href"]
-                episode_urls.append(ep_url)
+                href = a["href"]
+                episode_urls.append(href)
 
-                slug = ep_url.rstrip("/").split("/")[-1]
-                inferred_id = f"{show['id']}_{slug}"
-
-                if inferred_id in existing_ids:
-                    confirmed_seen += 1
+                slug = href.rstrip("/").split("/")[-1]
+                if f"{show['id']}_{slug}" in existing_ids:
+                    seen += 1
                 else:
-                    confirmed_seen = 0
+                    seen = 0
 
-                # ✅ 5-episode confirmation → stop series
-                if confirmed_seen >= CONFIRM_EPISODES:
-                    should_continue = False
+                if seen >= CONFIRM_EPISODES:
+                    page = None
                     break
+
+            if page is None:
+                break
 
             page += 1
 
@@ -161,20 +151,12 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
             if not h1:
                 continue
 
-            title_text = h1.get_text(strip=True).lower()
-
-            m = re.search(
-                r"(\d{1,2})(?:st|nd|rd|th)?\s+([a-z]+)\s+(\d{4})",
-                title_text
-            )
-
+            txt = h1.get_text(strip=True).lower()
+            m = re.search(r"(\\d{1,2})(?:st|nd|rd|th)?\\s+([a-z]+)\\s+(\\d{4})", txt)
             if not m or m.group(2) not in MONTHS:
                 continue
 
-            day = int(m.group(1))
-            month = MONTHS[m.group(2)]
-            year = m.group(3)
-
+            day, month, year = int(m.group(1)), MONTHS[m.group(2)], m.group(3)
             eid = f"{show['id']}_{year}_{month}_{day:02d}"
 
             links = [
@@ -183,9 +165,7 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
                     "name": a.get_text(strip=True) or "Server",
                     "url": a["href"]
                 }
-                for i, a in enumerate(
-                    sp.select(".thecontent a[href*='player.php?id=']")
-                )
+                for i, a in enumerate(sp.select(".thecontent a[href*='player.php?id=']"))
             ]
 
             episodes.append({
@@ -193,8 +173,6 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
                 "name": f"{show['name']} {day}-{month}-{year}",
                 "links": links
             })
-
-        log(f"Found {len(episodes)} episodes")
 
         write_json(
             REPO_ROOT / "series" / show["id"] / "episodes.json",
@@ -215,8 +193,6 @@ write_json(
 )
 
 # ---------------- PUBLISH ----------------
-
-log("Publishing to GitHub")
 
 git("add", ".")
 
