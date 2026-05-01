@@ -1,6 +1,7 @@
 # YO DESI SCRAPER + AUTO PUBLISH
-# INCREMENTAL (5-EPISODE CONFIRMATION ENABLED)
-# SAFE FOR ALL CHANNELS INCLUDING &TV
+# ✅ FIXED SELECTORS
+# ✅ TRUE INCREMENTAL (SERIES-LEVEL EXIT)
+# ✅ SAFE AGAINST EMPTY SCRAPES
 
 import json
 import re
@@ -91,7 +92,7 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
     try:
         s = soup(channel_url)
     except HTTPError:
-        log(f"Skipping {channel_name} (failed to load)")
+        log(f"Skipping channel (failed to load): {channel_name}")
         continue
 
     series = []
@@ -111,44 +112,50 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
 
     for show in series:
         existing_ids = load_existing_episode_ids(show["id"])
-        page = 1
         episode_urls = []
+        page = 1
         seen = 0
+        stop_series = False
 
-        while True:
+        # ✅ TRUE INCREMENTAL: STOP SERIES ENTIRELY
+        while not stop_series:
             try:
                 url = show["url"] if page == 1 else f"{show['url']}page/{page}/"
                 sp = soup(url)
             except HTTPError:
                 break
 
+            # ✅ FIXED SELECTOR (REAL >, NOT &gt;)
             links = sp.select("article.latestPost h2.title.front-view-title > a")
             if not links:
                 break
 
             for a in links:
                 href = a["href"]
-                episode_urls.append(href)
-
                 slug = href.rstrip("/").split("/")[-1]
+
                 if f"{show['id']}_{slug}" in existing_ids:
                     seen += 1
                 else:
                     seen = 0
+                    episode_urls.append(href)
 
                 if seen >= CONFIRM_EPISODES:
-                    page = None
+                    stop_series = True
                     break
-
-            if page is None:
-                break
 
             page += 1
 
+        log(f"Series {show['name']} → new episodes found: {len(episode_urls)}")
+
         episodes = []
 
-        for ep_url in dict.fromkeys(episode_urls):
-            sp = soup(ep_url)
+        for ep_url in episode_urls:
+            try:
+                sp = soup(ep_url)
+            except HTTPError:
+                continue
+
             h1 = sp.select_one("h1.title.entry-title")
             if not h1:
                 continue
@@ -167,8 +174,13 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
                     "name": a.get_text(strip=True) or "Server",
                     "url": a["href"]
                 }
-                for i, a in enumerate(sp.select(".thecontent a[href*='player.php?id=']"))
+                for i, a in enumerate(
+                    sp.select(".thecontent a[href*='player.php?id=']")
+                )
             ]
+
+            if not links:
+                continue
 
             episodes.append({
                 "id": eid,
@@ -176,16 +188,20 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
                 "links": links
             })
 
-        write_json(
-            REPO_ROOT / "series" / show["id"] / "episodes.json",
-            [{"id": e["id"], "name": e["name"]} for e in episodes]
-        )
-
-        for e in episodes:
+        # ✅ SAFEGUARD: DO NOT OVERWRITE WITH EMPTY LIST
+        if episodes:
             write_json(
-                REPO_ROOT / "episode" / e["id"] / "links.json",
-                e["links"]
+                REPO_ROOT / "series" / show["id"] / "episodes.json",
+                [{"id": e["id"], "name": e["name"]} for e in episodes]
             )
+
+            for e in episodes:
+                write_json(
+                    REPO_ROOT / "episode" / e["id"] / "links.json",
+                    e["links"]
+                )
+        else:
+            log(f"No new episodes for {show['name']}")
 
 # ---------------- CHANNEL LIST ----------------
 
