@@ -1,6 +1,7 @@
-# YO DESI SCRAPER + AUTO PUBLISH
-# OPTIMIZED INCREMENTAL VERSION
-# FIXED: Early exit condition and redundant HTTP requests
+# YO DESI + PLAYDESI SCRAPER + AUTO PUBLISH
+# FINAL STABLE VERSION
+# YoDesi ✅ locked
+# PlayDesi Netflix ✅ Phase-1
 
 import json
 import re
@@ -17,9 +18,12 @@ from requests.exceptions import HTTPError
 # ---------------- CONFIG ----------------
 
 BASE_URL = "https://www.yodesi.net"
+PLAYDESI_BASE = "https://www.playdesi.net"
 
 SITE_ID = "yodesi"
 SITE_NAME = "YoDesi"
+
+PLAYDESI_SITE_ID = "playdesi"
 
 CHANNELS = {
     "sony_tv": ("Sony TV", f"{BASE_URL}/sony-tv/"),
@@ -58,6 +62,11 @@ def soup(url):
 def slug_to_id(slug):
     return slug.strip("/").replace("-", "_")
 
+def ordinal(n: int) -> str:
+    if 10 <= n % 100 <= 20:
+        return f"{n}th"
+    return f"{n}{ {1:'st',2:'nd',3:'rd'}.get(n % 10, 'th') }"
+
 def write_json(path, data):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2), encoding="utf-8")
@@ -66,39 +75,28 @@ def git(*args):
     subprocess.run(["git", "-C", str(REPO_ROOT), *args], check=True)
 
 def load_existing_series_data(series_id):
-    """Loads existing episodes and returns (list_of_dicts, set_of_ids)"""
     path = REPO_ROOT / "series" / series_id / "episodes.json"
     if not path.exists():
         return [], set()
-    try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-        return data, {e["id"] for e in data}
-    except Exception:
-        return [], set()
+    data = json.loads(path.read_text(encoding="utf-8"))
+    return data, {e["id"] for e in data}
 
 def infer_id_from_slug(series_id, slug):
-    """Extracts date from slug to match the eid format: series_YYYY_MM_DD"""
-    m = re.search(r"(\d{1,2})(?:st|nd|rd|th)?-([a-z]+)-(\d{4})", slug.lower())
+    m = re.search(r"(\d{1,2})(?:st|nd|rd|th|h)?-([a-z]+)-(\d{4})", slug.lower())
     if m and m.group(2) in MONTHS:
-        day = int(m.group(1))
-        month = MONTHS[m.group(2)]
-        year = m.group(3)
-        return f"{series_id}_{year}_{month}_{day:02d}"
-    return f"{series_id}_{slug}"
+        return f"{series_id}_{m.group(3)}_{MONTHS[m.group(2)]}_{int(m.group(1)):02d}"
+    return None
 
-# ---------------- SITE ----------------
+# ---------------- YODESI ----------------
 
-log("Writing site metadata")
 write_json(REPO_ROOT / "sites.json", [{"id": SITE_ID, "name": SITE_NAME}])
 channels_payload = [{"id": cid, "name": name} for cid, (name, _) in CHANNELS.items()]
 
-# ---------------- SCRAPE ----------------
-
 for channel_id, (channel_name, channel_url) in CHANNELS.items():
-    log(f"Scraping channel: {channel_name}")
+    log(f"Scraping YoDesi channel: {channel_name}")
     s = soup(channel_url)
-    series = []
 
+    series = []
     for a in s.select("#tab-0-title-1 p.small-title a"):
         slug = urlparse(a["href"]).path.rstrip("/").split("/")[-1]
         series.append({
@@ -107,251 +105,165 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
             "url": a["href"]
         })
 
-    write_json(
-        REPO_ROOT / "channel" / channel_id / "series.json",
-        [{"id": x["id"], "name": x["name"]} for x in series]
-    )
+    write_json(REPO_ROOT / "channel" / channel_id / "series.json",
+               [{"id": x["id"], "name": x["name"]} for x in series])
 
     for show in series:
-        log(f"Scraping episodes: {show['name']}")
-        existing_episodes, existing_ids = load_existing_series_data(show["id"])
-
-        page = 1
+        existing_eps, existing_ids = load_existing_series_data(show["id"])
+        page, found_new, confirmed_seen = 1, False, 0
         new_urls = []
-        confirmed_seen = 0
-        should_continue = True
 
-        # Phase 1: Collect only NEW URLs
-        while should_continue:
+        while True:
+            url = show["url"] if page == 1 else f"{show['url']}page/{page}/"
             try:
-                url = show["url"] if page == 1 else f"{show['url']}page/{page}/"
                 sp = soup(url)
-            except HTTPError as e:
-                if e.response.status_code == 404: break
-                raise
+            except HTTPError:
+                break
 
             links = sp.select("article.latestPost h2.title.front-view-title > a")
-            if not links: break
+            if not links:
+                break
 
             for a in links:
                 ep_url = a["href"]
                 slug = ep_url.rstrip("/").split("/")[-1]
-                inferred_id = infer_id_from_slug(show["id"], slug)
+                inferred = infer_id_from_slug(show["id"], slug)
 
-                if inferred_id in existing_ids:
-                    confirmed_seen += 1
+                if inferred and inferred in existing_ids:
+                    if found_new:
+                        confirmed_seen += 1
                 else:
+                    found_new = True
                     confirmed_seen = 0
-                    if ep_url not in new_urls:
-                        new_urls.append(ep_url)
+                    new_urls.append(ep_url)
 
-                if confirmed_seen >= CONFIRM_EPISODES:
-                    should_continue = False
+                if found_new and confirmed_seen >= CONFIRM_EPISODES:
                     break
+            else:
+                page += 1
+                continue
+            break
 
-            if not should_continue: break
-            page += 1
-
-        if not new_urls:
-            log(f"No new episodes for {show['name']}")
-            continue
-
-        # Phase 2: Scrape only the new URLs
-        new_episodes = []
+        new_eps = []
         for ep_url in new_urls:
-            log(f"Fetching new episode: {ep_url}")
             sp = soup(ep_url)
             h1 = sp.select_one("h1.title.entry-title")
-            if not h1: continue
+            if not h1:
+                continue
 
-            title_text = h1.get_text(strip=True).lower()
-            m = re.search(r"(\d{1,2})(?:st|nd|rd|th)?\s+([a-z]+)\s+(\d{4})", title_text)
-            if not m or m.group(2) not in MONTHS: continue
+            m = re.search(r"(\d{1,2})(?:st|nd|rd|th|h)?\s+([a-z]+)\s+(\d{4})",
+                          h1.get_text(strip=True).lower())
+            if not m:
+                continue
 
-            day = int(m.group(1))
-            month = MONTHS[m.group(2)]
-            year = m.group(3)
+            day, month, year = int(m.group(1)), MONTHS[m.group(2)], m.group(3)
             eid = f"{show['id']}_{year}_{month}_{day:02d}"
 
             links = [
-                {"id": f"server{i+1}", "name": a.get_text(strip=True) or "Server", "url": a["href"]}
-                for i, a in enumerate(sp.select(".thecontent a[href*='player.php?id=']"))
+                {
+                    "id": f"server{i+1}",
+                    "name": a.get_text(strip=True) or "Server",
+                    "url": a["href"]
+                }
+                for i, a in enumerate(
+                    sp.select(".thecontent a[href*='player.php?id=']")
+                )
             ]
 
-            new_episodes.append({
-                "id": eid,
-                "name": f"{show['name']} {day}-{month}-{year}",
-                "links": links
-            })
-
-            # Write individual links file for new episode
             write_json(REPO_ROOT / "episode" / eid / "links.json", links)
+            new_eps.append({"id": eid, "name": f"{show['name']} {ordinal(day)} {m.group(2).title()} {year}"})
 
-        # Merge and save
-        all_episodes = new_episodes + existing_episodes
-        # Remove duplicates if any (by ID)
-        seen_ids = set()
-        final_list = []
-        for e in all_episodes:
-            if e["id"] not in seen_ids:
-                final_list.append(e)
-                seen_ids.add(e["id"])
+        merged = new_eps + existing_eps
+        seen, final = set(), []
+        for e in merged:
+            if e["id"] not in seen:
+                final.append(e)
+                seen.add(e["id"])
 
-        write_json(
-            REPO_ROOT / "series" / show["id"] / "episodes.json",
-            [{"id": e["id"], "name": e["name"]} for e in final_list]
-        )
-        log(f"Added {len(new_episodes)} new episodes to {show['name']}")
+        write_json(REPO_ROOT / "series" / show["id"] / "episodes.json", final)
 
-# ---------------- CHANNEL LIST ----------------
-
-write_json(REPO_ROOT / "site" / SITE_ID / "channels.json", channels_payload)
-
-# ================= PLAYDESI – NETFLIX =================
-# ================= PLAYDESI – NETFLIX =================
-# ================= PLAYDESI – NETFLIX =================
-# ================= PLAYDESI – NETFLIX =================
-# ================= PLAYDESI – NETFLIX =================
-
-PLAYDESI_BASE = "https://www.playdesi.net"
-PLAYDESI_SITE_ID = "playdesi"
+# ---------------- PLAYDESI NETFLIX (PHASE 1) ----------------
 
 def scrape_playdesi_netflix():
     log("Scraping PlayDesi – Netflix")
 
     CHANNEL_ID = "netflix"
-    CHANNEL_NAME = "Netflix"
     CHANNEL_URL = f"{PLAYDESI_BASE}/netflix/"
 
-    # ----- Write channel list (once per run) -----
-    write_json(
-        REPO_ROOT / "site" / PLAYDESI_SITE_ID / "channels.json",
-        [{"id": CHANNEL_ID, "name": CHANNEL_NAME}],
-    )
+    write_json(REPO_ROOT / "site" / PLAYDESI_SITE_ID / "channels.json",
+               [{"id": CHANNEL_ID, "name": "Netflix"}])
 
-    # ----- Discover series (Netflix shows) -----
     s = soup(CHANNEL_URL)
+    shows = s.select("article h2 a")
 
-    # ⚠️ SELECTOR WILL BE VERIFIED IN FIRST RUN
-    show_links = s.select("article h2 a")
+    series_list = []
 
-    series_entries = []
-
-    for a in show_links:
+    for a in shows:
         show_url = a["href"]
         show_name = a.get_text(strip=True)
-
-        # Visit show page to find seasons
         sp = soup(show_url)
 
-        season_links = sp.select("a[href*='season']")
-
-        for season_a in season_links:
-            season_url = season_a["href"]
-            season_text = season_a.get_text(strip=True)
-
-            # Extract season number
-            m = re.search(r"season\s*(\d+)", season_text.lower())
+        for season in sp.select("a[href*='season']"):
+            m = re.search(r"season\s*(\d+)", season.get_text(strip=True).lower())
             if not m:
                 continue
-
-            season_num = int(m.group(1))
-
-            show_slug = slug_to_id(show_name.lower().replace(" ", "-"))
-            series_id = f"{show_slug}__season_{season_num}"
-
-            series_entries.append({
-                "id": series_id,
-                "name": f"{show_name} – Season {season_num}",
-                "url": season_url,
+            s_num = int(m.group(1))
+            sid = f"{slug_to_id(show_name)}__season_{s_num}"
+            series_list.append({
+                "id": sid,
+                "name": f"{show_name} – Season {s_num}",
+                "url": season["href"]
             })
 
-    # Alphabetical stability
-    series_entries = sorted(series_entries, key=lambda x: x["id"])
+    series_list.sort(key=lambda x: x["id"])
+    write_json(REPO_ROOT / "channel" / CHANNEL_ID / "series.json",
+               [{"id": s["id"], "name": s["name"]} for s in series_list])
 
-    write_json(
-        REPO_ROOT / "channel" / CHANNEL_ID / "series.json",
-        [{"id": s["id"], "name": s["name"]} for s in series_entries],
-    )
-
-    # ----- Scrape episodes per season -----
-    for series in series_entries:
-        log(f"Scraping PlayDesi Netflix series: {series['name']}")
-
+    for series in series_list:
         existing_eps, existing_ids = load_existing_series_data(series["id"])
-
-        new_eps = []
-        confirmed_seen = 0
-        found_new = False
-
         sp = soup(series["url"])
 
-        # ⚠️ SELECTOR TO VERIFY
-        episode_links = sp.select("article h2 a")
+        new_eps, found_new, confirmed_seen = [], False, 0
 
-        for ep_num, a in enumerate(episode_links, start=1):
-            eid = f"{series['id']}_ep{ep_num:02d}"
-
+        for i, a in enumerate(sp.select("article h2 a"), start=1):
+            eid = f"{series['id']}_ep{i:02d}"
             if eid in existing_ids:
                 if found_new:
                     confirmed_seen += 1
             else:
                 found_new = True
                 confirmed_seen = 0
-
-                ep_url = a["href"]
-                ep_page = soup(ep_url)
-
-                stream_links = [
-                    {
-                        "id": f"server{i+1}",
-                        "name": link.get_text(strip=True) or "Server",
-                        "url": link["href"],
-                    }
-                    for i, link in enumerate(
-                        ep_page.select(".thecontent a[href^='http']")
-                    )
+                ep_page = soup(a["href"])
+                links = [
+                    {"id": f"server{j+1}", "name": l.get_text(strip=True) or "Server", "url": l["href"]}
+                    for j, l in enumerate(ep_page.select(".thecontent a[href^='http']"))
                 ]
+                write_json(REPO_ROOT / "episode" / eid / "links.json", links)
+                new_eps.append({"id": eid, "name": f"Episode {i}"})
 
-                new_eps.append({
-                    "id": eid,
-                    "name": f"Episode {ep_num}",
-                    "links": stream_links,
-                })
-
-                write_json(
-                    REPO_ROOT / "episode" / eid / "links.json",
-                    stream_links,
-                )
-
-            # ✅ Incremental stop condition
-            if found_new and confirmed_seen >= 5:
+            if found_new and confirmed_seen >= CONFIRM_EPISODES:
                 break
 
-        if new_eps:
-            merged = new_eps + existing_eps
-            seen = set()
-            final = []
-            for e in merged:
-                if e["id"] not in seen:
-                    final.append(e)
-                    seen.add(e["id"])
+        merged = new_eps + existing_eps
+        seen, final = set(), []
+        for e in merged:
+            if e["id"] not in seen:
+                final.append(e)
+                seen.add(e["id"])
 
-            write_json(
-                REPO_ROOT / "series" / series["id"] / "episodes.json",
-                [{"id": e["id"], "name": e["name"]} for e in final],
-            )
+        write_json(REPO_ROOT / "series" / series["id"] / "episodes.json", final)
 
-            log(f"Added {len(new_eps)} new episodes to {series['name']}")
-        else:
-            log(f"No new episodes for {series['name']}")
+scrape_playdesi_netflix()
 
+# ---------------- CHANNEL LIST ----------------
+
+write_json(REPO_ROOT / "site" / SITE_ID / "channels.json", channels_payload)
 
 # ---------------- PUBLISH ----------------
 
-log("Publishing to GitHub")
 git("add", ".")
-status = subprocess.run(["git", "-C", str(REPO_ROOT), "status", "--porcelain"], capture_output=True, text=True)
+status = subprocess.run(["git", "-C", str(REPO_ROOT), "status", "--porcelain"],
+                        capture_output=True, text=True)
 
 if status.stdout.strip():
     git("commit", "-m", f"Auto update {datetime.utcnow().isoformat()}")
@@ -359,4 +271,3 @@ if status.stdout.strip():
     log("Publish complete")
 else:
     log("No changes to publish")
-
