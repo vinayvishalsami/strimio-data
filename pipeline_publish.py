@@ -25,12 +25,12 @@ SITE_ID = "yodesi"
 SITE_NAME = "YoDesi"
 
 CHANNELS = {
-    "sony_tv": ("Sony TV", f"{BASE_URL}/sony-tv/"),
-    "star_plus": ("Star Plus", f"{BASE_URL}/star-plus/"),
-    "colors": ("Colors", f"{BASE_URL}/colors/"),
-    "zee_tv": ("Zee TV", f"{BASE_URL}/zee-tv/"),
-    "sab_tv": ("Sab TV", f"{BASE_URL}/sab-tv/"),
-    "mtv_india": ("MTV India", f"{BASE_URL}/mtv-india/"),
+   # "sony_tv": ("Sony TV", f"{BASE_URL}/sony-tv/"),
+   # "star_plus": ("Star Plus", f"{BASE_URL}/star-plus/"),
+   # "colors": ("Colors", f"{BASE_URL}/colors/"),
+   # "zee_tv": ("Zee TV", f"{BASE_URL}/zee-tv/"),
+   # "sab_tv": ("Sab TV", f"{BASE_URL}/sab-tv/"),
+   # "mtv_india": ("MTV India", f"{BASE_URL}/mtv-india/"),
     "and_tv": ("&TV", f"{BASE_URL}/tv-and-tv/"),
 }
 
