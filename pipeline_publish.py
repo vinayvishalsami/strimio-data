@@ -18,7 +18,7 @@ from requests.exceptions import HTTPError
 # ---------------- CONFIG ----------------
 
 BASE_URL = "https://www.yodesi.net"
-PLAYDESI_BASE = "https://www.playdesi.net"
+PLAYDESI_BASE = "https://playdesi.tv/"
 
 SITE_ID = "yodesi"
 SITE_NAME = "YoDesi"
