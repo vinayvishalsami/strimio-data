@@ -1,7 +1,8 @@
 # YO DESI SCRAPER + AUTO PUBLISH
-# ✅ FIXED SELECTORS
+# ✅ FIXED SELECTOR
 # ✅ TRUE INCREMENTAL (SERIES-LEVEL EXIT)
-# ✅ SAFE AGAINST EMPTY SCRAPES
+# ✅ NO EMPTY OVERWRITES
+# ✅ SAME DATA MODEL AS WORKING VERSION
 
 import json
 import re
@@ -29,7 +30,6 @@ CHANNELS = {
     "zee_tv": ("Zee TV", f"{BASE_URL}/zee-tv/"),
     "sab_tv": ("Sab TV", f"{BASE_URL}/sab-tv/"),
     "mtv_india": ("MTV India", f"{BASE_URL}/mtv-india/"),
-    "tv_and_tv": ("&TV", f"{BASE_URL}/tv-and-tv/"),
 }
 
 REPO_ROOT = Path(__file__).resolve().parent
@@ -87,14 +87,9 @@ channels_payload = [{"id": cid, "name": name} for cid, (name, _) in CHANNELS.ite
 # ---------------- SCRAPE ----------------
 
 for channel_id, (channel_name, channel_url) in CHANNELS.items():
-    log(f"Channel: {channel_name}")
+    log(f"Scraping channel: {channel_name}")
 
-    try:
-        s = soup(channel_url)
-    except HTTPError:
-        log(f"Skipping channel (failed to load): {channel_name}")
-        continue
-
+    s = soup(channel_url)
     series = []
 
     for a in s.select("#tab-0-title-1 p.small-title a"):
@@ -105,67 +100,71 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
             "url": a["href"]
         })
 
+    log(f"Found {len(series)} series")
+
     write_json(
         REPO_ROOT / "channel" / channel_id / "series.json",
         [{"id": x["id"], "name": x["name"]} for x in series]
     )
 
     for show in series:
+        log(f"Processing series: {show['name']}")
+
         existing_ids = load_existing_episode_ids(show["id"])
-        episode_urls = []
         page = 1
-        seen = 0
+        new_episode_urls = []
+        confirmed_seen = 0
         stop_series = False
 
-        # ✅ TRUE INCREMENTAL: STOP SERIES ENTIRELY
+        # ✅ TRUE INCREMENTAL
         while not stop_series:
+            url = show["url"] if page == 1 else f"{show['url']}page/{page}/"
             try:
-                url = show["url"] if page == 1 else f"{show['url']}page/{page}/"
                 sp = soup(url)
-            except HTTPError:
-                break
+            except HTTPError as e:
+                if e.response.status_code == 404:
+                    break
+                raise
 
-            # ✅ FIXED SELECTOR (REAL >, NOT &gt;)
+            # ✅ FIXED SELECTOR
             links = sp.select("article.latestPost h2.title.front-view-title > a")
             if not links:
                 break
 
             for a in links:
-                href = a["href"]
-                slug = href.rstrip("/").split("/")[-1]
+                ep_url = a["href"]
+                slug = ep_url.rstrip("/").split("/")[-1]
+                inferred_id = f"{show['id']}_{slug}"
 
-                if f"{show['id']}_{slug}" in existing_ids:
-                    seen += 1
+                if inferred_id in existing_ids:
+                    confirmed_seen += 1
                 else:
-                    seen = 0
-                    episode_urls.append(href)
+                    confirmed_seen = 0
+                    new_episode_urls.append(ep_url)
 
-                if seen >= CONFIRM_EPISODES:
+                if confirmed_seen >= CONFIRM_EPISODES:
                     stop_series = True
                     break
 
             page += 1
 
-        log(f"Series {show['name']} → new episodes found: {len(episode_urls)}")
-
         episodes = []
 
-        for ep_url in episode_urls:
-            try:
-                sp = soup(ep_url)
-            except HTTPError:
-                continue
-
+        for ep_url in new_episode_urls:
+            sp = soup(ep_url)
             h1 = sp.select_one("h1.title.entry-title")
             if not h1:
                 continue
 
             txt = h1.get_text(strip=True).lower()
-            m = re.search(r"(\\d{1,2})(?:st|nd|rd|th)?\\s+([a-z]+)\\s+(\\d{4})", txt)
+            m = re.search(r"(\d{1,2})(?:st|nd|rd|th)?\s+([a-z]+)\s+(\d{4})", txt)
             if not m or m.group(2) not in MONTHS:
                 continue
 
-            day, month, year = int(m.group(1)), MONTHS[m.group(2)], m.group(3)
+            day = int(m.group(1))
+            month = MONTHS[m.group(2)]
+            year = m.group(3)
+
             eid = f"{show['id']}_{year}_{month}_{day:02d}"
 
             links = [
@@ -179,16 +178,15 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
                 )
             ]
 
-            if not links:
-                continue
-
             episodes.append({
                 "id": eid,
                 "name": f"{show['name']} {day}-{month}-{year}",
                 "links": links
             })
 
-        # ✅ SAFEGUARD: DO NOT OVERWRITE WITH EMPTY LIST
+        log(f"New episodes found: {len(episodes)}")
+
+        # ✅ SAFEGUARD — do not wipe existing data
         if episodes:
             write_json(
                 REPO_ROOT / "series" / show["id"] / "episodes.json",
@@ -200,8 +198,6 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
                     REPO_ROOT / "episode" / e["id"] / "links.json",
                     e["links"]
                 )
-        else:
-            log(f"No new episodes for {show['name']}")
 
 # ---------------- CHANNEL LIST ----------------
 
