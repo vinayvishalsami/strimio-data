@@ -207,19 +207,6 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
 
 write_json(REPO_ROOT / "site" / SITE_ID / "channels.json", channels_payload)
 
-# ---------------- PUBLISH ----------------
-
-log("Publishing to GitHub")
-git("add", ".")
-status = subprocess.run(["git", "-C", str(REPO_ROOT), "status", "--porcelain"], capture_output=True, text=True)
-
-if status.stdout.strip():
-    git("commit", "-m", f"Auto update {datetime.utcnow().isoformat()}")
-    git("push", "origin", "main")
-    log("Publish complete")
-else:
-    log("No changes to publish")
-
 # ================= PLAYDESI – NETFLIX =================
 # ================= PLAYDESI – NETFLIX =================
 # ================= PLAYDESI – NETFLIX =================
@@ -358,3 +345,18 @@ def scrape_playdesi_netflix():
             log(f"Added {len(new_eps)} new episodes to {series['name']}")
         else:
             log(f"No new episodes for {series['name']}")
+
+
+# ---------------- PUBLISH ----------------
+
+log("Publishing to GitHub")
+git("add", ".")
+status = subprocess.run(["git", "-C", str(REPO_ROOT), "status", "--porcelain"], capture_output=True, text=True)
+
+if status.stdout.strip():
+    git("commit", "-m", f"Auto update {datetime.utcnow().isoformat()}")
+    git("push", "origin", "main")
+    log("Publish complete")
+else:
+    log("No changes to publish")
+
