@@ -78,7 +78,7 @@ def load_existing_series_data(series_id):
 
 def infer_id_from_slug(series_id, slug):
     """Extracts date from slug to match the eid format: series_YYYY_MM_DD"""
-    m = re.search(r"(\d{1,2})(?:st|t|s|nd|n|d|rd|r|th|h)?-([a-z]+)-(\d{4})", slug.lower())
+    m = re.search(r"(\d{1,2})(?:st|nd|rd|th)?-([a-z]+)-(\d{4})", slug.lower())
     if m and m.group(2) in MONTHS:
         day = int(m.group(1))
         month = MONTHS[m.group(2)]
@@ -165,7 +165,7 @@ for channel_id, (channel_name, channel_url) in CHANNELS.items():
             if not h1: continue
 
             title_text = h1.get_text(strip=True).lower()
-            m = re.search(r"(\d{1,2})(?:st|t|s|nd|n|d|rd|r|th|h)?\s+([a-z]+)\s+(\d{4})", title_text)
+            m = re.search(r"(\d{1,2})(?:st|nd|rd|th)?\s+([a-z]+)\s+(\d{4})", title_text)
             if not m or m.group(2) not in MONTHS: continue
 
             day = int(m.group(1))
