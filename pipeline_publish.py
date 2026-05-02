@@ -92,7 +92,16 @@ def ordinal(n):
 # YODESI SCRAPER (UNCHANGED)
 # ============================================================
 
-write_json(REPO_ROOT / "sites.json", [{"id": SITE_ID, "name": "YoDesi"}])
+#write_json(REPO_ROOT / "sites.json", [{"id": SITE_ID, "name": "YoDesi"}])
+
+write_json(
+    REPO_ROOT / "sites.json",
+    [
+        {"id": "yodesi", "name": "YoDesi"},
+        {"id": "playdesi", "name": "PlayDesi"},
+    ]
+)
+
 yodesi_channels_payload = [{"id": cid, "name": n} for cid, (n, _) in CHANNELS.items()]
 
 for channel_id, (_, channel_url) in CHANNELS.items():
