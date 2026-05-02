@@ -1,7 +1,8 @@
 [
   {
     "id": "sony_tv",
-    "name": "Sony TV"
+    "name": "Sony TV",
+    "image": "https://github.com/vinayvishalsami/strimio-data/blob/main/assets/logos/sony_tv.png"
   },
   {
     "id": "star_plus",
