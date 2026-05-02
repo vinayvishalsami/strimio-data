@@ -1,27 +1,8 @@
 [
   {
-    "id": "server1",
-    "name": "Spotlight Season 1 Watch Online Video- Episode 8",
-    "url": "https://groundbanks.net/post.php?id=1413828"
-  },
-  {
-    "id": "server2",
-    "name": "Spotlight Season 1 Watch Online Video- Episode 8",
-    "url": "https://groundbanks.net/post.php?id=1413829"
-  },
-  {
-    "id": "server3",
-    "name": "Spotlight Season 1 Watch Online Video- Episode 8",
-    "url": "https://groundbanks.net/post.php?id=1413830"
-  },
-  {
-    "id": "server4",
-    "name": "Spotlight Season 1 Watch Online Video- Episode 8",
-    "url": "https://groundbanks.net/post.php?id=1413831"
-  },
-  {
-    "id": "server5",
-    "name": "Spotlight Season 1 Watch Online Video- Episode 8",
-    "url": "https://groundbanks.net/post.php?id=1413832"
+    "id": "watch",
+    "name": "Watch on PlayDesi",
+    "url": "https://playdesi.tv/spotlight-season-1-episode-8-watch-online/",
+    "source": "playdesi"
   }
 ]

@@ -1,27 +1,8 @@
 [
   {
-    "id": "server1",
-    "name": "Spotlight Season 1 Watch Online Video- Episode 4",
-    "url": "https://groundbanks.net/post.php?id=1413788"
-  },
-  {
-    "id": "server2",
-    "name": "Spotlight Season 1 Watch Online Video- Episode 4",
-    "url": "https://groundbanks.net/post.php?id=1413789"
-  },
-  {
-    "id": "server3",
-    "name": "Spotlight Season 1 Watch Online Video- Episode 4",
-    "url": "https://groundbanks.net/post.php?id=1413790"
-  },
-  {
-    "id": "server4",
-    "name": "Spotlight Season 1 Watch Online Video- Episode 4",
-    "url": "https://groundbanks.net/post.php?id=1413791"
-  },
-  {
-    "id": "server5",
-    "name": "Spotlight Season 1 Watch Online Video- Episode 4",
-    "url": "https://groundbanks.net/post.php?id=1413792"
+    "id": "watch",
+    "name": "Watch on PlayDesi",
+    "url": "https://playdesi.tv/spotlight-season-1-episode-4-watch-online/",
+    "source": "playdesi"
   }
 ]
