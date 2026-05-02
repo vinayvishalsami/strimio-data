@@ -79,12 +79,11 @@ def groundbanks_is_valid(url, expected_show, episode_no):
     show = expected_show.lower()
 
     if show not in title:
-        return False
+    return False
 
-    if f"episode {episode_no}" not in title:
-        return False
-
-    return True
+# VIU Originals GroundBanks pages often do NOT include episode numbers
+# Only enforce correct series match, not episode match
+return True
 
 # ============================================================
 # SCRAPER — VIU ORIGINALS (WEB SERIES ONLY)
