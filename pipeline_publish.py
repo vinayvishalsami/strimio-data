@@ -1,7 +1,6 @@
 import json
 import re
 import time
-import subprocess
 from datetime import datetime
 from pathlib import Path
 
@@ -16,13 +15,16 @@ PLAYDESI_BASE = "https://playdesi.tv"
 CHANNEL_URL = f"{PLAYDESI_BASE}/viu-originals/"
 CHANNEL_ID = "viu_originals"
 
+# ✅ TARGET ONLY THIS SERIES (CHANGE LATER)
+TARGET_SERIES_NAME = "Spotlight"
+TARGET_SEASON = 1
+
 REPO_ROOT = Path(__file__).resolve().parent
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (StrimioIndexer/1.0)",
+    "User-Agent": "Mozilla/5.0",
     "Referer": PLAYDESI_BASE,
 }
 
-CONFIRM_EPISODES = 5
 SLEEP = 1
 
 session = requests.Session()
@@ -51,23 +53,11 @@ def write_json(path, data):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2), encoding="utf-8")
 
-def load_existing(series_id):
-    p = REPO_ROOT / "series" / series_id / "episodes.json"
-    if not p.exists():
-        return [], set()
-    data = json.loads(p.read_text())
-    return data, {e["id"] for e in data}
-
 # ============================================================
-# GROUNDBANKS VALIDATION (HYBRID SAFE)
+# GROUNDBANKS VALIDATION (SERIES‑LEVEL ONLY)
 # ============================================================
 
-def groundbanks_is_valid(url, expected_show, episode_no):
-    """
-    Ensures GroundBanks page belongs to the correct series.
-    NOTE: For VIU Originals we validate ONLY series name,
-    because episode numbers are unreliable on GroundBanks.
-    """
+def groundbanks_is_valid(url, expected_show):
     try:
         sp = soup(url, ref=PLAYDESI_BASE)
     except Exception:
@@ -78,23 +68,22 @@ def groundbanks_is_valid(url, expected_show, episode_no):
         return False
 
     title = og.get("content", "").lower()
-    show = expected_show.lower()
-
-    # ✅ Enforce correct series (prevents GOT / Glory issue)
-    if show not in title:
-        return False
-
-    return True
+    return expected_show.lower() in title
 
 # ============================================================
-# SCRAPER — VIU ORIGINALS
+# SCRAPER — SINGLE SERIES ONLY
 # ============================================================
 
-def scrape_viu_originals():
-    log("Scraping PlayDesi – VIU Originals")
+def scrape_single_series():
+    log("Scraping PlayDesi – VIU Originals (SINGLE SERIES MODE)")
 
     index = soup(CHANNEL_URL)
-    series_entries = []
+
+    target_series = None
+
+    # --------------------------------------------------------
+    # FIND ONLY THE TARGET SERIES
+    # --------------------------------------------------------
 
     for a in index.select("a[href*='/watch-online/']"):
         title = a.get_text(strip=True)
@@ -109,125 +98,84 @@ def scrape_viu_originals():
             show = title
             season = 1
 
-        sid = f"{slugify(show)}__season_{season}"
+        if show.lower() == TARGET_SERIES_NAME.lower() and season == TARGET_SEASON:
+            target_series = {
+                "id": f"{slugify(show)}__season_{season}",
+                "name": f"{show} – Season {season}",
+                "show": show,
+                "url": url,
+            }
+            break
 
-        series_entries.append({
-            "id": sid,
-            "name": f"{show} – Season {season}",
-            "show": show,
-            "url": url
-        })
+    if not target_series:
+        log("❌ Target series not found – check name/season")
+        return
+
+    # --------------------------------------------------------
+    # WRITE SERIES INDEX (ONLY ONE)
+    # --------------------------------------------------------
 
     write_json(
         REPO_ROOT / "channel" / CHANNEL_ID / "series.json",
-        [{"id": s["id"], "name": s["name"]} for s in series_entries]
+        [{"id": target_series["id"], "name": target_series["name"]}],
     )
 
-    # ========================================================
-    # EPISODES
-    # ========================================================
+    # --------------------------------------------------------
+    # SCRAPE EPISODES
+    # --------------------------------------------------------
 
-    for series in series_entries:
-        log(f"Scraping episodes: {series['name']}")
+    log(f"Scraping episodes: {target_series['name']}")
 
-        existing, existing_ids = load_existing(series["id"])
-        page = soup(series["url"], ref=CHANNEL_URL)
+    page = soup(target_series["url"], ref=CHANNEL_URL)
 
-        episode_urls = []
-        for a in page.select("a[href*='episode']"):
-            if a["href"].startswith(PLAYDESI_BASE):
-                episode_urls.append(a["href"])
+    episode_urls = []
+    for a in page.select("a[href*='/watch-online/']"):
+        href = a["href"]
+        if href.startswith(PLAYDESI_BASE) and href != target_series["url"]:
+            episode_urls.append(href)
 
-        episode_urls = list(dict.fromkeys(episode_urls))
+    episode_urls = list(dict.fromkeys(episode_urls))
 
-        new_eps = []
-        confirmed = 0
+    episodes = []
 
-        for ep_url in episode_urls:
-            ep = soup(ep_url, ref=series["url"])
-            h1 = ep.select_one("h1")
-            if not h1:
-                continue
+    for ep_url in episode_urls:
+        ep = soup(ep_url, ref=target_series["url"])
+        h1 = ep.select_one("h1")
+        if not h1:
+            continue
 
-            m = re.search(r"episode\s+(\d+)", h1.get_text(), re.I)
-            if not m:
-                continue
+        m = re.search(r"episode\s*(\d+)|part\s*(\d+)|\b(\d+)\b", h1.get_text(), re.I)
+        if not m:
+            continue
 
-            ep_no = int(m.group(1))
-            eid = f"{series['id']}_ep{ep_no:02d}"
+        ep_no = next(int(g) for g in m.groups() if g)
+        eid = f"{target_series['id']}_ep{ep_no:02d}"
 
-            if eid in existing_ids:
-                confirmed += 1
-                if confirmed >= CONFIRM_EPISODES:
-                    break
-                continue
+        links = []
+        for i, a in enumerate(ep.select(".entry-content a[href*='groundbanks.net']")):
+            gb_url = a["href"]
+            if groundbanks_is_valid(gb_url, target_series["show"]):
+                links.append({
+                    "id": f"server{i+1}",
+                    "name": a.get_text(strip=True) or f"Server {i+1}",
+                    "url": gb_url
+                })
 
-            valid_links = []
+        if not links:
+            continue
 
-            for i, a in enumerate(ep.select(".entry-content a[href*='groundbanks.net']")):
-                gb_url = a["href"]
+        write_json(REPO_ROOT / "episode" / eid / "links.json", links)
+        episodes.append({"id": eid, "name": f"Episode {ep_no}"})
 
-                if groundbanks_is_valid(gb_url, series["show"], ep_no):
-                    valid_links.append({
-                        "id": f"server{i+1}",
-                        "name": a.get_text(strip=True) or f"Server {i+1}",
-                        "url": gb_url
-                    })
-
-            if not valid_links:
-                continue
-
-            write_json(
-                REPO_ROOT / "episode" / eid / "links.json",
-                valid_links
-            )
-
-            new_eps.append({
-                "id": eid,
-                "name": f"Episode {ep_no}"
-            })
-
-        merged = new_eps + existing
-        seen, final = set(), []
-
-        for e in merged:
-            if e["id"] not in seen:
-                final.append(e)
-                seen.add(e["id"])
-
-        write_json(
-            REPO_ROOT / "series" / series["id"] / "episodes.json",
-            final
-        )
-
-# ============================================================
-# RUN + SAFE COMMIT
-# ============================================================
-
-scrape_viu_originals()
-
-write_json(
-    REPO_ROOT / "sites.json",
-    [
-        {"id": "yodesi", "name": "YoDesi"},
-        {"id": "playdesi", "name": "PlayDesi"},
-    ]
-)
-
-subprocess.run(["git", "add", "."], cwd=REPO_ROOT)
-status = subprocess.run(
-    ["git", "status", "--porcelain"],
-    cwd=REPO_ROOT,
-    capture_output=True,
-    text=True
-)
-
-if status.stdout.strip():
-    subprocess.run(
-        ["git", "commit", "-m", "Fix VIU Originals episode visibility"],
-        cwd=REPO_ROOT
+    write_json(
+        REPO_ROOT / "series" / target_series["id"] / "episodes.json",
+        episodes,
     )
-    subprocess.run(["git", "push"], cwd=REPO_ROOT)
-    log("Publish complete")
-else:
-    log("No changes to publish")
+
+    log("✅ Single series scrape complete")
+
+# ============================================================
+# RUN
+# ============================================================
+
+scrape_single_series()
