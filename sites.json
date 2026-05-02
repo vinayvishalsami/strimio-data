@@ -1,6 +1,13 @@
-[
-  {
-    "id": "yodesi",
-    "name": "YoDesi"
-  }
-]
+#[
+ # {
+#    "id": "yodesi",
+#    "name": "YoDesi"
+ # }
+#]
+write_json(
+    REPO_ROOT / "sites.json",
+    [
+        {"id": "yodesi", "name": "YoDesi"},
+        {"id": "playdesi", "name": "PlayDesi"},
+    ]
+)
