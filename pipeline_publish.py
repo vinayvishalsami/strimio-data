@@ -59,12 +59,14 @@ def load_existing(series_id):
     return data, {e["id"] for e in data}
 
 # ============================================================
-# GROUNDBANKS VALIDATION (CRITICAL)
+# GROUNDBANKS VALIDATION (HYBRID SAFE)
 # ============================================================
 
 def groundbanks_is_valid(url, expected_show, episode_no):
     """
-    Ensures GroundBanks page belongs to correct show & episode.
+    Ensures GroundBanks page belongs to the correct series.
+    NOTE: For VIU Originals we validate ONLY series name,
+    because episode numbers are unreliable on GroundBanks.
     """
     try:
         sp = soup(url, ref=PLAYDESI_BASE)
@@ -78,22 +80,20 @@ def groundbanks_is_valid(url, expected_show, episode_no):
     title = og.get("content", "").lower()
     show = expected_show.lower()
 
+    # ✅ Enforce correct series (prevents GOT / Glory issue)
     if show not in title:
-    return False
+        return False
 
-# VIU Originals GroundBanks pages often do NOT include episode numbers
-# Only enforce correct series match, not episode match
-return True
+    return True
 
 # ============================================================
-# SCRAPER — VIU ORIGINALS (WEB SERIES ONLY)
+# SCRAPER — VIU ORIGINALS
 # ============================================================
 
 def scrape_viu_originals():
     log("Scraping PlayDesi – VIU Originals")
 
     index = soup(CHANNEL_URL)
-
     series_entries = []
 
     for a in index.select("a[href*='/watch-online/']"):
@@ -106,7 +106,6 @@ def scrape_viu_originals():
             show = season_match.group(1).strip()
             season = int(season_match.group(2))
         else:
-            # single season
             show = title
             season = 1
 
@@ -134,20 +133,19 @@ def scrape_viu_originals():
         existing, existing_ids = load_existing(series["id"])
         page = soup(series["url"], ref=CHANNEL_URL)
 
-        ep_links = []
+        episode_urls = []
         for a in page.select("a[href*='episode']"):
             if a["href"].startswith(PLAYDESI_BASE):
-                ep_links.append(a["href"])
+                episode_urls.append(a["href"])
 
-        ep_links = list(dict.fromkeys(ep_links))
+        episode_urls = list(dict.fromkeys(episode_urls))
 
         new_eps = []
         confirmed = 0
 
-        for ep_url in ep_links:
+        for ep_url in episode_urls:
             ep = soup(ep_url, ref=series["url"])
             h1 = ep.select_one("h1")
-
             if not h1:
                 continue
 
@@ -169,11 +167,7 @@ def scrape_viu_originals():
             for i, a in enumerate(ep.select(".entry-content a[href*='groundbanks.net']")):
                 gb_url = a["href"]
 
-                if groundbanks_is_valid(
-                    gb_url,
-                    series["show"],
-                    ep_no
-                ):
+                if groundbanks_is_valid(gb_url, series["show"], ep_no):
                     valid_links.append({
                         "id": f"server{i+1}",
                         "name": a.get_text(strip=True) or f"Server {i+1}",
@@ -181,7 +175,7 @@ def scrape_viu_originals():
                     })
 
             if not valid_links:
-                continue  # safer to drop than show wrong video
+                continue
 
             write_json(
                 REPO_ROOT / "episode" / eid / "links.json",
@@ -221,7 +215,6 @@ write_json(
 )
 
 subprocess.run(["git", "add", "."], cwd=REPO_ROOT)
-
 status = subprocess.run(
     ["git", "status", "--porcelain"],
     cwd=REPO_ROOT,
@@ -231,7 +224,7 @@ status = subprocess.run(
 
 if status.stdout.strip():
     subprocess.run(
-        ["git", "commit", "-m", "Fix VIU Originals scraping & episode validation"],
+        ["git", "commit", "-m", "Fix VIU Originals episode visibility"],
         cwd=REPO_ROOT
     )
     subprocess.run(["git", "push"], cwd=REPO_ROOT)
