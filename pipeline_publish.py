@@ -47,7 +47,6 @@ MONTHS = {
 PLAYDESI_BASE = "https://playdesi.tv"
 PLAYDESI_SITE_ID = "playdesi"
 
-# Only web-series channels (exclude Movies + Dubbed buckets; you can add later)
 PLAYDESI_CHANNELS = {
     "alt_balaji": ("ALT Balaji", f"{PLAYDESI_BASE}/alt-balaji-web/"),
     "amazon_prime": ("Amazon Prime", f"{PLAYDESI_BASE}/amazon-prime/"),
@@ -68,12 +67,14 @@ PLAYDESI_CHANNELS = {
     "standup": ("Stand-Up Comedy", f"{PLAYDESI_BASE}/stand-up-comedy/"),
 }
 
+CONFIRM_EPISODES = 5  # incremental stop threshold
+
 # If you want to temporarily test only one PlayDesi channel, set this:
 # e.g. PLAYDESI_CHANNEL_ALLOWLIST = {"viu_originals"}
 PLAYDESI_CHANNEL_ALLOWLIST = None
 
 # If you want to temporarily test only one series page per channel (faster):
-PLAYDESI_LIMIT_SERIES_PER_CHANNEL = 5  # e.g. 1
+PLAYDESI_LIMIT_SERIES_PER_CHANNEL = 1  # e.g. 1
 
 CONFIRM_EPISODES = 5
 
@@ -114,7 +115,6 @@ def load_existing_episodes(series_id: str):
 
 def git_commit_push(message: str):
     subprocess.run(["git", "add", "."], cwd=REPO_ROOT, check=True)
-
     status = subprocess.run(
         ["git", "status", "--porcelain"],
         cwd=REPO_ROOT,
@@ -122,7 +122,6 @@ def git_commit_push(message: str):
         text=True,
         check=True
     )
-
     if status.stdout.strip():
         subprocess.run(["git", "commit", "-m", message], cwd=REPO_ROOT, check=True)
         subprocess.run(["git", "push"], cwd=REPO_ROOT, check=True)
@@ -131,21 +130,70 @@ def git_commit_push(message: str):
         log("No changes to publish")
 
 # ============================================================
-# YoDesi SCRAPER (unchanged behavior + adds source field)
+# YoDesi: Robust episode ID extraction (FIX FOR MISSING DATE GAPS)
 # ============================================================
 
 def infer_yodesi_episode_id(series_id: str, slug: str):
+    """
+    Tries to infer ID from YoDesi slug like: 19th-april-2026-...
+    """
     m = re.search(r"(\d{1,2})(?:st|nd|rd|th|h)?-([a-z]+)-(\d{4})", slug)
     if m and m.group(2) in MONTHS:
         return f"{series_id}_{m.group(3)}_{MONTHS[m.group(2)]}_{int(m.group(1)):02d}"
     return None
 
-def scrape_yodesi():
-    log("=== YoDesi scraping شروع ===")
+def yodesi_eid_from_url(series_id: str, ep_url: str):
+    """
+    Prefer extracting the date from the URL slug (most reliable).
+    """
+    try:
+        slug = ep_url.rstrip("/").split("/")[-2]
+    except Exception:
+        return None
+    return infer_yodesi_episode_id(series_id, slug)
 
-    # Register YoDesi channels
-    write_json(REPO_ROOT / "site" / YODESI_SITE_ID / "channels.json",
-               [{"id": cid, "name": name} for cid, (name, _) in YODESI_CHANNELS.items()])
+def yodesi_eid_from_time_tag(series_id: str, sp: BeautifulSoup):
+    """
+    Fallback: use <time datetime="YYYY-MM-DD..."> if present.
+    """
+    t = sp.select_one("time[datetime]")
+    if not t:
+        return None
+    dt = t.get("datetime", "")
+    if len(dt) < 10:
+        return None
+    date_part = dt[:10]  # YYYY-MM-DD
+    if not re.match(r"^\d{4}-\d{2}-\d{2}$", date_part):
+        return None
+    y, m, d = date_part.split("-")
+    return f"{series_id}_{y}_{m}_{d}"
+
+def yodesi_eid_from_text(series_id: str, sp: BeautifulSoup):
+    """
+    Last resort: regex on page text.
+    """
+    text = sp.get_text(" ").lower()
+    m = re.search(r"(\d{1,2})(?:st|nd|rd|th|h)?\s+([a-z]+)\s+(\d{4})", text)
+    if not m:
+        return None
+    day = int(m.group(1))
+    month_name = m.group(2)
+    year = m.group(3)
+    if month_name not in MONTHS:
+        return None
+    return f"{series_id}_{year}_{MONTHS[month_name]}_{day:02d}"
+
+# ============================================================
+# YoDesi SCRAPER (with robust ID; adds source=yodesi)
+# ============================================================
+
+def scrape_yodesi():
+    log("=== YoDesi scraping ===")
+
+    write_json(
+        REPO_ROOT / "site" / YODESI_SITE_ID / "channels.json",
+        [{"id": cid, "name": name} for cid, (name, _) in YODESI_CHANNELS.items()]
+    )
 
     for channel_id, (_, channel_url) in YODESI_CHANNELS.items():
         log(f"YoDesi channel: {channel_id}")
@@ -160,10 +208,11 @@ def scrape_yodesi():
                 "url": a["href"]
             })
 
-        write_json(REPO_ROOT / "channel" / channel_id / "series.json",
-                   [{"id": x["id"], "name": x["name"]} for x in shows])
+        write_json(
+            REPO_ROOT / "channel" / channel_id / "series.json",
+            [{"id": x["id"], "name": x["name"]} for x in shows]
+        )
 
-        # Episodes per show (incremental)
         for show in shows:
             existing_eps, existing_ids = load_existing_episodes(show["id"])
 
@@ -184,7 +233,8 @@ def scrape_yodesi():
                     break
 
                 for a in links:
-                    slug = a["href"].split("/")[-2]
+                    href = a["href"]
+                    slug = href.rstrip("/").split("/")[-2]
                     inferred = infer_yodesi_episode_id(show["id"], slug)
 
                     if inferred and inferred in existing_ids:
@@ -193,7 +243,7 @@ def scrape_yodesi():
                     else:
                         found_new = True
                         confirmed = 0
-                        new_urls.append(a["href"])
+                        new_urls.append(href)
 
                     if found_new and confirmed >= CONFIRM_EPISODES:
                         break
@@ -204,23 +254,21 @@ def scrape_yodesi():
 
             new_eps = []
             for ep_url in new_urls:
-                ep_page = fetch_soup(ep_url, ref=show["url"])
-                text = ep_page.get_text(" ").lower()
-                m = re.search(r"(\d{1,2})(?:st|nd|rd|th|h)?\s+([a-z]+)\s+(\d{4})", text)
-                if not m:
+                sp = fetch_soup(ep_url, ref=show["url"])
+
+                # ✅ Robust ID: URL slug -> <time> -> text
+                eid = (
+                    yodesi_eid_from_url(show["id"], ep_url)
+                    or yodesi_eid_from_time_tag(show["id"], sp)
+                    or yodesi_eid_from_text(show["id"], sp)
+                )
+
+                if not eid:
                     continue
 
-                day = int(m.group(1))
-                month_name = m.group(2)
-                year = m.group(3)
-                if month_name not in MONTHS:
-                    continue
-
-                eid = f"{show['id']}_{year}_{MONTHS[month_name]}_{day:02d}"
-
-                # YoDesi links stay direct (player.php); include source field for routing
+                # YoDesi links (player.php). Add source=yodesi.
                 links = []
-                for i, a in enumerate(ep_page.select(".thecontent a[href*='player.php']")):
+                for i, a in enumerate(sp.select(".thecontent a[href*='player.php']")):
                     links.append({
                         "id": f"server{i+1}",
                         "name": a.get_text(strip=True) or f"Server {i+1}",
@@ -233,9 +281,12 @@ def scrape_yodesi():
 
                 write_json(REPO_ROOT / "episode" / eid / "links.json", links)
 
+                # Pretty name from eid date (seriesid_YYYY_MM_DD)
+                parts = eid.split("_")
+                year, month, day = parts[-3], parts[-2], parts[-1]
                 new_eps.append({
                     "id": eid,
-                    "name": f"{show['name']} {ordinal(day)} {month_name.title()} {year}"
+                    "name": f"{show['name']} {int(day)}-{month}-{year}"
                 })
 
             merged = new_eps + existing_eps
@@ -248,152 +299,180 @@ def scrape_yodesi():
 
             write_json(REPO_ROOT / "series" / show["id"] / "episodes.json", final)
 
-    log("=== YoDesi scraping complete ===")
+    log("=== YoDesi done ===")
 
 # ============================================================
-# PlayDesi SCRAPER (web series only; store episode page URL only)
+# PlayDesi SCRAPER (alphabetical-safe series discovery; web series only)
+# Stores ONLY episode page URL (no GroundBanks), source=playdesi
 # ============================================================
 
-def playdesi_series_page_has_episodes(series_url: str) -> bool:
+def collect_all_series_pages_from_channel(channel_url: str) -> list[tuple[str, str]]:
     """
-    Web-series validation:
-    Only accept series pages that list episode posts (article -> entry-title -> link),
-    and those links look like episodic pages containing '-episode-' in URL.
+    Collect series pages across channel listing + pagination (/page/2/ ...).
+    No cap: alphabetical lists must be scanned fully.
+    """
+    results = []
+    seen = set()
+
+    page = 1
+    while True:
+        url = channel_url if page == 1 else f"{channel_url.rstrip('/')}/page/{page}/"
+        try:
+            sp = fetch_soup(url, ref=PLAYDESI_BASE)
+        except Exception:
+            break
+
+        found_any = False
+        for a in sp.select("a[href*='/watch-online/']"):
+            href = a.get("href")
+            if not href or not href.startswith(PLAYDESI_BASE):
+                continue
+            title = a.get_text(strip=True) or href
+            if href not in seen:
+                seen.add(href)
+                results.append((title, href))
+            found_any = True
+
+        if not found_any:
+            break
+
+        page += 1
+        if page > 50:
+            break
+
+    return results
+
+def series_page_has_episodes(series_url: str) -> bool:
+    """
+    Web-series filter: series page must list episode posts with '-episode-' in href.
     """
     try:
         sp = fetch_soup(series_url, ref=PLAYDESI_BASE)
     except Exception:
         return False
 
-    eps = []
     for a in sp.select("article h2.entry-title a"):
         href = a.get("href", "")
         if "-episode-" in href:
-            eps.append(href)
-    return len(eps) > 0
+            return True
+    return False
 
 def scrape_playdesi():
-    log("=== PlayDesi scraping شروع ===")
+    log("=== PlayDesi scraping ===")
 
-    # Register PlayDesi channels (controls what appears in app)
-    playdesi_channel_list = []
-    for cid, (name, url) in PLAYDESI_CHANNELS.items():
-        if PLAYDESI_CHANNEL_ALLOWLIST and cid not in PLAYDESI_CHANNEL_ALLOWLIST:
-            continue
-        playdesi_channel_list.append({"id": cid, "name": name})
-
-    write_json(REPO_ROOT / "site" / PLAYDESI_SITE_ID / "channels.json", playdesi_channel_list)
+    write_json(
+        REPO_ROOT / "site" / PLAYDESI_SITE_ID / "channels.json",
+        [{"id": cid, "name": name} for cid, (name, _) in PLAYDESI_CHANNELS.items()]
+    )
 
     for channel_id, (channel_name, channel_url) in PLAYDESI_CHANNELS.items():
-        if PLAYDESI_CHANNEL_ALLOWLIST and channel_id not in PLAYDESI_CHANNEL_ALLOWLIST:
-            continue
-
         log(f"PlayDesi channel: {channel_name}")
-        index = fetch_soup(channel_url, ref=PLAYDESI_BASE)
 
-        # Candidate series pages from channel index
-        candidates = []
-        for a in index.select("a[href*='/watch-online/']"):
-            href = a.get("href")
-            if not href or not href.startswith(PLAYDESI_BASE):
-                continue
-
-            title = a.get_text(strip=True)
-            if not title:
-                continue
-
-            # Deduplicate
-            candidates.append((title, href))
-
-        # Unique by URL
-        seen_urls = set()
-        unique = []
-        for t, u in candidates:
-            if u not in seen_urls:
-                unique.append((t, u))
-                seen_urls.add(u)
+        candidates = collect_all_series_pages_from_channel(channel_url)
 
         series_entries = []
-        for title, series_url in unique:
-            # Optional: limit for speed
-            if PLAYDESI_LIMIT_SERIES_PER_CHANNEL and len(series_entries) >= PLAYDESI_LIMIT_SERIES_PER_CHANNEL:
-                break
+        seen_series = set()
 
-            # Determine show + season from title (best-effort)
+        for title, series_url in candidates:
             m = re.search(r"(.+?)\s+season\s+(\d+)", title, re.I)
             if m:
                 show = m.group(1).strip()
                 season = int(m.group(2))
             else:
                 show = title.strip()
-                season = 1  # later validated by episodic check
+                season = 1
 
             series_id = f"{slugify(show)}__season_{season}"
-
-            # ✅ web-series only: series page must list episodic episode posts
-            if not playdesi_series_page_has_episodes(series_url):
+            if series_id in seen_series:
                 continue
 
+            if not series_page_has_episodes(series_url):
+                continue
+
+            seen_series.add(series_id)
             series_entries.append({
                 "id": series_id,
                 "name": f"{show} – Season {season}",
-                "show": show,
                 "url": series_url
             })
 
-        # Write channel series list
         write_json(
             REPO_ROOT / "channel" / channel_id / "series.json",
             [{"id": s["id"], "name": s["name"]} for s in sorted(series_entries, key=lambda x: x["id"])]
         )
 
-        # Episodes for each series
         for series in series_entries:
             log(f"PlayDesi series episodes: {series['name']}")
 
             existing_eps, existing_ids = load_existing_episodes(series["id"])
-            sp = fetch_soup(series["url"], ref=channel_url)
 
-            ep_pages = []
-            for a in sp.select("article h2.entry-title a"):
-                href = a.get("href")
-                if href and href.startswith(PLAYDESI_BASE) and "-episode-" in href:
-                    ep_pages.append(href)
-
-            # Deduplicate
-            ep_pages = list(dict.fromkeys(ep_pages))
-
+            page = 1
+            found_new = False
+            confirmed = 0
             new_eps = []
-            for ep_url in ep_pages:
-                ep_page = fetch_soup(ep_url, ref=series["url"])
 
-                h1 = ep_page.select_one("h1")
-                if not h1:
-                    continue
+            while True:
+                list_url = series["url"] if page == 1 else f"{series['url'].rstrip('/')}/page/{page}/"
+                try:
+                    sp = fetch_soup(list_url, ref=channel_url)
+                except Exception:
+                    break
 
-                mm = re.search(r"episode\s+(\d+)", h1.get_text(), re.I)
-                if not mm:
-                    # Fallback: episode number from URL
+                ep_pages = []
+                for a in sp.select("article h2.entry-title a"):
+                    href = a.get("href")
+                    if href and href.startswith(PLAYDESI_BASE) and "-episode-" in href:
+                        ep_pages.append(href)
+
+                if not ep_pages:
+                    break
+
+                ep_pages = list(dict.fromkeys(ep_pages))
+
+                for ep_url in ep_pages:
                     mm = re.search(r"-episode-(\d+)-", ep_url, re.I)
-                if not mm:
-                    continue
+                    if not mm:
+                        # fallback to title
+                        ep_page = fetch_soup(ep_url, ref=series["url"])
+                        h1 = ep_page.select_one("h1")
+                        if not h1:
+                            continue
+                        mm = re.search(r"episode\s+(\d+)", h1.get_text(), re.I)
+                    if not mm:
+                        continue
 
-                ep_no = int(mm.group(1))
-                ep_id = f"{series['id']}_ep{ep_no:02d}"
+                    ep_no = int(mm.group(1))
+                    ep_id = f"{series['id']}_ep{ep_no:02d}"
 
-                if ep_id in existing_ids:
-                    continue
+                    if ep_id in existing_ids:
+                        if found_new:
+                            confirmed += 1
+                        continue
 
-                # ✅ store ONLY PlayDesi episode page URL (no GroundBanks)
-                links = [{
-                    "id": "watch",
-                    "name": "Watch on PlayDesi",
-                    "url": ep_url,
-                    "source": "playdesi"
-                }]
+                    found_new = True
+                    confirmed = 0
 
-                write_json(REPO_ROOT / "episode" / ep_id / "links.json", links)
-                new_eps.append({"id": ep_id, "name": f"Episode {ep_no}"})
+                    write_json(
+                        REPO_ROOT / "episode" / ep_id / "links.json",
+                        [{
+                            "id": "watch",
+                            "name": "Watch on PlayDesi",
+                            "url": ep_url,
+                            "source": "playdesi"
+                        }]
+                    )
+
+                    new_eps.append({"id": ep_id, "name": f"Episode {ep_no}"})
+
+                    if found_new and confirmed >= CONFIRM_EPISODES:
+                        break
+
+                if found_new and confirmed >= CONFIRM_EPISODES:
+                    break
+
+                page += 1
+                if page > 50:
+                    break
 
             merged = new_eps + existing_eps
             seen = set()
@@ -403,7 +482,6 @@ def scrape_playdesi():
                     final.append(e)
                     seen.add(e["id"])
 
-            # Sort by episode number if possible
             def ep_sort_key(e):
                 m = re.search(r"_ep(\d+)$", e["id"])
                 return int(m.group(1)) if m else 999999
@@ -411,14 +489,13 @@ def scrape_playdesi():
             write_json(REPO_ROOT / "series" / series["id"] / "episodes.json",
                        sorted(final, key=ep_sort_key))
 
-    log("=== PlayDesi scraping complete ===")
+    log("=== PlayDesi done ===")
 
 # ============================================================
 # MAIN
 # ============================================================
 
 def main():
-    # Register sites
     write_json(
         REPO_ROOT / "sites.json",
         [
@@ -430,7 +507,7 @@ def main():
     scrape_yodesi()
     scrape_playdesi()
 
-    git_commit_push("Update YoDesi + PlayDesi (web series only; PlayDesi episode URLs only)")
+    git_commit_push("Update YoDesi (robust date IDs) + PlayDesi (alphabetical-safe series; web series only)")
 
 if __name__ == "__main__":
     main()
