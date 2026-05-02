@@ -1,13 +1,10 @@
-#[
- # {
-#    "id": "yodesi",
-#    "name": "YoDesi"
- # }
-#]#
-
-
 [
-  { "id": "yodesi", "name": "YoDesi" },
-  { "id": "playdesi", "name": "PlayDesi" }
+  {
+    "id": "yodesi",
+    "name": "YoDesi"
+  },
+  {
+    "id": "playdesi",
+    "name": "PlayDesi"
+  }
 ]
-
