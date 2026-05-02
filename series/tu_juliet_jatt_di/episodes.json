@@ -1,27 +1,7 @@
 [
   {
-    "id": "tu_juliet_jatt_di_2026_04_19",
-    "name": "Tu Juliet Jatt Di 19th April 2026"
-  },
-  {
-    "id": "tu_juliet_jatt_di_2026_04_18",
-    "name": "Tu Juliet Jatt Di 18th April 2026"
-  },
-  {
-    "id": "tu_juliet_jatt_di_2026_04_17",
-    "name": "Tu Juliet Jatt Di 17th April 2026"
-  },
-  {
-    "id": "tu_juliet_jatt_di_2026_04_16",
-    "name": "Tu Juliet Jatt Di 16th April 2026"
-  },
-  {
-    "id": "tu_juliet_jatt_di_2026_04_15",
-    "name": "Tu Juliet Jatt Di 15th April 2026"
-  },
-  {
-    "id": "tu_juliet_jatt_di_2026_04_14",
-    "name": "Tu Juliet Jatt Di 14th April 2026"
+    "id": "tu_juliet_jatt_di_2026_05_02",
+    "name": "Tu Juliet Jatt Di 2-05-2026"
   },
   {
     "id": "tu_juliet_jatt_di_2026_05_01",
@@ -70,6 +50,30 @@
   {
     "id": "tu_juliet_jatt_di_2026_04_20",
     "name": "Tu Juliet Jatt Di 20-04-2026"
+  },
+  {
+    "id": "tu_juliet_jatt_di_2026_04_19",
+    "name": "Tu Juliet Jatt Di 19-04-2026"
+  },
+  {
+    "id": "tu_juliet_jatt_di_2026_04_18",
+    "name": "Tu Juliet Jatt Di 18-04-2026"
+  },
+  {
+    "id": "tu_juliet_jatt_di_2026_04_17",
+    "name": "Tu Juliet Jatt Di 17-04-2026"
+  },
+  {
+    "id": "tu_juliet_jatt_di_2026_04_16",
+    "name": "Tu Juliet Jatt Di 16-04-2026"
+  },
+  {
+    "id": "tu_juliet_jatt_di_2026_04_15",
+    "name": "Tu Juliet Jatt Di 15-04-2026"
+  },
+  {
+    "id": "tu_juliet_jatt_di_2026_04_14",
+    "name": "Tu Juliet Jatt Di 14-04-2026"
   },
   {
     "id": "tu_juliet_jatt_di_2026_04_13",
@@ -318,10 +322,6 @@
   {
     "id": "tu_juliet_jatt_di_2026_02_11",
     "name": "Tu Juliet Jatt Di 11-02-2026"
-  },
-  {
-    "id": "tu_juliet_jatt_di_2026_02_10",
-    "name": "Tu Juliet Jatt Di 10-02-2026"
   },
   {
     "id": "tu_juliet_jatt_di_2026_02_09",
@@ -624,10 +624,6 @@
     "name": "Tu Juliet Jatt Di 27-11-2025"
   },
   {
-    "id": "tu_juliet_jatt_di_2025_11_26",
-    "name": "Tu Juliet Jatt Di 26-11-2025"
-  },
-  {
     "id": "tu_juliet_jatt_di_2025_11_25",
     "name": "Tu Juliet Jatt Di 25-11-2025"
   },
@@ -662,5 +658,13 @@
   {
     "id": "tu_juliet_jatt_di_2025_11_17",
     "name": "Tu Juliet Jatt Di 17-11-2025"
+  },
+  {
+    "id": "tu_juliet_jatt_di_2026_02_10",
+    "name": "Tu Juliet Jatt Di 10-02-2026"
+  },
+  {
+    "id": "tu_juliet_jatt_di_2025_11_26",
+    "name": "Tu Juliet Jatt Di 26-11-2025"
   }
 ]

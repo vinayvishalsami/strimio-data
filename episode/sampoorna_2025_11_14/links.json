@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Sampoorna 14th November 2025 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2857967"
+    "url": "http://tvpost.cc/player.php?id=2857967",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Sampoorna 14th November 2025 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2857968"
+    "url": "http://tvpost.cc/player.php?id=2857968",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Sampoorna 14th November 2025 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2857969"
+    "url": "http://tvpost.cc/player.php?id=2857969",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Sampoorna 14th November 2025 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2857970"
+    "url": "http://tvpost.cc/player.php?id=2857970",
+    "source": "yodesi"
   }
 ]

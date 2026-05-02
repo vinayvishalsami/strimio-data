@@ -1,27 +1,11 @@
 [
   {
-    "id": "kyunki_rishton_ke_bhi_roop_badalte_hai_2026_04_09",
-    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9th April 2026"
+    "id": "kyunki_rishton_ke_bhi_roop_badalte_hai_2026_05_02",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 2-05-2026"
   },
   {
     "id": "kyunki_rishton_ke_bhi_roop_badalte_hai_2026_05_01",
-    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 1st May 2026"
-  },
-  {
-    "id": "kyunki_rishton_ke_bhi_roop_badalte_hai_2026_04_19",
-    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 19th April 2026"
-  },
-  {
-    "id": "kyunki_rishton_ke_bhi_roop_badalte_hai_2026_04_18",
-    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 18th April 2026"
-  },
-  {
-    "id": "kyunki_rishton_ke_bhi_roop_badalte_hai_2026_04_17",
-    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 17th April 2026"
-  },
-  {
-    "id": "kyunki_rishton_ke_bhi_roop_badalte_hai_2026_04_16",
-    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 16th April 2026"
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 1-05-2026"
   },
   {
     "id": "kyunki_rishton_ke_bhi_roop_badalte_hai_2026_04_30",
@@ -68,6 +52,22 @@
     "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 20-04-2026"
   },
   {
+    "id": "kyunki_rishton_ke_bhi_roop_badalte_hai_2026_04_19",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 19-04-2026"
+  },
+  {
+    "id": "kyunki_rishton_ke_bhi_roop_badalte_hai_2026_04_18",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 18-04-2026"
+  },
+  {
+    "id": "kyunki_rishton_ke_bhi_roop_badalte_hai_2026_04_17",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 17-04-2026"
+  },
+  {
+    "id": "kyunki_rishton_ke_bhi_roop_badalte_hai_2026_04_16",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 16-04-2026"
+  },
+  {
     "id": "kyunki_rishton_ke_bhi_roop_badalte_hai_2026_04_15",
     "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 15-04-2026"
   },
@@ -90,5 +90,9 @@
   {
     "id": "kyunki_rishton_ke_bhi_roop_badalte_hai_2026_04_10",
     "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 10-04-2026"
+  },
+  {
+    "id": "kyunki_rishton_ke_bhi_roop_badalte_hai_2026_04_09",
+    "name": "Kyunki Rishton Ke Bhi Roop Badalte Hai 9-04-2026"
   }
 ]

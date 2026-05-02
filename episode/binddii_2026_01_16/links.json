@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Binddii 16th January 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2866619"
+    "url": "http://tvpost.cc/player.php?id=2866619",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Binddii 16th January 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2866620"
+    "url": "http://tvpost.cc/player.php?id=2866620",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Binddii 16th January 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2866621"
+    "url": "http://tvpost.cc/player.php?id=2866621",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Binddii 16th January 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2866622"
+    "url": "http://tvpost.cc/player.php?id=2866622",
+    "source": "yodesi"
   }
 ]

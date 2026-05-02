@@ -2,16 +2,19 @@
   {
     "id": "server1",
     "name": "The 50 6th February 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2869374"
+    "url": "http://tvpost.cc/player.php?id=2869374",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "The 50 6th February 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2869375"
+    "url": "http://tvpost.cc/player.php?id=2869375",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "The 50 6th February 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2869376"
+    "url": "http://tvpost.cc/player.php?id=2869376",
+    "source": "yodesi"
   }
 ]

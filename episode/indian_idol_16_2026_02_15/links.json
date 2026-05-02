@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Indian Idol 16 15th February 2026 \u2013 Full Episode",
-    "url": "http://tvcine.me/player.php?id=2870534"
+    "url": "http://tvcine.me/player.php?id=2870534",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Indian Idol 16 15th February 2026 \u2013 Full Episode",
-    "url": "http://tvcine.me/player.php?id=2870535"
+    "url": "http://tvcine.me/player.php?id=2870535",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Indian Idol 16 15th February 2026 \u2013 Full Episode",
-    "url": "http://tvcine.me/player.php?id=2870536"
+    "url": "http://tvcine.me/player.php?id=2870536",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Indian Idol 16 15th February 2026 \u2013 Full Episode",
-    "url": "http://tvcine.me/player.php?id=2870537"
+    "url": "http://tvcine.me/player.php?id=2870537",
+    "source": "yodesi"
   }
 ]

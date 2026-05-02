@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Itti Si Khushi 29th January 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2868239"
+    "url": "http://tvmag.cc/player.php?id=2868239",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Itti Si Khushi 29th January 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2868240"
+    "url": "http://tvmag.cc/player.php?id=2868240",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Itti Si Khushi 29th January 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2868241"
+    "url": "http://tvmag.cc/player.php?id=2868241",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Itti Si Khushi 29th January 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2868242"
+    "url": "http://tvmag.cc/player.php?id=2868242",
+    "source": "yodesi"
   }
 ]

@@ -1,9 +1,5 @@
 [
   {
-    "id": "chhoriyan_chali_gaon_2025_09_29",
-    "name": "Chhoriyan Chali Gaon 29th September 2025"
-  },
-  {
     "id": "chhoriyan_chali_gaon_2025_10_04",
     "name": "Chhoriyan Chali Gaon 4-10-2025"
   },
@@ -22,6 +18,10 @@
   {
     "id": "chhoriyan_chali_gaon_2025_09_30",
     "name": "Chhoriyan Chali Gaon 30-09-2025"
+  },
+  {
+    "id": "chhoriyan_chali_gaon_2025_09_29",
+    "name": "Chhoriyan Chali Gaon 29-09-2025"
   },
   {
     "id": "chhoriyan_chali_gaon_2025_09_28",
@@ -236,15 +236,15 @@
     "name": "Chhoriyan Chali Gaon 6-08-2025"
   },
   {
-    "id": "chhoriyan_chali_gaon_2025_08_05",
-    "name": "Chhoriyan Chali Gaon 5-08-2025"
-  },
-  {
     "id": "chhoriyan_chali_gaon_2025_08_04",
     "name": "Chhoriyan Chali Gaon 4-08-2025"
   },
   {
     "id": "chhoriyan_chali_gaon_2025_08_03",
     "name": "Chhoriyan Chali Gaon 3-08-2025"
+  },
+  {
+    "id": "chhoriyan_chali_gaon_2025_08_05",
+    "name": "Chhoriyan Chali Gaon 5-08-2025"
   }
 ]

@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Sampoorna 17th October 2025 \u2013 Full Episode",
-    "url": "https://tvcine.me/player.php?id=2853183"
+    "url": "https://tvcine.me/player.php?id=2853183",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Sampoorna 17th October 2025 \u2013 Full Episode",
-    "url": "https://tvcine.me/player.php?id=2853184"
+    "url": "https://tvcine.me/player.php?id=2853184",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Sampoorna 17th October 2025 \u2013 Full Episode",
-    "url": "https://tvcine.me/player.php?id=2853185"
+    "url": "https://tvcine.me/player.php?id=2853185",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Sampoorna 17th October 2025 \u2013 Full Episode",
-    "url": "https://tvcine.me/player.php?id=2853186"
+    "url": "https://tvcine.me/player.php?id=2853186",
+    "source": "yodesi"
   }
 ]

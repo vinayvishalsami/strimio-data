@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Vasudha 30th April 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2879999"
+    "url": "http://tvmag.cc/player.php?id=2879999",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Vasudha 30th April 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2880000"
+    "url": "http://tvmag.cc/player.php?id=2880000",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Vasudha 30th April 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2880001"
+    "url": "http://tvmag.cc/player.php?id=2880001",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Vasudha 30th April 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2880002"
+    "url": "http://tvmag.cc/player.php?id=2880002",
+    "source": "yodesi"
   }
 ]

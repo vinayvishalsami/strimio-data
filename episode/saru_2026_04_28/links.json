@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Saru 29th April 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2879815"
+    "url": "http://tvmag.cc/player.php?id=2879815",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Saru 29th April 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2879816"
+    "url": "http://tvmag.cc/player.php?id=2879816",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Saru 29th April 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2879817"
+    "url": "http://tvmag.cc/player.php?id=2879817",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Saru 29th April 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2879818"
+    "url": "http://tvmag.cc/player.php?id=2879818",
+    "source": "yodesi"
   }
 ]

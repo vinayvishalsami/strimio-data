@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Wheel of Fortune 1st April 2026 \u2013 Full Episode",
-    "url": "http://tvcine.me/player.php?id=2876278"
+    "url": "http://tvcine.me/player.php?id=2876278",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Wheel of Fortune 1st April 2026 \u2013 Full Episode",
-    "url": "http://tvcine.me/player.php?id=2876279"
+    "url": "http://tvcine.me/player.php?id=2876279",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Wheel of Fortune 1st April 2026 \u2013 Full Episode",
-    "url": "http://tvcine.me/player.php?id=2876280"
+    "url": "http://tvcine.me/player.php?id=2876280",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Wheel of Fortune 1st April 2026 \u2013 Full Episode",
-    "url": "http://tvcine.me/player.php?id=2876281"
+    "url": "http://tvcine.me/player.php?id=2876281",
+    "source": "yodesi"
   }
 ]

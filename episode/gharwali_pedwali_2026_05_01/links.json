@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Gharwali Pedwali 1st May 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2880115"
+    "url": "http://tvmag.cc/player.php?id=2880115",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Gharwali Pedwali 1st May 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2880116"
+    "url": "http://tvmag.cc/player.php?id=2880116",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Gharwali Pedwali 1st May 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2880117"
+    "url": "http://tvmag.cc/player.php?id=2880117",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Gharwali Pedwali 1st May 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2880118"
+    "url": "http://tvmag.cc/player.php?id=2880118",
+    "source": "yodesi"
   }
 ]

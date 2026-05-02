@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Vashikaranam 1st April 2026 \u2013 Full Episode",
-    "url": "http://tvcine.me/player.php?id=2876270"
+    "url": "http://tvcine.me/player.php?id=2876270",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Vashikaranam 1st April 2026 \u2013 Full Episode",
-    "url": "http://tvcine.me/player.php?id=2876271"
+    "url": "http://tvcine.me/player.php?id=2876271",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Vashikaranam 1st April 2026 \u2013 Full Episode",
-    "url": "http://tvcine.me/player.php?id=2876272"
+    "url": "http://tvcine.me/player.php?id=2876272",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Vashikaranam 1st April 2026 \u2013 Full Episode",
-    "url": "http://tvcine.me/player.php?id=2876273"
+    "url": "http://tvcine.me/player.php?id=2876273",
+    "source": "yodesi"
   }
 ]

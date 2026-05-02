@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Sampoorna 3rd December 2025 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2861129"
+    "url": "http://tvpost.cc/player.php?id=2861129",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Sampoorna 3rd December 2025 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2861130"
+    "url": "http://tvpost.cc/player.php?id=2861130",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Sampoorna 3rd December 2025 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2861131"
+    "url": "http://tvpost.cc/player.php?id=2861131",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Sampoorna 3rd December 2025 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2861132"
+    "url": "http://tvpost.cc/player.php?id=2861132",
+    "source": "yodesi"
   }
 ]

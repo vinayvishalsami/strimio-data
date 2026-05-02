@@ -2,16 +2,19 @@
   {
     "id": "server1",
     "name": "Dr Aarambhi 24th April 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2878568"
+    "url": "http://tvpost.cc/player.php?id=2878568",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Dr Aarambhi 24th April 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2878569"
+    "url": "http://tvpost.cc/player.php?id=2878569",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Dr Aarambhi 24th April 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2878570"
+    "url": "http://tvpost.cc/player.php?id=2878570",
+    "source": "yodesi"
   }
 ]

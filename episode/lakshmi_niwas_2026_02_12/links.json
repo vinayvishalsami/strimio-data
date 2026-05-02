@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Lakshmi Niwas 12th February 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2870101"
+    "url": "http://tvmag.cc/player.php?id=2870101",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Lakshmi Niwas 12th February 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2870102"
+    "url": "http://tvmag.cc/player.php?id=2870102",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Lakshmi Niwas 12th February 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2870103"
+    "url": "http://tvmag.cc/player.php?id=2870103",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Lakshmi Niwas 12th February 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2870104"
+    "url": "http://tvmag.cc/player.php?id=2870104",
+    "source": "yodesi"
   }
 ]

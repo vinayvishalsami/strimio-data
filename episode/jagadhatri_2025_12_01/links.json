@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Jagadhatri 1st December 2025 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2860899"
+    "url": "http://tvmag.cc/player.php?id=2860899",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Jagadhatri 1st December 2025 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2860900"
+    "url": "http://tvmag.cc/player.php?id=2860900",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Jagadhatri 1st December 2025 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2860901"
+    "url": "http://tvmag.cc/player.php?id=2860901",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Jagadhatri 1st December 2025 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2860902"
+    "url": "http://tvmag.cc/player.php?id=2860902",
+    "source": "yodesi"
   }
 ]

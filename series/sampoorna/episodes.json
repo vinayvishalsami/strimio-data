@@ -1,9 +1,5 @@
 [
   {
-    "id": "sampoorna_2025_09_29",
-    "name": "Sampoorna 29th September 2025"
-  },
-  {
     "id": "sampoorna_2025_12_09",
     "name": "Sampoorna 9-12-2025"
   },
@@ -254,6 +250,10 @@
   {
     "id": "sampoorna_2025_09_30",
     "name": "Sampoorna 30-09-2025"
+  },
+  {
+    "id": "sampoorna_2025_09_29",
+    "name": "Sampoorna 29-09-2025"
   },
   {
     "id": "sampoorna_2025_09_28",

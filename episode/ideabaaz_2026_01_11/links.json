@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Ideabaaz 11th January 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2866051"
+    "url": "http://tvmag.cc/player.php?id=2866051",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Ideabaaz 11th January 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2866052"
+    "url": "http://tvmag.cc/player.php?id=2866052",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Ideabaaz 11th January 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2866053"
+    "url": "http://tvmag.cc/player.php?id=2866053",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Ideabaaz 11th January 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2866054"
+    "url": "http://tvmag.cc/player.php?id=2866054",
+    "source": "yodesi"
   }
 ]

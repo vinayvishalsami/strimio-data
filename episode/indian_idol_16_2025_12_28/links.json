@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Indian Idol 16 28th December 2025 \u2013 Full Episode",
-    "url": "http://tvcine.me/player.php?id=2864491"
+    "url": "http://tvcine.me/player.php?id=2864491",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Indian Idol 16 28th December 2025 \u2013 Full Episode",
-    "url": "http://tvcine.me/player.php?id=2864492"
+    "url": "http://tvcine.me/player.php?id=2864492",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Indian Idol 16 28th December 2025 \u2013 Full Episode",
-    "url": "http://tvcine.me/player.php?id=2864493"
+    "url": "http://tvcine.me/player.php?id=2864493",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Indian Idol 16 28th December 2025 \u2013 Full Episode",
-    "url": "http://tvcine.me/player.php?id=2864494"
+    "url": "http://tvcine.me/player.php?id=2864494",
+    "source": "yodesi"
   }
 ]

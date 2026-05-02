@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Ganesh Kartikey 2nd January 2026 \u2013 Full Episode",
-    "url": "http://tvcine.me/player.php?id=2864999"
+    "url": "http://tvcine.me/player.php?id=2864999",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Ganesh Kartikey 2nd January 2026 \u2013 Full Episode",
-    "url": "http://tvcine.me/player.php?id=2865000"
+    "url": "http://tvcine.me/player.php?id=2865000",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Ganesh Kartikey 2nd January 2026 \u2013 Full Episode",
-    "url": "http://tvcine.me/player.php?id=2865001"
+    "url": "http://tvcine.me/player.php?id=2865001",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Ganesh Kartikey 2nd January 2026 \u2013 Full Episode",
-    "url": "http://tvcine.me/player.php?id=2865002"
+    "url": "http://tvcine.me/player.php?id=2865002",
+    "source": "yodesi"
   }
 ]

@@ -1,9 +1,5 @@
 [
   {
-    "id": "aarti_anjali_awasthi_2025_09_29",
-    "name": "Aarti Anjali Awasthi 29th September 2025"
-  },
-  {
     "id": "aarti_anjali_awasthi_2026_03_10",
     "name": "Aarti Anjali Awasthi 10-03-2026"
   },
@@ -174,10 +170,6 @@
   {
     "id": "aarti_anjali_awasthi_2026_01_26",
     "name": "Aarti Anjali Awasthi 26-01-2026"
-  },
-  {
-    "id": "aarti_anjali_awasthi_2026_01_25",
-    "name": "Aarti Anjali Awasthi 25-01-2026"
   },
   {
     "id": "aarti_anjali_awasthi_2026_01_24",
@@ -484,10 +476,6 @@
     "name": "Aarti Anjali Awasthi 9-11-2025"
   },
   {
-    "id": "aarti_anjali_awasthi_2025_11_08",
-    "name": "Aarti Anjali Awasthi 8-11-2025"
-  },
-  {
     "id": "aarti_anjali_awasthi_2025_11_07",
     "name": "Aarti Anjali Awasthi 7-11-2025"
   },
@@ -638,6 +626,10 @@
   {
     "id": "aarti_anjali_awasthi_2025_09_30",
     "name": "Aarti Anjali Awasthi 30-09-2025"
+  },
+  {
+    "id": "aarti_anjali_awasthi_2025_09_29",
+    "name": "Aarti Anjali Awasthi 29-09-2025"
   },
   {
     "id": "aarti_anjali_awasthi_2025_09_28",
@@ -990,5 +982,13 @@
   {
     "id": "aarti_anjali_awasthi_2025_06_30",
     "name": "Aarti Anjali Awasthi 30-06-2025"
+  },
+  {
+    "id": "aarti_anjali_awasthi_2026_01_25",
+    "name": "Aarti Anjali Awasthi 25-01-2026"
+  },
+  {
+    "id": "aarti_anjali_awasthi_2025_11_08",
+    "name": "Aarti Anjali Awasthi 8-11-2025"
   }
 ]

@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Naagin 7 10th January 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2865907"
+    "url": "http://tvpost.cc/player.php?id=2865907",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Naagin 7 10th January 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2865908"
+    "url": "http://tvpost.cc/player.php?id=2865908",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Naagin 7 10th January 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2865909"
+    "url": "http://tvpost.cc/player.php?id=2865909",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Naagin 7 10th January 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2865910"
+    "url": "http://tvpost.cc/player.php?id=2865910",
+    "source": "yodesi"
   }
 ]

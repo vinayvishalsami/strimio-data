@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Sampoorna 26th November 2025 \u2013 Full Episode",
-    "url": "https://tvcine.me/player.php?id=2859946"
+    "url": "https://tvcine.me/player.php?id=2859946",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Sampoorna 26th November 2025 \u2013 Full Episode",
-    "url": "https://tvcine.me/player.php?id=2859947"
+    "url": "https://tvcine.me/player.php?id=2859947",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Sampoorna 26th November 2025 \u2013 Full Episode",
-    "url": "https://tvcine.me/player.php?id=2859948"
+    "url": "https://tvcine.me/player.php?id=2859948",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Sampoorna 26th November 2025 \u2013 Full Episode",
-    "url": "https://tvcine.me/player.php?id=2859949"
+    "url": "https://tvcine.me/player.php?id=2859949",
+    "source": "yodesi"
   }
 ]

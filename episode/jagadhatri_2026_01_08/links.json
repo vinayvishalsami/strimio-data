@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Jagadhatri 8th January 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2865751"
+    "url": "http://tvmag.cc/player.php?id=2865751",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Jagadhatri 8th January 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2865752"
+    "url": "http://tvmag.cc/player.php?id=2865752",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Jagadhatri 8th January 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2865753"
+    "url": "http://tvmag.cc/player.php?id=2865753",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Jagadhatri 8th January 2026 \u2013 Full Episode",
-    "url": "http://tvmag.cc/player.php?id=2865754"
+    "url": "http://tvmag.cc/player.php?id=2865754",
+    "source": "yodesi"
   }
 ]

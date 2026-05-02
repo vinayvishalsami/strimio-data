@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Naagin 7 14th March 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2874040"
+    "url": "http://tvpost.cc/player.php?id=2874040",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Naagin 7 14th March 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2874041"
+    "url": "http://tvpost.cc/player.php?id=2874041",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Naagin 7 14th March 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2874042"
+    "url": "http://tvpost.cc/player.php?id=2874042",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Naagin 7 14th March 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2874043"
+    "url": "http://tvpost.cc/player.php?id=2874043",
+    "source": "yodesi"
   }
 ]

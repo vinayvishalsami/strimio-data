@@ -2,21 +2,25 @@
   {
     "id": "server1",
     "name": "Indian Idol 16 14th March 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2874064"
+    "url": "http://tvpost.cc/player.php?id=2874064",
+    "source": "yodesi"
   },
   {
     "id": "server2",
     "name": "Indian Idol 16 14th March 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2874065"
+    "url": "http://tvpost.cc/player.php?id=2874065",
+    "source": "yodesi"
   },
   {
     "id": "server3",
     "name": "Indian Idol 16 14th March 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2874066"
+    "url": "http://tvpost.cc/player.php?id=2874066",
+    "source": "yodesi"
   },
   {
     "id": "server4",
     "name": "Indian Idol 16 14th March 2026 \u2013 Full Episode",
-    "url": "http://tvpost.cc/player.php?id=2874067"
+    "url": "http://tvpost.cc/player.php?id=2874067",
+    "source": "yodesi"
   }
 ]

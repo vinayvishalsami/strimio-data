@@ -76,10 +76,6 @@
     "name": "Shehzaadi Hai Tu Dil Ki 27-02-2026"
   },
   {
-    "id": "shehzaadi_hai_tu_dil_ki_2026_02_26",
-    "name": "Shehzaadi Hai Tu Dil Ki 26-02-2026"
-  },
-  {
     "id": "shehzaadi_hai_tu_dil_ki_2026_02_25",
     "name": "Shehzaadi Hai Tu Dil Ki 25-02-2026"
   },
@@ -394,5 +390,9 @@
   {
     "id": "shehzaadi_hai_tu_dil_ki_2025_12_04",
     "name": "Shehzaadi Hai Tu Dil Ki 4-12-2025"
+  },
+  {
+    "id": "shehzaadi_hai_tu_dil_ki_2026_02_26",
+    "name": "Shehzaadi Hai Tu Dil Ki 26-02-2026"
   }
 ]
