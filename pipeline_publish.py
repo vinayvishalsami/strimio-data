@@ -65,7 +65,6 @@ PLAYDESI_CHANNELS = {
     "vb_on_the_web": ("VB on the Web", f"{PLAYDESI_BASE}/vb-on-the-web/"),
     "viu_originals": ("Viu", f"{PLAYDESI_BASE}/viu-originals/"),
     "zee5": ("Zee5", f"{PLAYDESI_BASE}/zee5-web/"),
-    "gujarati": ("Gujarati Web Series", f"{PLAYDESI_BASE}/gujarati-web-series/"),
     "standup": ("Stand-Up Comedy", f"{PLAYDESI_BASE}/stand-up-comedy/"),
 }
 
@@ -74,7 +73,7 @@ PLAYDESI_CHANNELS = {
 PLAYDESI_CHANNEL_ALLOWLIST = None
 
 # If you want to temporarily test only one series page per channel (faster):
-PLAYDESI_LIMIT_SERIES_PER_CHANNEL = 1  # e.g. 1
+PLAYDESI_LIMIT_SERIES_PER_CHANNEL = 5  # e.g. 1
 
 CONFIRM_EPISODES = 5
 
