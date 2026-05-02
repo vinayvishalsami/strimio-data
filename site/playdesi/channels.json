@@ -1,6 +1,4 @@
 [
-  {
-    "id": "netflix",
-    "name": "Netflix"
-  }
+  { "id": "viu_originals", "name": "VIU Originals" },
+  { "id": "netflix", "name": "Netflix" }
 ]
