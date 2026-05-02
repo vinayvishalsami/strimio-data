@@ -48,20 +48,20 @@ def slugify(text):
 
 def write_json(path, data):
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(list(data), indent=2), encoding="utf-8")
+    path.write_text(json.dumps(data, indent=2), encoding="utf-8")
 
 # ============================================================
-# SCRAPE SPOTLIGHT SEASON 1 (CORRECT STRUCTURE)
+# SCRAPE SPOTLIGHT SEASON 1 (PLAYDESI-CORRECT)
 # ============================================================
 
 def scrape_spotlight():
-    log("Scraping Spotlight Season 1")
+    log("Scraping Spotlight Season 1 (PlayDesi episode links only)")
 
     series_id = f"{slugify(SERIES_NAME)}__season_{SEASON}"
     page = soup(SERIES_URL)
 
     # --------------------------------------------------------
-    # STEP 1: GET EPISODE PAGES FROM <article> BLOCKS
+    # STEP 1: FIND EPISODE PAGES
     # --------------------------------------------------------
 
     episode_pages = []
@@ -71,13 +71,12 @@ def scrape_spotlight():
             episode_pages.append(href)
 
     episode_pages = list(dict.fromkeys(episode_pages))
-
     log(f"Found {len(episode_pages)} episode pages")
 
     episodes = []
 
     # --------------------------------------------------------
-    # STEP 2: SCRAPE EACH EPISODE PAGE
+    # STEP 2: PROCESS EACH EPISODE PAGE
     # --------------------------------------------------------
 
     for ep_url in episode_pages:
@@ -94,20 +93,19 @@ def scrape_spotlight():
         ep_no = int(match.group(1))
         ep_id = f"{series_id}_ep{ep_no:02d}"
 
-        servers = []
-        for i, a in enumerate(ep_page.select(".entry-content a[href*='groundbanks.net']")):
-            servers.append({
-                "id": f"server{i+1}",
-                "name": a.get_text(strip=True) or f"Server {i+1}",
-                "url": a["href"],
-            })
-
-        if not servers:
-            continue
+        # ✅ ONLY STORE PLAYDESI EPISODE URL
+        links = [
+            {
+                "id": "watch",
+                "name": "Watch on PlayDesi",
+                "url": ep_url,
+                "source": "playdesi"
+            }
+        ]
 
         write_json(
             REPO_ROOT / "episode" / ep_id / "links.json",
-            servers,
+            links
         )
 
         episodes.append({
@@ -121,7 +119,7 @@ def scrape_spotlight():
 
     write_json(
         REPO_ROOT / "series" / series_id / "episodes.json",
-        sorted(episodes, key=lambda x: x["id"]),
+        sorted(episodes, key=lambda x: x["id"])
     )
 
     write_json(
@@ -129,10 +127,10 @@ def scrape_spotlight():
         [{
             "id": series_id,
             "name": f"{SERIES_NAME} – Season {SEASON}"
-        }],
+        }]
     )
 
-    log("✅ Spotlight Season 1 scrape completed")
+    log("✅ Spotlight Season 1 scrape completed (PlayDesi-safe)")
 
 # ============================================================
 # RUN SCRAPER
@@ -141,7 +139,7 @@ def scrape_spotlight():
 scrape_spotlight()
 
 # ============================================================
-# COMMIT & PUSH CHANGES (CRITICAL)
+# COMMIT & PUSH
 # ============================================================
 
 subprocess.run(["git", "add", "."], cwd=REPO_ROOT)
@@ -155,7 +153,7 @@ status = subprocess.run(
 
 if status.stdout.strip():
     subprocess.run(
-        ["git", "commit", "-m", "Publish Spotlight Season 1 episodes"],
+        ["git", "commit", "-m", "PlayDesi: store episode URLs only (no GroundBanks)"],
         cwd=REPO_ROOT
     )
     subprocess.run(["git", "push"], cwd=REPO_ROOT)
