@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "id": "special_ops_1_5__season_1_ep01",
+    "name": "Episode 1"
+  },
+  {
+    "id": "special_ops_1_5__season_1_ep02",
+    "name": "Episode 2"
+  },
+  {
+    "id": "special_ops_1_5__season_1_ep03",
+    "name": "Episode 3"
+  },
+  {
+    "id": "special_ops_1_5__season_1_ep04",
+    "name": "Episode 4"
+  }
+]
