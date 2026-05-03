@@ -1,12 +1,17 @@
-name: Daily Strimio Scraper
+name: YoDesi Scraper (every 2 hours)
 
 on:
   schedule:
-    - cron: "0 */6 * * *"   # ✅ every 6 hours
+    - cron: "0 */2 * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
+
+# ✅ GUARANTEE no overlap with PlayDesi: shared concurrency group
+concurrency:
+  group: scrape-all
+  cancel-in-progress: false
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -14,12 +19,14 @@ env:
 jobs:
   scrape:
     runs-on: ubuntu-latest
+    timeout-minutes: 120
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           persist-credentials: true
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -33,9 +40,12 @@ jobs:
 
       - name: Configure Git identity
         run: |
-          git config user.name "github-actions"
+          git config user.name "github-actions[bot]"
           git config user.email "github-actions@github.com"
 
-      - name: Run scraper
+      - name: Run YoDesi only
+        env:
+          RUN_YODESI: "1"
+          RUN_PLAYDESI: "0"
         run: |
           python pipeline_publish.py
