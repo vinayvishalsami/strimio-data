@@ -1,66 +1,6 @@
 [
   {
-    "id": "alt_balaji",
-    "name": "ALT Balaji"
-  },
-  {
-    "id": "amazon_prime",
-    "name": "Amazon Prime"
-  },
-  {
-    "id": "eros_now",
-    "name": "Eros Now"
-  },
-  {
-    "id": "hoichoi",
-    "name": "Hoichoi"
-  },
-  {
-    "id": "hotstar",
-    "name": "Hotstar"
-  },
-  {
-    "id": "hotstar_quix",
-    "name": "HotStar Quix"
-  },
-  {
-    "id": "jio_cinema",
-    "name": "Jio Cinema"
-  },
-  {
-    "id": "mixed_bag",
-    "name": "Mixed Bag"
-  },
-  {
-    "id": "mx_player",
-    "name": "MX Player"
-  },
-  {
-    "id": "netflix",
-    "name": "Netflix"
-  },
-  {
-    "id": "sonyliv",
-    "name": "SonyLiv"
-  },
-  {
-    "id": "tvf",
-    "name": "TVF Play"
-  },
-  {
-    "id": "voot",
-    "name": "VOOT"
-  },
-  {
-    "id": "vb_on_the_web",
-    "name": "VB on the Web"
-  },
-  {
     "id": "viu_originals",
     "name": "Viu"
-  },
-  {
-    "id": "zee5",
-    "name": "Zee5"
   }
 ]
