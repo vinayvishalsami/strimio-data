@@ -22,12 +22,9 @@ session = requests.Session()
 session.headers.update(HEADERS)
 
 CONFIRM_EPISODES = int(os.getenv("CONFIRM_EPISODES", "5"))
-MAX_PAGES = int(os.getenv("MAX_PAGES", "15"))
+MAX_PAGES = int(os.getenv("MAX_PAGES", "50"))
 
-# ------------------------------------------------------------
-# YoDesi
-# ------------------------------------------------------------
-
+# ---------- YoDesi ----------
 YODESI_BASE = "https://www.yodesi.net"
 YODESI_SITE_ID = "yodesi"
 
@@ -56,10 +53,7 @@ MONTHS_TITLE = {
     "december": ("12", "December"),
 }
 
-# ------------------------------------------------------------
-# PlayDesi
-# ------------------------------------------------------------
-
+# ---------- PlayDesi ----------
 PLAYDESI_BASE = "https://playdesi.tv"
 PLAYDESI_SITE_ID = "playdesi"
 
@@ -80,6 +74,8 @@ PLAYDESI_CHANNELS = {
     "vb_on_the_web": ("VB on the Web", f"{PLAYDESI_BASE}/vb-on-the-web/"),
     "viu_originals": ("Viu", f"{PLAYDESI_BASE}/viu-originals/"),
     "zee5": ("Zee5", f"{PLAYDESI_BASE}/zee5-web/"),
+    "gujarati": ("Gujarati Web Series", f"{PLAYDESI_BASE}/gujarati-web-series/"),
+    "standup": ("Stand-Up Comedy", f"{PLAYDESI_BASE}/stand-up-comedy/"),
 }
 
 PLAYDESI_GENRES = {
@@ -135,7 +131,7 @@ def load_existing_episodes(series_id: str):
     return data, {e["id"] for e in data}
 
 # ============================================================
-# YoDesi: Option 2 naming + title-first date IDs
+# YoDesi (title-first date IDs + consistent naming)
 # ============================================================
 
 def parse_date_from_text(text: str):
@@ -311,7 +307,7 @@ def scrape_yodesi():
     log("=== YoDesi done ===")
 
 # ============================================================
-# PlayDesi: Genre concat fix + robust episodes + pagination
+# PlayDesi (all channels + pagination + robust episodes + genre fix)
 # ============================================================
 
 def normalize_playdesi_title(raw: str) -> str:
@@ -337,6 +333,7 @@ def collect_series_pages_from_channel(channel_url: str):
     results = []
     seen = set()
     prev_count = 0
+
     for page in range(1, MAX_PAGES + 1):
         url = wp_page_url(channel_url, page)
         try:
@@ -363,6 +360,7 @@ def collect_series_pages_from_channel(channel_url: str):
         prev_count = len(results)
         if not page_has_next(sp):
             break
+
     return results
 
 def series_page_has_episodes(series_url: str) -> bool:
@@ -371,10 +369,12 @@ def series_page_has_episodes(series_url: str) -> bool:
             sp = fetch_soup(wp_page_url(series_url, page), ref=PLAYDESI_BASE)
         except Exception:
             return False
+
         for a in sp.select("article .entry-title a"):
             href = a.get("href", "")
             if "-episode-" in href:
                 return True
+
         if not page_has_next(sp):
             break
     return False
@@ -386,6 +386,7 @@ def scrape_playdesi():
 
     for channel_id, (channel_name, channel_url) in PLAYDESI_CHANNELS.items():
         log(f"PlayDesi channel: {channel_name}")
+
         candidates = collect_series_pages_from_channel(channel_url)
 
         series_entries = []
@@ -415,8 +416,8 @@ def scrape_playdesi():
 
         for series in series_entries:
             log(f"PlayDesi series episodes: {series['name']}")
-            existing_eps, existing_ids = load_existing_episodes(series["id"])
 
+            existing_eps, existing_ids = load_existing_episodes(series["id"])
             found_new = False
             confirmed = 0
             new_eps = []
@@ -441,7 +442,7 @@ def scrape_playdesi():
                 for ep_url in ep_pages:
                     ep_no = parse_playdesi_episode_number_from_url(ep_url)
                     if ep_no is None:
-                        # fallback to open page and parse h1
+                        # fallback: parse episode number from H1
                         ep_page = fetch_soup(ep_url, ref=series["url"])
                         h1 = ep_page.select_one("h1")
                         if not h1:
@@ -543,7 +544,7 @@ def main():
     what = []
     if run_yodesi: what.append("YoDesi")
     if run_playdesi: what.append("PlayDesi")
-    git_publish(f"Scheduled scrape: {', '.join(what) if what else 'none'}")
+    git_publish(f"Scheduled scrape: {', '.join(what)}")
 
 if __name__ == "__main__":
     main()
