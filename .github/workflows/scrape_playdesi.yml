@@ -1,0 +1,51 @@
+name: PlayDesi Scraper (daily)
+
+on:
+  schedule:
+    - cron: "0 18 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# ✅ GUARANTEE no overlap with YoDesi: shared concurrency group
+concurrency:
+  group: scrape-all
+  cancel-in-progress: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 420
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4 lxml
+
+      - name: Configure Git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions@github.com"
+
+      - name: Run PlayDesi only
+        env:
+          RUN_YODESI: "0"
+          RUN_PLAYDESI: "1"
+        run: |
+          python pipeline_publish.py
