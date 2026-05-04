@@ -37,14 +37,34 @@ def fetch_json(url):
     return r.json()
 
 def fetch_dm_episodes(playlist_id):
-    url = f"{DM_API}/playlist/{playlist_id}/videos"
-    params = {
-        "fields": "id,title",
-        "limit": 100
-    }
-    r = requests.get(url, headers=HEADERS, params=params, timeout=30)
-    r.raise_for_status()
-    return r.json().get("list", [])
+    all_episodes = []
+    page = 1
+
+    while True:
+        url = f"{DM_API}/playlist/{playlist_id}/videos"
+        params = {
+            "fields": "id,title",
+            "limit": 100,
+            "page": page
+        }
+
+        r = requests.get(url, headers=HEADERS, params=params, timeout=30)
+        r.raise_for_status()
+        data = r.json()
+
+        items = data.get("list", [])
+        if not items:
+            break
+
+        all_episodes.extend(items)
+
+        if not data.get("has_more"):
+            break
+
+        page += 1
+        time.sleep(0.2)
+
+    return all_episodes
 
 # --------------------------------------------------
 # MAIN PIPELINE
@@ -54,7 +74,7 @@ def main():
     print("=== ARY DIGITAL PIPELINE ===")
 
     # --------------------------------------------------
-    # Ensure site exists (non-destructive)
+    # Ensure site exists
     # --------------------------------------------------
     sites_path = REPO_ROOT / "sites.json"
     sites = json.loads(sites_path.read_text())
@@ -75,7 +95,7 @@ def main():
     )
 
     # --------------------------------------------------
-    # Per Section (with pagination)
+    # SERIES PAGINATION (Load More FIX)
     # --------------------------------------------------
     for channel_id, category in SECTIONS.items():
         print(f"Fetching section: {category}")
@@ -87,23 +107,19 @@ def main():
             url = f"{ARY_API}/{category}/{COUNTRY}?page={page}"
             resp = fetch_json(url)
 
-            # ✅ Handle both ARY response shapes safely
-            if "data" in resp:
-                data_block = resp["data"]
-                series_page = data_block.get("series", [])
-                pagination = data_block.get("pagination", {})
+            if "data" in resp and "series" in resp["data"]:
+                series_page = resp["data"]["series"]
+            elif "series" in resp:
+                series_page = resp["series"]
             else:
-                series_page = resp.get("series", [])
-                pagination = {}
+                break
 
             if not series_page:
                 break
 
+            print(f"Page {page}: {len(series_page)} series")
+
             all_series.extend(series_page)
-
-            if not pagination.get("hasNext"):
-                break
-
             page += 1
             time.sleep(0.4)
 
@@ -114,7 +130,6 @@ def main():
             series_name = series.get("title")
             playlist = series.get("seriesDM")
 
-            # Skip series without Dailymotion playlists
             if not series_id or not playlist:
                 continue
 
