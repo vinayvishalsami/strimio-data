@@ -8,10 +8,13 @@ from pathlib import Path
 # --------------------------------------------------
 
 REPO_ROOT = Path(__file__).resolve().parent
-HEADERS = {"User-Agent": "Strimio-ARY"}
-DM_API = "https://api.dailymotion.com"
+
+HEADERS = {
+    "User-Agent": "Strimio-ARY"
+}
 
 ARY_API = "https://node.aryzap.com/api/series/byCatID/pg"
+DM_API = "https://api.dailymotion.com"
 COUNTRY = "PK"
 
 SECTIONS = {
@@ -44,15 +47,15 @@ def fetch_dm_episodes(playlist_id):
     return r.json().get("list", [])
 
 # --------------------------------------------------
-# PIPELINE
+# MAIN PIPELINE
 # --------------------------------------------------
 
 def main():
     print("=== ARY DIGITAL PIPELINE ===")
 
-    # -----------------------------
-    # Ensure site exists
-    # -----------------------------
+    # --------------------------------------------------
+    # Ensure site exists (non-destructive)
+    # --------------------------------------------------
     sites_path = REPO_ROOT / "sites.json"
     sites = json.loads(sites_path.read_text())
 
@@ -60,9 +63,9 @@ def main():
         sites.append({"id": "arydigital", "name": "ARY Digital"})
         write_json(sites_path, sites)
 
-    # -----------------------------
+    # --------------------------------------------------
     # Channels
-    # -----------------------------
+    # --------------------------------------------------
     write_json(
         REPO_ROOT / "site/arydigital/channels.json",
         [
@@ -71,32 +74,47 @@ def main():
         ]
     )
 
-    # -----------------------------
-    # Per Section
-    # -----------------------------
+    # --------------------------------------------------
+    # Per Section (with pagination)
+    # --------------------------------------------------
     for channel_id, category in SECTIONS.items():
         print(f"Fetching section: {category}")
 
-        url = f"{ARY_API}/{category}/{COUNTRY}"
-        resp = fetch_json(url)
+        page = 1
+        all_series = []
 
-        # ✅ Handle both API shapes
-        if "data" in resp and "series" in resp["data"]:
-            series_list = resp["data"]["series"]
-        elif "series" in resp:
-            series_list = resp["series"]
-        else:
-            print(f"⚠️ No series found for {category}, keys: {resp.keys()}")
-            continue
+        while True:
+            url = f"{ARY_API}/{category}/{COUNTRY}?page={page}"
+            resp = fetch_json(url)
+
+            # ✅ Handle both ARY response shapes safely
+            if "data" in resp:
+                data_block = resp["data"]
+                series_page = data_block.get("series", [])
+                pagination = data_block.get("pagination", {})
+            else:
+                series_page = resp.get("series", [])
+                pagination = {}
+
+            if not series_page:
+                break
+
+            all_series.extend(series_page)
+
+            if not pagination.get("hasNext"):
+                break
+
+            page += 1
+            time.sleep(0.4)
 
         series_index = []
 
-        for series in series_list:
+        for series in all_series:
             series_id = series.get("_id")
             series_name = series.get("title")
             playlist = series.get("seriesDM")
 
-            # Skip non-Dailymotion series safely
+            # Skip series without Dailymotion playlists
             if not series_id or not playlist:
                 continue
 
@@ -133,7 +151,7 @@ def main():
                 episode_index
             )
 
-            time.sleep(0.3)
+            time.sleep(0.2)
 
         write_json(
             REPO_ROOT / f"channel/{channel_id}/series.json",
