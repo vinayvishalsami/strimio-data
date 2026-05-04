@@ -24,7 +24,7 @@ jobs:
           pip install requests
 
       - name: Run ARY pipeline
-        run: python pipeline_ary.py
+        run: python pipeline_ary_test.py
 
       - name: Commit ARY data only
         run: |
