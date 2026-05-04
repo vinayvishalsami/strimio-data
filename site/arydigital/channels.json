@@ -1,0 +1,14 @@
+[
+  {
+    "id": "ary_on_air",
+    "name": "On Air"
+  },
+  {
+    "id": "ary_popular",
+    "name": "Popular"
+  },
+  {
+    "id": "ary_archive",
+    "name": "Archive"
+  }
+]
