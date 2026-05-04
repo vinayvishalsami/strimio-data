@@ -57,7 +57,15 @@ def main():
         print(f"Fetching section: {category}")
 
         url = f"{ARY_API}/{category}/{COUNTRY}"
-        data = fetch_json(url)["data"]["series"]
+        resp = fetch_json(url)
+
+if "data" in resp and "series" in resp["data"]:
+    data = resp["data"]["series"]
+elif "series" in resp:
+    data = resp["series"]
+else:
+    print(f"⚠️ No series found for {category}, raw response keys: {resp.keys()}")
+    continue
 
         series_index = []
 
