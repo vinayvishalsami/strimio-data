@@ -1,35 +1,35 @@
-name: ARY Digital – Limited Test Scrape
+name: ARY Digital Pipeline
 
 on:
-  workflow_dispatch:   # manual trigger only
+  workflow_dispatch:
   schedule:
-    - cron: "0 3 * * *"   # OPTIONAL: once daily (remove if you want)
+    - cron: "0 2 * * *"   # once daily (official content)
 
 jobs:
-  ary-test:
+  arydigital:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install dependencies
+      - name: Install deps
         run: |
           python -m pip install --upgrade pip
-          pip install requests beautifulsoup4 lxml
+          pip install requests
 
-      - name: Run ARY test pipeline
-        run: python pipeline_ary_test.py
+      - name: Run ARY pipeline
+        run: python pipeline_ary.py
 
-      - name: Commit results (ARY only)
+      - name: Commit ARY data only
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "actions@github.com"
           git add site/arydigital channel/ary_* series episode sites.json
-          git commit -m "ARY Digital test scrape (limited)" || echo "Nothing to commit"
+          git commit -m "Update ARY Digital catalog" || echo "No changes"
           git push
