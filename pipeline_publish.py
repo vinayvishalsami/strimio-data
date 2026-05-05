@@ -129,8 +129,79 @@ def load_existing_episodes(series_id: str):
     return data, {e["id"] for e in data}
 
 # ============================================================
-# YoDesi SCRAPER (FIX APPLIED HERE)
+# YoDesi (title-first date IDs + consistent naming)
 # ============================================================
+
+def parse_date_from_text(text: str):
+    if not text:
+        return None
+    t = text.lower()
+    m = re.search(r"\b(\d{1,2})(?:st|nd|rd|th|h)?\s+([a-z]+)\s+(\d{4})\b", t)
+    if not m:
+        return None
+    day = int(m.group(1))
+    month = m.group(2)
+    year = m.group(3)
+    if month not in MONTHS_TITLE:
+        return None
+    mm, month_title = MONTHS_TITLE[month]
+    return (year, mm, f"{day:02d}", month_title)
+
+def yodesi_eid_from_title(series_id: str, title_text: str):
+    parsed = parse_date_from_text(title_text)
+    if not parsed:
+        return None
+    year, mm, dd, _ = parsed
+    return f"{series_id}_{year}_{mm}_{dd}"
+
+def yodesi_eid_from_url(series_id: str, ep_url: str):
+    try:
+        slug = ep_url.rstrip("/").split("/")[-2]
+    except Exception:
+        return None
+    m = re.search(r"(\d{1,2})(?:st|nd|rd|th|h)?-([a-z]+)-(\d{4})", slug)
+    if not m:
+        return None
+    day = int(m.group(1))
+    month = m.group(2)
+    year = m.group(3)
+    if month not in MONTHS_TITLE:
+        return None
+    mm, _ = MONTHS_TITLE[month]
+    return f"{series_id}_{year}_{mm}_{day:02d}"
+
+def yodesi_eid_from_time_tag(series_id: str, sp: BeautifulSoup):
+    t = sp.select_one("time[datetime]")
+    if not t:
+        return None
+    dt = (t.get("datetime") or "").strip()
+    if len(dt) < 10:
+        return None
+    date_part = dt[:10]
+    if not re.match(r"^\d{4}-\d{2}-\d{2}$", date_part):
+        return None
+    y, m, d = date_part.split("-")
+    return f"{series_id}_{y}_{m}_{d}"
+
+def yodesi_eid_from_page_h1(series_id: str, sp: BeautifulSoup):
+    h1 = sp.select_one("h1")
+    if not h1:
+        return None
+    return yodesi_eid_from_title(series_id, h1.get_text(" ", strip=True))
+
+def format_episode_name(show_name: str, eid: str):
+    parts = eid.split("_")
+    if len(parts) < 4:
+        return show_name
+    year, mm, dd = parts[-3], parts[-2], parts[-1]
+    month_title = None
+    for _, (mm2, title) in MONTHS_TITLE.items():
+        if mm2 == mm:
+            month_title = title
+            break
+    if not month_title:
+        month_title = mm
+    return f"{show_name} {int(dd)} {month_title} {year}"
 
 def scrape_yodesi():
     log("=== YoDesi scraping ===")
@@ -148,7 +219,8 @@ def scrape_yodesi():
             slug = urlparse(a["href"]).path.rstrip("/").split("/")[-1]
             shows.append({"id": slugify(slug), "name": a.get_text(strip=True), "url": a["href"]})
 
-        valid_shows = []
+        write_json(REPO_ROOT / "channel" / channel_id / "series.json",
+                   [{"id": x["id"], "name": x["name"]} for x in shows])
 
         for show in shows:
             try:
@@ -216,44 +288,258 @@ def scrape_yodesi():
                             "source": "yodesi"
                         })
 
-                    if links:
-                        write_json(REPO_ROOT / "episode" / eid / "links.json", links)
-                        new_eps_map[eid] = {"id": eid, "name": format_episode_name(show["name"], eid)}
+                    # --------------------------------------------------
+                    # 2. Protect links.json writes
+                    # --------------------------------------------------
+                    links_path = REPO_ROOT / "episode" / eid / "links.json"
+                    if links and len(links) > 0:
+                        write_json(links_path, links)
+                    else:
+                        log(f"⚠️ Skipping links for {eid} — no servers found")
+
+                    if links and len(links) > 0:
+                        if eid not in new_eps_map:
+                            new_eps_map[eid] = {"id": eid, "name": format_episode_name(show["name"], eid)}
 
                 merged = list(new_eps_map.values()) + existing_eps
-                dedup = {e["id"]: e for e in merged}
+                dedup = {e["id"]: {"id": e["id"], "name": format_episode_name(show["name"], e["id"])} for e in merged}
 
                 def sort_key(e):
                     parts = e["id"].split("_")
-                    return f"{parts[-3]}{parts[-2]}{parts[-1]}"
+                    y, m, d = parts[-3], parts[-2], parts[-1]
+                    return f"{y}{m}{d}"
 
                 final = sorted(dedup.values(), key=sort_key, reverse=True)
 
-                if not final:
-                    log(f"⏭️ Skipping YoDesi series with NO episodes: {show['name']}")
-                    continue
-
-                write_json(REPO_ROOT / "series" / show["id"] / "episodes.json", final)
-                valid_shows.append({"id": show["id"], "name": show["name"]})
+                # --------------------------------------------------
+                # 1. Prevent empty overwrites (YoDesi episodes.json)
+                # --------------------------------------------------
+                ep_path = REPO_ROOT / "series" / show["id"] / "episodes.json"
+                if final and len(final) > 0:
+                    write_json(ep_path, final)
+                else:
+                    log(f"⚠️ Skipping write for {ep_path} — no valid data")
 
             except Exception as e:
                 log(f"❌ Error processing {show['id']}: {e}")
 
-        write_json(REPO_ROOT / "channel" / channel_id / "series.json", valid_shows)
-
     log("=== YoDesi done ===")
 
 # ============================================================
-# PlayDesi SCRAPER (UNCHANGED)
+# PlayDesi (all channels + pagination + robust episodes + genre fix)
 # ============================================================
+
+def normalize_playdesi_title(raw: str) -> str:
+    if not raw:
+        return ""
+    s = " ".join(raw.split())
+    s = re.sub(r"([a-z])([A-Z])", r"\1 \2", s)
+    parts = s.split()
+    if parts and parts[-1].lower() in PLAYDESI_GENRES:
+        s = " ".join(parts[:-1])
+    return s.strip()
+
+def parse_playdesi_episode_number_from_url(url: str):
+    m = re.search(r"-episode-(\d+)(?:-|/)", url, re.I)
+    if m:
+        return int(m.group(1))
+    m = re.search(r"episode-(\d+)(?:-|/)", url, re.I)
+    if m:
+        return int(m.group(1))
+    return None
+
+def collect_series_pages_from_channel(channel_url: str):
+    results = []
+    seen = set()
+    prev_count = 0
+
+    for page in range(1, MAX_PAGES + 1):
+        url = wp_page_url(channel_url, page)
+        try:
+            sp = fetch_soup(url, ref=PLAYDESI_BASE)
+        except Exception:
+            break
+
+        for a in sp.select("a[href*='/watch-online/']"):
+            href = a.get("href")
+            if not href or not href.startswith(PLAYDESI_BASE):
+                continue
+            if "-episode-" in href:
+                continue
+
+            raw_title = a.get_text(" ", strip=True) or href
+            title = normalize_playdesi_title(raw_title)
+
+            if href not in seen:
+                seen.add(href)
+                results.append((title, href))
+
+        if len(results) == prev_count and not page_has_next(sp):
+            break
+        prev_count = len(results)
+        if not page_has_next(sp):
+            break
+
+    return results
+
+def series_page_has_episodes(series_url: str) -> bool:
+    for page in (1, 2):
+        try:
+            sp = fetch_soup(wp_page_url(series_url, page), ref=PLAYDESI_BASE)
+        except Exception:
+            return False
+
+        for a in sp.select("article .entry-title a"):
+            href = a.get("href", "")
+            if "-episode-" in href:
+                return True
+
+        if not page_has_next(sp):
+            break
+    return False
 
 def scrape_playdesi():
     log("=== PlayDesi scraping ===")
-    # ORIGINAL PlayDesi CODE UNCHANGED (already handles empty series)
-    pass
+    write_json(
+        REPO_ROOT / "site" / PLAYDESI_SITE_ID / "channels.json",
+        [{"id": cid, "name": name} for cid, (name, _) in PLAYDESI_CHANNELS.items()]
+    )
+
+    for channel_id, (channel_name, channel_url) in PLAYDESI_CHANNELS.items():
+        log(f"PlayDesi channel: {channel_name}")
+
+        candidates = collect_series_pages_from_channel(channel_url)
+
+        series_entries = []
+        seen_series = set()
+
+        for title, series_url in candidates:
+            title = normalize_playdesi_title(title)
+            m = re.search(r"(.+?)\s+season\s+(\d+)", title, re.I)
+            if m:
+                show = m.group(1).strip()
+                season = int(m.group(2))
+            else:
+                show = title.strip()
+                season = 1
+
+            series_id = f"{slugify(show)}__season_{season}"
+            if series_id in seen_series:
+                continue
+            if not series_page_has_episodes(series_url):
+                continue
+
+            seen_series.add(series_id)
+            series_entries.append({"id": series_id, "name": f"{show} – Season {season}", "url": series_url})
+
+        write_json(
+            REPO_ROOT / "channel" / channel_id / "series.json",
+            [{"id": s["id"], "name": s["name"]} for s in sorted(series_entries, key=lambda x: x["id"])]
+        )
+
+        for series in series_entries:
+            try:
+                log(f"PlayDesi series episodes: {series['name']}")
+
+                existing_eps, existing_ids = load_existing_episodes(series["id"])
+                found_new = False
+                confirmed = 0
+                new_eps = []
+
+                for page in range(1, MAX_PAGES + 1):
+                    list_url = wp_page_url(series["url"], page)
+                    try:
+                        sp = fetch_soup(list_url, ref=channel_url)
+                    except Exception:
+                        break
+
+                    ep_pages = []
+                    for a in sp.select("article .entry-title a"):
+                        href = a.get("href")
+                        if href and href.startswith(PLAYDESI_BASE) and "-episode-" in href:
+                            ep_pages.append(href)
+
+                    ep_pages = unique_preserve(ep_pages)
+                    if not ep_pages:
+                        break
+
+                    for ep_url in ep_pages:
+                        ep_no = parse_playdesi_episode_number_from_url(ep_url)
+                        if ep_no is None:
+                            ep_page = fetch_soup(ep_url, ref=series["url"])
+                            h1 = ep_page.select_one("h1")
+                            if not h1:
+                                continue
+                            mm = re.search(r"episode\s+(\d+)", h1.get_text(), re.I)
+                            if not mm:
+                                continue
+                            ep_no = int(mm.group(1))
+
+                        ep_id = f"{series['id']}_ep{ep_no:02d}"
+
+                        if ep_id in existing_ids:
+                            if found_new:
+                                confirmed += 1
+                            continue
+
+                        found_new = True
+                        confirmed = 0
+
+                        links = [{
+                            "id": "watch",
+                            "name": "Watch on PlayDesi",
+                            "url": ep_url,
+                            "source": "playdesi"
+                        }]
+
+                        # --------------------------------------------------
+                        # 2. Protect links.json writes (PlayDesi)
+                        # --------------------------------------------------
+                        links_path = REPO_ROOT / "episode" / ep_id / "links.json"
+                        if links and len(links) > 0:
+                            write_json(links_path, links)
+                        else:
+                            log(f"⚠️ Skipping links for {ep_id} — no servers found")
+
+                        if links and len(links) > 0:
+                            new_eps.append({"id": ep_id, "name": f"Episode {ep_no}"})
+
+                        if found_new and confirmed >= CONFIRM_EPISODES:
+                            break
+
+                    if found_new and confirmed >= CONFIRM_EPISODES:
+                        break
+
+                    if not page_has_next(sp):
+                        break
+
+                merged = new_eps + existing_eps
+                dedup = {}
+                for e in merged:
+                    dedup[e["id"]] = e
+
+                def ep_sort_key(e):
+                    m = re.search(r"_ep(\d+)$", e["id"])
+                    return int(m.group(1)) if m else 999999
+
+                final_eps = sorted(dedup.values(), key=ep_sort_key)
+
+                # --------------------------------------------------
+                # 1. Prevent empty overwrites (PlayDesi episodes.json)
+                # --------------------------------------------------
+                ep_path = REPO_ROOT / "series" / series["id"] / "episodes.json"
+                if final_eps and len(final_eps) > 0:
+                    write_json(ep_path, final_eps)
+                else:
+                    log(f"⚠️ Skipping write for {ep_path} — no valid data")
+
+            except Exception as e:
+                log(f"❌ Error processing {series['id']}: {e}")
+
+    log("=== PlayDesi done ===")
 
 # ============================================================
-# Git publish
+# Git publish (unchanged)
 # ============================================================
 
 def git_publish(message: str):
@@ -269,18 +555,30 @@ def git_publish(message: str):
 
     subprocess.run(["git", "commit", "-m", message], cwd=REPO_ROOT, check=True)
     subprocess.run(["git", "pull", "--rebase", "origin", "main"], cwd=REPO_ROOT, check=True)
-    subprocess.run(["git", "push"], cwd=REPO_ROOT, check=True)
+
+    try:
+        subprocess.run(["git", "push"], cwd=REPO_ROOT, check=True)
+    except subprocess.CalledProcessError:
+        log("⚠️ Push failed, retrying after rebase…")
+        subprocess.run(["git", "pull", "--rebase", "origin", "main"], cwd=REPO_ROOT, check=True)
+        subprocess.run(["git", "push"], cwd=REPO_ROOT, check=True)
 
     log("✅ Changes committed and pushed")
 
 # ============================================================
-# MAIN
+# MAIN (flags)
 # ============================================================
 
 def main():
     run_yodesi = os.getenv("RUN_YODESI", "1") == "1"
     run_playdesi = os.getenv("RUN_PLAYDESI", "1") == "1"
 
+    # --------------------------------------------------
+    # 4. Add run flag logging
+    # --------------------------------------------------
+    log(f"RUN_YODESI={run_yodesi}, RUN_PLAYDESI={run_playdesi}")
+
+    # Always keep sites.json present
     write_json(REPO_ROOT / "sites.json", [
         {"id": YODESI_SITE_ID, "name": "YoDesi"},
         {"id": PLAYDESI_SITE_ID, "name": "PlayDesi"},
@@ -288,10 +586,16 @@ def main():
 
     if run_yodesi:
         scrape_yodesi()
+
     if run_playdesi:
         scrape_playdesi()
 
-    git_publish("Scheduled scrape")
+    what = []
+    if run_yodesi:
+        what.append("YoDesi")
+    if run_playdesi:
+        what.append("PlayDesi")
+    git_publish(f"Scheduled scrape: {', '.join(what)}")
 
 if __name__ == "__main__":
     main()
