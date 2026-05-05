@@ -589,11 +589,11 @@ def main():
     # --------------------------------------------------
     # 4. Add run flag logging
     # --------------------------------------------------
-    log(f"RUN_YODESI={run_yodesi}, RUN_PLAYDESI={run_playdesi}")
+    
+    upsert_site(YODESI_SITE_ID, "YoDesi")
+    upsert_site(PLAYDESI_SITE_ID, "PlayDesi")
 
-    # Always keep sites.json present
-       upsert_site(YODESI_SITE_ID, "YoDesi")
-       upsert_site(PLAYDESI_SITE_ID, "PlayDesi")
+    log(f"RUN_YODESI={run_yodesi}, RUN_PLAYDESI={run_playdesi}")
 
     if run_yodesi:
         scrape_yodesi()
