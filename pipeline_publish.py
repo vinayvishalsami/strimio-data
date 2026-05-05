@@ -86,6 +86,19 @@ PLAYDESI_GENRES = {
 # HELPERS
 # ============================================================
 
+
+def upsert_site(site_id: str, site_name: str):
+    sites_path = REPO_ROOT / "sites.json"
+
+    if sites_path.exists():
+        sites = json.loads(sites_path.read_text(encoding="utf-8"))
+    else:
+        sites = []
+
+    if not any(s["id"] == site_id for s in sites):
+        sites.append({"id": site_id, "name": site_name})
+        write_json(sites_path, sites)
+
 def log(msg: str):
     print(f"[{datetime.utcnow().isoformat()}] {msg}")
 
@@ -579,10 +592,8 @@ def main():
     log(f"RUN_YODESI={run_yodesi}, RUN_PLAYDESI={run_playdesi}")
 
     # Always keep sites.json present
-    write_json(REPO_ROOT / "sites.json", [
-        {"id": YODESI_SITE_ID, "name": "YoDesi"},
-        {"id": PLAYDESI_SITE_ID, "name": "PlayDesi"},
-    ])
+       upsert_site(YODESI_SITE_ID, "YoDesi")
+       upsert_site(PLAYDESI_SITE_ID, "PlayDesi")
 
     if run_yodesi:
         scrape_yodesi()
