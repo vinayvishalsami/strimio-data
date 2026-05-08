@@ -579,12 +579,105 @@ def git_publish(message: str):
     log("✅ Changes committed and pushed")
 
 # ============================================================
+# HUM TV (ISOLATED TEST SCRAPER - MUAMMA)
+# ============================================================
+
+def scrape_humtv():
+    log("=== HUM TV scraping (Muamma only) ===")
+
+    BASE = "https://hum.tv"
+    SERIES_URL = "https://hum.tv/dramas/muamma/"
+    SERIES_ID = "muamma"
+    SERIES_NAME = "Muamma"
+
+    SITE_ID = "hum_tv"
+    CHANNEL_ID = "hum_tv"
+
+    # ✅ write ONLY HUM TV files (isolated)
+    write_json(REPO_ROOT / "site" / SITE_ID / "channels.json", [
+        {"id": CHANNEL_ID, "name": "HUM TV"}
+    ])
+
+    write_json(REPO_ROOT / "channel" / CHANNEL_ID / "series.json", [
+        {"id": SERIES_ID, "name": SERIES_NAME}
+    ])
+
+    existing_eps, existing_ids = load_existing_episodes(SERIES_ID)
+
+    try:
+        soup = fetch_soup(SERIES_URL, ref=BASE)
+    except Exception as e:
+        log(f"❌ Failed to load HUM TV series: {e}")
+        return
+
+    ep_links = []
+
+    # ✅ Extract episode links
+    for a in soup.select("a[href]"):
+        href = a.get("href", "")
+        if "muamma-episode-" in href:
+            full_url = href if href.startswith("http") else BASE + href
+            ep_links.append(full_url)
+
+    ep_links = unique_preserve(ep_links)
+
+    new_eps = []
+
+    # ✅ Process each episode
+    for url in ep_links:
+        m = re.search(r"episode-(\\d+)", url)
+        if not m:
+            continue
+
+        ep_num = int(m.group(1))
+        ep_id = f"{SERIES_ID}_ep{ep_num:02d}"
+
+        if ep_id in existing_ids:
+            continue
+
+        links = [{
+            "id": "watch",
+            "name": "Watch on HUM TV",
+            "url": url,
+            "source": "hum_tv"
+        }]
+
+        # ✅ safe write links
+        if links:
+            write_json(REPO_ROOT / "episode" / ep_id / "links.json", links)
+
+        new_eps.append({
+            "id": ep_id,
+            "name": f"Episode {ep_num}"
+        })
+
+    # ✅ merge safely
+    merged = new_eps + existing_eps
+
+    dedup = {}
+    for e in merged:
+        dedup[e["id"]] = e
+
+    def sort_key(e):
+        m = re.search(r"_ep(\\d+)$", e["id"])
+        return int(m.group(1)) if m else 0
+
+    final = sorted(dedup.values(), key=sort_key, reverse=True)
+
+    # ✅ safe write episodes
+    if final:
+        write_json(REPO_ROOT / "series" / SERIES_ID / "episodes.json", final)
+
+    log("=== HUM TV done ===")
+
+# ============================================================
 # MAIN (flags)
 # ============================================================
 
 def main():
     run_yodesi = os.getenv("RUN_YODESI", "1") == "1"
     run_playdesi = os.getenv("RUN_PLAYDESI", "1") == "1"
+    run_humtv = os.getenv("RUN_HUMTV", "0") == "1"
 
     # --------------------------------------------------
     # 4. Add run flag logging
@@ -600,12 +693,18 @@ def main():
 
     if run_playdesi:
         scrape_playdesi()
-
+        
+    if run_humtv:
+    scrape_humtv()
+    
     what = []
     if run_yodesi:
         what.append("YoDesi")
     if run_playdesi:
         what.append("PlayDesi")
+    if run_humtv: 
+        what.append("HUM TV")
+        
     git_publish(f"Scheduled scrape: {', '.join(what)}")
 
 if __name__ == "__main__":
