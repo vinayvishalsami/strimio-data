@@ -695,7 +695,8 @@ def main():
         scrape_playdesi()
         
     if run_humtv:
-    scrape_humtv()
+        upsert_site("hum_tv", "HUM TV")   # ✅ safe add only when used
+        scrape_humtv()
     
     what = []
     if run_yodesi:
