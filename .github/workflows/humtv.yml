@@ -33,7 +33,11 @@ jobs:
 
       - name: Run HUM TV ONLY
         run: |
+          
+          pip install playwright
+          playwright install chromium
           python pipeline_publish.py
+          
         env:
           RUN_YODESI: "0"
           RUN_PLAYDESI: "0"
