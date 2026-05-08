@@ -579,22 +579,23 @@ def git_publish(message: str):
     log("✅ Changes committed and pushed")
 
 # ============================================================
-# HUM TV (ISOLATED TEST SCRAPER - MUAMMA)
+# HUM TV (ISOLATED TEST SCRAPER - MUAMMA WITH PAGINATION)
 # ============================================================
 
 from playwright.sync_api import sync_playwright
 
 def scrape_humtv():
-    log("=== HUM TV scraping (Muamma with JS) ===")
+    log("=== HUM TV scraping (Muamma FULL pagination) ===")
 
     BASE = "https://hum.tv"
-    SERIES_URL = "https://hum.tv/dramas/muamma/"
+    BASE_SERIES_URL = "https://hum.tv/dramas/muamma/"
     SERIES_ID = "muamma"
     SERIES_NAME = "Muamma"
 
     SITE_ID = "hum_tv"
     CHANNEL_ID = "hum_tv"
 
+    # ✅ register
     write_json(REPO_ROOT / "site" / SITE_ID / "channels.json", [
         {"id": CHANNEL_ID, "name": "HUM TV"}
     ])
@@ -605,104 +606,70 @@ def scrape_humtv():
 
     existing_eps, existing_ids = load_existing_episodes(SERIES_ID)
 
-    ep_links = []
-
-  with sync_playwright() as p:
-    browser = p.chromium.launch(headless=True)
-    page = browser.new_page()
-
     all_links = []
 
-    page_num = 1
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
 
-    while True:
-        log(f"Loading page {page_num}...")
+        page_num = 1
 
-        page.goto(SERIES_URL, timeout=60000)
+        while True:
+            log(f"🔄 Loading page {page_num}")
 
-        # ✅ wait initial load
-        page.wait_for_timeout(3000)
+            # ✅ IMPORTANT: handle pagination URL properly
+            if page_num == 1:
+                current_url = BASE_SERIES_URL
+            else:
+                current_url = f"{BASE_SERIES_URL}page/{page_num}/"
 
-        # ✅ click Episodes tab
-        try:
-            page.click("text=Episodes", timeout=5000)
-            log(f"✅ Page {page_num}: clicked Episodes tab")
-            page.wait_for_timeout(4000)
-        except:
-            log(f"⚠️ Page {page_num}: Episodes tab not found")
+            page.goto(current_url, timeout=60000)
 
-        # ✅ get HTML
-        html = page.content()
-        soup = BeautifulSoup(html, "lxml")
+            # ✅ wait basic load
+            page.wait_for_timeout(3000)
 
-        # ✅ extract episode links
-        page_links = []
-        for a in soup.select("a"):
-            href = a.get("href", "")
-            if re.search(r"muamma-episode-\d+", href, re.I):
-                full_url = href if href.startswith("http") else BASE + href
-                page_links.append(full_url)
+            # ✅ ALWAYS CLICK EPISODES TAB AGAIN
+            try:
+                page.click("text=Episodes", timeout=5000)
+                log(f"✅ Page {page_num}: clicked Episodes tab")
+                page.wait_for_timeout(4000)
+            except:
+                log(f"⚠️ Page {page_num}: Episodes tab not found")
 
-        page_links = unique_preserve(page_links)
+            html = page.content()
+            soup = BeautifulSoup(html, "lxml")
 
-        log(f"Page {page_num}: found {len(page_links)} links")
+            page_links = []
 
-        if not page_links:
-            break
+            # ✅ extract episodes
+            for a in soup.select("a"):
+                href = a.get("href", "")
+                if re.search(r"muamma-episode-\d+", href, re.I):
+                    full_url = href if href.startswith("http") else BASE + href
+                    page_links.append(full_url)
 
-        all_links.extend(page_links)
+            page_links = unique_preserve(page_links)
 
-        # ✅ try clicking NEXT / pagination
-        try:
-            next_button = page.locator("a:has-text('Next'), a[aria-label='Next']")
-            
-            if next_button.count() == 0:
-                log("✅ No more pages")
+            log(f"📄 Page {page_num}: found {len(page_links)} links")
+
+            if not page_links:
+                log("✅ No more episodes found — stopping")
                 break
 
-            next_button.first.click()
-            log("➡️ Moving to next page")
+            all_links.extend(page_links)
 
-            page.wait_for_timeout(5000)
+            # ✅ move to next page
             page_num += 1
-
-        except Exception as e:
-            log(f"✅ Pagination finished: {e}")
-            break
-
-    browser.close()
-
-ep_links = unique_preserve(all_links)
-
-        # ✅ Wait for page load
-        page.wait_for_timeout(3000)
-        
-        # ✅ Click "Episodes" tab (important)
-        try:
-            page.click("text=Episodes", timeout=5000)
-            log("✅ Clicked Episodes tab")
-            page.wait_for_timeout(5000)
-        except:
-            log("⚠️ Episodes tab not found (continuing anyway)")
-
-        html = page.content()
-        soup = BeautifulSoup(html, "lxml")
-
-        # ✅ Extract episode links after JS render
-        for a in soup.select("a"):
-            href = a.get("href", "")
-            if re.search(r"muamma-episode-\d+", href, re.I):
-                full_url = href if href.startswith("http") else BASE + href
-                ep_links.append(full_url)
 
         browser.close()
 
-    ep_links = unique_preserve(ep_links)
+    ep_links = unique_preserve(all_links)
 
-    log(f"✅ Found {len(ep_links)} episode links")
+    log(f"✅ TOTAL unique episodes found: {len(ep_links)}")
 
+    # ✅ safety check
     if not ep_links:
-        log("⚠️ No episode links found after JS — skipping")
+        log("⚠️ No episode links found — skipping")
         return
 
     new_eps = []
@@ -749,8 +716,11 @@ ep_links = unique_preserve(all_links)
 
     if final:
         write_json(REPO_ROOT / "series" / SERIES_ID / "episodes.json", final)
+    else:
+        log("⚠️ Skipping episodes.json write — empty")
 
     log("=== HUM TV done ===")
+    
 # ============================================================
 # MAIN (flags)
 # ============================================================
