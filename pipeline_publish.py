@@ -614,8 +614,16 @@ def scrape_humtv():
         log("Loading HUM TV page (with JS)...")
         page.goto(SERIES_URL, timeout=60000)
 
-        # ✅ Wait for dynamic content
-        page.wait_for_timeout(5000)
+        # ✅ Wait for page load
+        page.wait_for_timeout(3000)
+        
+        # ✅ Click "Episodes" tab (important)
+        try:
+            page.click("text=Episodes", timeout=5000)
+            log("✅ Clicked Episodes tab")
+            page.wait_for_timeout(5000)
+        except:
+            log("⚠️ Episodes tab not found (continuing anyway)")
 
         html = page.content()
         soup = BeautifulSoup(html, "lxml")
