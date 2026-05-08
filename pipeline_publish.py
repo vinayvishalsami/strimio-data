@@ -593,7 +593,7 @@ def scrape_humtv():
     SITE_ID = "hum_tv"
     CHANNEL_ID = "hum_tv"
 
-    # ✅ write ONLY HUM TV files (isolated)
+    # ✅ Register channel + series (isolated)
     write_json(REPO_ROOT / "site" / SITE_ID / "channels.json", [
         {"id": CHANNEL_ID, "name": "HUM TV"}
     ])
@@ -612,20 +612,33 @@ def scrape_humtv():
 
     ep_links = []
 
-    # ✅ Extract episode links
-    for a in soup.select("a[href]"):
+    # ✅ FIXED EXTRACTION (this is the important part)
+    for a in soup.select("a"):
         href = a.get("href", "")
-        if "muamma-episode-" in href:
+        if not href:
+            continue
+
+        # ✅ Match episode pattern robustly
+        if re.search(r"muamma-episode-\\d+", href, re.I):
             full_url = href if href.startswith("http") else BASE + href
             ep_links.append(full_url)
 
     ep_links = unique_preserve(ep_links)
 
+    log(f"✅ Found {len(ep_links)} episode links")
+
+    # ✅ If scraping fails, DO NOT overwrite existing data
+    if not ep_links:
+        log("⚠️ No episode links found — skipping update")
+        return
+
     new_eps = []
 
-    # ✅ Process each episode
+    # ✅ Process episodes
     for url in ep_links:
-        m = re.search(r"episode-(\\d+)", url)
+        log(f"Processing: {url}")
+
+        m = re.search(r"episode-(\\d+)", url, re.I)
         if not m:
             continue
 
@@ -642,16 +655,16 @@ def scrape_humtv():
             "source": "hum_tv"
         }]
 
-        # ✅ safe write links
         if links:
             write_json(REPO_ROOT / "episode" / ep_id / "links.json", links)
+        else:
+            log(f"⚠️ Skipping links for {ep_id}")
 
         new_eps.append({
             "id": ep_id,
             "name": f"Episode {ep_num}"
         })
 
-    # ✅ merge safely
     merged = new_eps + existing_eps
 
     dedup = {}
@@ -664,9 +677,10 @@ def scrape_humtv():
 
     final = sorted(dedup.values(), key=sort_key, reverse=True)
 
-    # ✅ safe write episodes
-    if final:
+    if final and len(final) > 0:
         write_json(REPO_ROOT / "series" / SERIES_ID / "episodes.json", final)
+    else:
+        log("⚠️ Skipping episodes.json write — empty result")
 
     log("=== HUM TV done ===")
 
