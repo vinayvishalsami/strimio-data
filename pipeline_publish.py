@@ -582,8 +582,10 @@ def git_publish(message: str):
 # HUM TV (ISOLATED TEST SCRAPER - MUAMMA)
 # ============================================================
 
+from playwright.sync_api import sync_playwright
+
 def scrape_humtv():
-    log("=== HUM TV scraping (Muamma only) ===")
+    log("=== HUM TV scraping (Muamma with JS) ===")
 
     BASE = "https://hum.tv"
     SERIES_URL = "https://hum.tv/dramas/muamma/"
@@ -593,7 +595,6 @@ def scrape_humtv():
     SITE_ID = "hum_tv"
     CHANNEL_ID = "hum_tv"
 
-    # ✅ Register channel + series (isolated)
     write_json(REPO_ROOT / "site" / SITE_ID / "channels.json", [
         {"id": CHANNEL_ID, "name": "HUM TV"}
     ])
@@ -604,41 +605,44 @@ def scrape_humtv():
 
     existing_eps, existing_ids = load_existing_episodes(SERIES_ID)
 
-    try:
-        soup = fetch_soup(SERIES_URL, ref=BASE)
-    except Exception as e:
-        log(f"❌ Failed to load HUM TV series: {e}")
-        return
-
     ep_links = []
 
-    # ✅ FIXED EXTRACTION (this is the important part)
-    for a in soup.select("a"):
-        href = a.get("href", "")
-        if not href:
-            continue
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
 
-        # ✅ Match episode pattern robustly
-        if re.search(r"muamma-episode-\\d+", href, re.I):
-            full_url = href if href.startswith("http") else BASE + href
-            ep_links.append(full_url)
+        log("Loading HUM TV page (with JS)...")
+        page.goto(SERIES_URL, timeout=60000)
+
+        # ✅ Wait for dynamic content
+        page.wait_for_timeout(5000)
+
+        html = page.content()
+        soup = BeautifulSoup(html, "lxml")
+
+        # ✅ Extract episode links after JS render
+        for a in soup.select("a"):
+            href = a.get("href", "")
+            if re.search(r"muamma-episode-\d+", href, re.I):
+                full_url = href if href.startswith("http") else BASE + href
+                ep_links.append(full_url)
+
+        browser.close()
 
     ep_links = unique_preserve(ep_links)
 
     log(f"✅ Found {len(ep_links)} episode links")
 
-    # ✅ If scraping fails, DO NOT overwrite existing data
     if not ep_links:
-        log("⚠️ No episode links found — skipping update")
+        log("⚠️ No episode links found after JS — skipping")
         return
 
     new_eps = []
 
-    # ✅ Process episodes
     for url in ep_links:
         log(f"Processing: {url}")
 
-        m = re.search(r"episode-(\\d+)", url, re.I)
+        m = re.search(r"episode-(\d+)", url)
         if not m:
             continue
 
@@ -657,8 +661,6 @@ def scrape_humtv():
 
         if links:
             write_json(REPO_ROOT / "episode" / ep_id / "links.json", links)
-        else:
-            log(f"⚠️ Skipping links for {ep_id}")
 
         new_eps.append({
             "id": ep_id,
@@ -672,18 +674,15 @@ def scrape_humtv():
         dedup[e["id"]] = e
 
     def sort_key(e):
-        m = re.search(r"_ep(\\d+)$", e["id"])
+        m = re.search(r"_ep(\d+)$", e["id"])
         return int(m.group(1)) if m else 0
 
     final = sorted(dedup.values(), key=sort_key, reverse=True)
 
-    if final and len(final) > 0:
+    if final:
         write_json(REPO_ROOT / "series" / SERIES_ID / "episodes.json", final)
-    else:
-        log("⚠️ Skipping episodes.json write — empty result")
 
     log("=== HUM TV done ===")
-
 # ============================================================
 # MAIN (flags)
 # ============================================================
