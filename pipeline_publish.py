@@ -607,12 +607,72 @@ def scrape_humtv():
 
     ep_links = []
 
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
+  with sync_playwright() as p:
+    browser = p.chromium.launch(headless=True)
+    page = browser.new_page()
 
-        log("Loading HUM TV page (with JS)...")
+    all_links = []
+
+    page_num = 1
+
+    while True:
+        log(f"Loading page {page_num}...")
+
         page.goto(SERIES_URL, timeout=60000)
+
+        # ✅ wait initial load
+        page.wait_for_timeout(3000)
+
+        # ✅ click Episodes tab
+        try:
+            page.click("text=Episodes", timeout=5000)
+            log(f"✅ Page {page_num}: clicked Episodes tab")
+            page.wait_for_timeout(4000)
+        except:
+            log(f"⚠️ Page {page_num}: Episodes tab not found")
+
+        # ✅ get HTML
+        html = page.content()
+        soup = BeautifulSoup(html, "lxml")
+
+        # ✅ extract episode links
+        page_links = []
+        for a in soup.select("a"):
+            href = a.get("href", "")
+            if re.search(r"muamma-episode-\d+", href, re.I):
+                full_url = href if href.startswith("http") else BASE + href
+                page_links.append(full_url)
+
+        page_links = unique_preserve(page_links)
+
+        log(f"Page {page_num}: found {len(page_links)} links")
+
+        if not page_links:
+            break
+
+        all_links.extend(page_links)
+
+        # ✅ try clicking NEXT / pagination
+        try:
+            next_button = page.locator("a:has-text('Next'), a[aria-label='Next']")
+            
+            if next_button.count() == 0:
+                log("✅ No more pages")
+                break
+
+            next_button.first.click()
+            log("➡️ Moving to next page")
+
+            page.wait_for_timeout(5000)
+            page_num += 1
+
+        except Exception as e:
+            log(f"✅ Pagination finished: {e}")
+            break
+
+    browser.close()
+
+ep_links = unique_preserve(all_links)
 
         # ✅ Wait for page load
         page.wait_for_timeout(3000)
