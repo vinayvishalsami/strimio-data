@@ -17,6 +17,8 @@ ARY_API = "https://node.aryzap.com/api/series/byCatID/pg"
 DM_API = "https://api.dailymotion.com"
 COUNTRY = "PK"
 
+ARY_IMAGE_BASE = "https://node.aryzap.com/public/"
+
 SECTIONS = {
     "ary_on_air": "DIGITAL: On Air",
     "ary_popular": "DIGITAL: Popular",
@@ -95,7 +97,7 @@ def main():
     )
 
     # --------------------------------------------------
-    # SERIES PAGINATION (Load More FIX)
+    # SERIES PAGINATION
     # --------------------------------------------------
     for channel_id, category in SECTIONS.items():
         print(f"Fetching section: {category}")
@@ -117,8 +119,6 @@ def main():
             if not series_page:
                 break
 
-            print(f"Page {page}: {len(series_page)} series")
-
             all_series.extend(series_page)
             page += 1
             time.sleep(0.4)
@@ -133,11 +133,24 @@ def main():
             if not series_id or not playlist:
                 continue
 
-            series_index.append({
+            series_entry = {
                 "id": series_id,
                 "name": series_name
-            })
+            }
 
+            # --------------------------------------------------
+            # ✅ ADD POSTER ONLY FOR ON-AIR
+            # --------------------------------------------------
+            if channel_id == "ary_on_air":
+                poster_path = series.get("imagePoster")
+                if poster_path:
+                    series_entry["poster"] = ARY_IMAGE_BASE + poster_path.lstrip("/")
+
+            series_index.append(series_entry)
+
+            # --------------------------------------------------
+            # Episodes
+            # --------------------------------------------------
             episodes = fetch_dm_episodes(playlist)
             episode_index = []
 
