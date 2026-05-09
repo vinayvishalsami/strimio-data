@@ -1,7 +1,6 @@
 import os
 import json
 import time
-import subprocess
 import re
 from datetime import datetime
 from pathlib import Path
@@ -44,11 +43,7 @@ def write_json(path: Path, data):
 
 def upsert_site(site_id: str, name: str):
     sites_path = REPO_ROOT / "sites.json"
-    if sites_path.exists():
-        sites = json.loads(sites_path.read_text(encoding="utf-8"))
-    else:
-        sites = []
-
+    sites = json.loads(sites_path.read_text(encoding="utf-8")) if sites_path.exists() else []
     if not any(s["id"] == site_id for s in sites):
         sites.append({"id": site_id, "name": name})
         write_json(sites_path, sites)
@@ -57,18 +52,16 @@ def extract_series_image(series_url: str) -> str | None:
     try:
         soup = fetch_soup(series_url)
 
-        # ✅ Best source: OpenGraph image
         og = soup.find("meta", property="og:image")
         if og and og.get("content"):
             return urljoin(HUM_BASE, og["content"])
 
-        # ✅ Fallback: first large poster image
-        img = soup.select_one("img")
+        img = soup.find("img")
         if img and img.get("src"):
             return urljoin(HUM_BASE, img["src"])
 
     except Exception as e:
-        log(f"Image fetch failed: {series_url} ({e})")
+        log(f"Poster extraction failed for {series_url}: {e}")
 
     return None
 
@@ -89,10 +82,6 @@ def scrape_hum():
         [{"id": channel_id, "name": "Latest Dramas"}]
     )
 
-    # --------------------------------------------------
-    # Discover series
-    # --------------------------------------------------
-
     series_list = []
     page = 1
     seen_series = set()
@@ -106,43 +95,35 @@ def scrape_hum():
         except Exception:
             break
 
-        anchors = soup.select("a[href*='/dramas/']")
+        anchors = soup.select("a[href^='https://hum.tv/dramas/']")
         found_any = False
 
         for a in anchors:
-            href = a.get("href", "")
-            if not href.startswith(HUM_BASE + "/dramas/"):
+            href = a.get("href")
+            name = a.get_text(strip=True)
+
+            if not href or not name:
                 continue
 
             slug = urlparse(href).path.strip("/").split("/")[-1]
-            name = a.get_text(strip=True)
-
-            if not slug or slug in seen_series:
+            if slug in seen_series:
                 continue
 
             seen_series.add(slug)
             found_any = True
-            series_list.append({
-                "id": slug,
-                "name": name,
-                "url": href
-            })
+            series_list.append({"id": slug, "name": name, "url": href})
 
         if not found_any:
             break
+
         page += 1
 
     valid_series = []
-
-    # --------------------------------------------------
-    # Scrape episodes + image
-    # --------------------------------------------------
 
     for series in series_list:
         series_id = series["id"]
         series_name = series["name"]
         base_series_url = series["url"].rstrip("/") + "/"
-        series_url_with_tab = base_series_url + "#episodes"
 
         log(f"Scraping series: {series_name}")
 
@@ -163,27 +144,25 @@ def scrape_hum():
             found_any = False
             for a in soup.find_all("a", href=True):
                 href = a["href"]
+                title = a.get_text(strip=True)
 
                 if not href.startswith(HUM_BASE):
                     continue
                 if not EP_URL_RE.search(href):
                     continue
-
-                title = a.get_text(strip=True)
                 if not title or "episode" not in title.lower():
                     continue
-
                 if href in seen_eps:
                     continue
 
                 seen_eps.add(href)
                 found_any = True
-
                 ep_id = urlparse(href).path.strip("/").replace("/", "_")
                 episodes.append({"id": ep_id, "name": title, "url": href})
 
             if not found_any:
                 break
+
             page += 1
 
         episodes.reverse()
@@ -193,7 +172,7 @@ def scrape_hum():
         series_obj = {
             "id": series_id,
             "name": series_name,
-            "url": series_url_with_tab
+            "url": base_series_url + "#episodes"
         }
 
         if poster_image:
@@ -230,7 +209,6 @@ def scrape_hum():
 
 def main():
     scrape_hum()
-    git_publish()
 
 if __name__ == "__main__":
     main()
