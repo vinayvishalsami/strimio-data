@@ -27,3 +27,16 @@ jobs:
       - run: pip install requests beautifulsoup4 lxml
 
       - run: python pipeline_hum.py
+
+      - name: Commit & push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "actions@github.com"
+
+          if [ -n "$(git status --porcelain)" ]; then
+            git add .
+            git commit -m "Scheduled scrape: HUM TV"
+            git push
+          else
+            echo "No changes to commit"
+          fi
