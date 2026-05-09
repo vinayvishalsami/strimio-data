@@ -24,7 +24,7 @@ HUM_BASE = "https://hum.tv"
 SITE_ID = "humtv"
 SITE_NAME = "HUM TV"
 
-# TEST MODE — ONLY ONE SERIES
+# ✅ TEST MODE – ONE SERIES ONLY
 TEST_SERIES_SLUG = "ilzam-e-ishq"
 
 # ============================================================
@@ -56,12 +56,13 @@ def upsert_site(site_id: str, name: str):
         write_json(sites_path, sites)
 
 # ============================================================
-# HUM SCRAPER
+# HUM SCRAPER (FIX APPLIED HERE)
 # ============================================================
 
 def scrape_hum():
     log("=== HUM TV scraping ===")
 
+    # ✅ Safe site registration (non-destructive)
     upsert_site(SITE_ID, SITE_NAME)
 
     # Single logical channel
@@ -71,7 +72,10 @@ def scrape_hum():
         [{"id": channel_id, "name": "Latest Dramas"}]
     )
 
-    series_url = f"{HUM_BASE}/dramas/{TEST_SERIES_SLUG}/"
+    # ✅ FORCE Episodes Tab (IMPORTANT FIX)
+    base_series_url = f"{HUM_BASE}/dramas/{TEST_SERIES_SLUG}/"
+    series_url = base_series_url + "#episodes"
+
     series_id = TEST_SERIES_SLUG
     episodes = []
 
@@ -79,9 +83,15 @@ def scrape_hum():
 
     page = 1
     while True:
-        url = series_url if page == 1 else f"{series_url}page/{page}/"
+        # Pagination still works correctly
+        paged_url = (
+            base_series_url
+            if page == 1
+            else f"{base_series_url}page/{page}/"
+        )
+
         try:
-            soup = fetch_soup(url)
+            soup = fetch_soup(paged_url)
         except Exception:
             break
 
@@ -107,26 +117,30 @@ def scrape_hum():
 
         page += 1
 
-    # HUM lists latest first — reverse so FIRST episode is at top
+    # ✅ HUM lists latest first – reverse for Episode 1 on top
     episodes.reverse()
 
     if not episodes:
         log("No episodes found — skipping series entirely")
         return
 
-    # Write series list
+    # ✅ Series link NOW lands on Episodes tab
     write_json(
         REPO_ROOT / "channel" / channel_id / "series.json",
-        [{"id": series_id, "name": "Ilzam‑e‑Ishq"}]
+        [{
+            "id": series_id,
+            "name": "Ilzam‑e‑Ishq",
+            "url": series_url   # ✅ FIXED LINK
+        }]
     )
 
-    # Write episodes.json
+    # Episodes list
     write_json(
         REPO_ROOT / "series" / series_id / "episodes.json",
         [{"id": ep["id"], "name": ep["name"]} for ep in episodes]
     )
 
-    # Write links
+    # Episode links (safe — no tabs here)
     for ep in episodes:
         write_json(
             REPO_ROOT / "episode" / ep["id"] / "links.json",
@@ -134,7 +148,7 @@ def scrape_hum():
                 "id": "watch",
                 "name": "Watch on HUM TV",
                 "url": ep["url"],
-                "source": "humtv"
+                "source": SITE_ID
             }]
         )
 
