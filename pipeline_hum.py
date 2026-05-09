@@ -2,6 +2,7 @@ import os
 import json
 import time
 import subprocess
+import re
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlparse
@@ -24,7 +25,7 @@ HUM_BASE = "https://hum.tv"
 SITE_ID = "humtv"
 SITE_NAME = "HUM TV"
 
-# ✅ TEST MODE – ONE SERIES ONLY
+# TEST MODE — ONE SERIES ONLY
 TEST_SERIES_SLUG = "ilzam-e-ishq"
 
 # ============================================================
@@ -56,23 +57,22 @@ def upsert_site(site_id: str, name: str):
         write_json(sites_path, sites)
 
 # ============================================================
-# HUM SCRAPER (FIX APPLIED HERE)
+# HUM SCRAPER (FIXED)
 # ============================================================
+
+EP_URL_RE = re.compile(r"(?:-|/)episode-(\d+)|last-episode-(\d+)", re.I)
 
 def scrape_hum():
     log("=== HUM TV scraping ===")
 
-    # ✅ Safe site registration (non-destructive)
     upsert_site(SITE_ID, SITE_NAME)
 
-    # Single logical channel
     channel_id = "hum_latest"
     write_json(
         REPO_ROOT / "site" / SITE_ID / "channels.json",
         [{"id": channel_id, "name": "Latest Dramas"}]
     )
 
-    # ✅ FORCE Episodes Tab (IMPORTANT FIX)
     base_series_url = f"{HUM_BASE}/dramas/{TEST_SERIES_SLUG}/"
     series_url = base_series_url + "#episodes"
 
@@ -82,8 +82,9 @@ def scrape_hum():
     log(f"Scraping series: {series_id}")
 
     page = 1
+    seen_urls = set()
+
     while True:
-        # Pagination still works correctly
         paged_url = (
             base_series_url
             if page == 1
@@ -95,52 +96,62 @@ def scrape_hum():
         except Exception:
             break
 
-        episode_links = soup.select("a[href*='episode']")
-        if not episode_links:
-            break
+        anchors = soup.find_all("a", href=True)
+        found_any = False
 
-        for a in episode_links:
-            href = a.get("href")
-            title = a.get_text(strip=True)
+        for a in anchors:
+            href = a["href"]
 
-            if not href or "episode" not in href:
+            if not href.startswith(HUM_BASE):
                 continue
 
+            if not EP_URL_RE.search(href):
+                continue
+
+            title = a.get_text(strip=True)
+            if not title or "episode" not in title.lower():
+                continue
+
+            if href in seen_urls:
+                continue
+
+            seen_urls.add(href)
+            found_any = True
+
             ep_slug = urlparse(href).path.strip("/").replace("/", "_")
-            ep_id = ep_slug
 
             episodes.append({
-                "id": ep_id,
+                "id": ep_slug,
                 "name": title,
                 "url": href
             })
 
+        if not found_any:
+            break
+
         page += 1
 
-    # ✅ HUM lists latest first – reverse for Episode 1 on top
+    # HUM lists latest first → reverse
     episodes.reverse()
 
     if not episodes:
-        log("No episodes found — skipping series entirely")
+        log("No valid episodes found — skipping series")
         return
 
-    # ✅ Series link NOW lands on Episodes tab
     write_json(
         REPO_ROOT / "channel" / channel_id / "series.json",
         [{
             "id": series_id,
             "name": "Ilzam‑e‑Ishq",
-            "url": series_url   # ✅ FIXED LINK
+            "url": series_url
         }]
     )
 
-    # Episodes list
     write_json(
         REPO_ROOT / "series" / series_id / "episodes.json",
         [{"id": ep["id"], "name": ep["name"]} for ep in episodes]
     )
 
-    # Episode links (safe — no tabs here)
     for ep in episodes:
         write_json(
             REPO_ROOT / "episode" / ep["id"] / "links.json",
