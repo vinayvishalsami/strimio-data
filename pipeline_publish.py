@@ -577,149 +577,6 @@ def git_publish(message: str):
         subprocess.run(["git", "push"], cwd=REPO_ROOT, check=True)
 
     log("✅ Changes committed and pushed")
-
-# ============================================================
-# HUM TV (ISOLATED TEST SCRAPER - MUAMMA WITH PAGINATION)
-# ============================================================
-
-from playwright.sync_api import sync_playwright
-
-def scrape_humtv():
-    log("=== HUM TV scraping (Muamma FULL pagination) ===")
-
-    BASE = "https://hum.tv"
-    BASE_SERIES_URL = "https://hum.tv/dramas/muamma/"
-    SERIES_ID = "muamma"
-    SERIES_NAME = "Muamma"
-
-    SITE_ID = "hum_tv"
-    CHANNEL_ID = "hum_tv"
-
-    # ✅ register
-    write_json(REPO_ROOT / "site" / SITE_ID / "channels.json", [
-        {"id": CHANNEL_ID, "name": "HUM TV"}
-    ])
-
-    write_json(REPO_ROOT / "channel" / CHANNEL_ID / "series.json", [
-        {"id": SERIES_ID, "name": SERIES_NAME}
-    ])
-
-    existing_eps, existing_ids = load_existing_episodes(SERIES_ID)
-
-    all_links = []
-
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
-
-        page_num = 1
-
-        while True:
-            log(f"🔄 Loading page {page_num}")
-
-            # ✅ IMPORTANT: handle pagination URL properly
-            if page_num == 1:
-                current_url = BASE_SERIES_URL
-            else:
-                current_url = f"{BASE_SERIES_URL}page/{page_num}/"
-
-            page.goto(current_url, timeout=60000)
-
-            # ✅ wait basic load
-            page.wait_for_timeout(3000)
-
-            # ✅ ALWAYS CLICK EPISODES TAB AGAIN
-            try:
-                page.click("text=Episodes", timeout=5000)
-                log(f"✅ Page {page_num}: clicked Episodes tab")
-                page.wait_for_timeout(4000)
-            except:
-                log(f"⚠️ Page {page_num}: Episodes tab not found")
-
-            html = page.content()
-            soup = BeautifulSoup(html, "lxml")
-
-            page_links = []
-
-            # ✅ extract episodes
-            for a in soup.select("a"):
-                href = a.get("href", "")
-                if re.search(r"muamma-episode-\d+", href, re.I):
-                    full_url = href if href.startswith("http") else BASE + href
-                    page_links.append(full_url)
-
-            page_links = unique_preserve(page_links)
-
-            log(f"📄 Page {page_num}: found {len(page_links)} links")
-
-            if not page_links:
-                log("✅ No more episodes found — stopping")
-                break
-
-            all_links.extend(page_links)
-
-            # ✅ move to next page
-            page_num += 1
-
-        browser.close()
-
-    ep_links = unique_preserve(all_links)
-
-    log(f"✅ TOTAL unique episodes found: {len(ep_links)}")
-
-    # ✅ safety check
-    if not ep_links:
-        log("⚠️ No episode links found — skipping")
-        return
-
-    new_eps = []
-
-    for url in ep_links:
-        log(f"Processing: {url}")
-
-        m = re.search(r"episode-(\d+)", url)
-        if not m:
-            continue
-
-        ep_num = int(m.group(1))
-        ep_id = f"{SERIES_ID}_ep{ep_num:02d}"
-
-        if ep_id in existing_ids:
-            continue
-
-        links = [{
-            "id": "watch",
-            "name": "Watch on HUM TV",
-            "url": url,
-            "source": "hum_tv"
-        }]
-
-        if links:
-            write_json(REPO_ROOT / "episode" / ep_id / "links.json", links)
-
-        new_eps.append({
-            "id": ep_id,
-            "name": f"Episode {ep_num}"
-        })
-
-    merged = new_eps + existing_eps
-
-    dedup = {}
-    for e in merged:
-        dedup[e["id"]] = e
-
-    def sort_key(e):
-        m = re.search(r"_ep(\d+)$", e["id"])
-        return int(m.group(1)) if m else 0
-
-    final = sorted(dedup.values(), key=sort_key, reverse=True)
-
-    if final:
-        write_json(REPO_ROOT / "series" / SERIES_ID / "episodes.json", final)
-    else:
-        log("⚠️ Skipping episodes.json write — empty")
-
-    log("=== HUM TV done ===")
     
 # ============================================================
 # MAIN (flags)
@@ -728,7 +585,6 @@ def scrape_humtv():
 def main():
     run_yodesi = os.getenv("RUN_YODESI", "1") == "1"
     run_playdesi = os.getenv("RUN_PLAYDESI", "1") == "1"
-    run_humtv = os.getenv("RUN_HUMTV", "0") == "1"
 
     # --------------------------------------------------
     # 4. Add run flag logging
@@ -744,18 +600,12 @@ def main():
 
     if run_playdesi:
         scrape_playdesi()
-        
-    if run_humtv:
-        upsert_site("hum_tv", "HUM TV")   # ✅ safe add only when used
-        scrape_humtv()
     
     what = []
     if run_yodesi:
         what.append("YoDesi")
     if run_playdesi:
         what.append("PlayDesi")
-    if run_humtv: 
-        what.append("HUM TV")
         
     git_publish(f"Scheduled scrape: {', '.join(what)}")
 
