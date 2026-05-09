@@ -14,5 +14,9 @@
   {
     "id": "hum_tv",
     "name": "HUM TV"
+  },
+  {
+    "id": "humtv",
+    "name": "HUM TV"
   }
 ]
