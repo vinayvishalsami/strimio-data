@@ -25,9 +25,6 @@ HUM_BASE = "https://hum.tv"
 SITE_ID = "humtv"
 SITE_NAME = "HUM TV"
 
-# TEST MODE — ONE SERIES ONLY
-TEST_SERIES_SLUG = "ilzam-e-ishq"
-
 # ============================================================
 # HELPERS
 # ============================================================
@@ -57,7 +54,7 @@ def upsert_site(site_id: str, name: str):
         write_json(sites_path, sites)
 
 # ============================================================
-# HUM SCRAPER (FIXED)
+# HUM SCRAPER
 # ============================================================
 
 EP_URL_RE = re.compile(r"(?:-|/)episode-(\d+)|last-episode-(\d+)", re.I)
@@ -73,56 +70,42 @@ def scrape_hum():
         [{"id": channel_id, "name": "Latest Dramas"}]
     )
 
-    base_series_url = f"{HUM_BASE}/dramas/{TEST_SERIES_SLUG}/"
-    series_url = base_series_url + "#episodes"
+    # --------------------------------------------------
+    # 1. Discover all series from latest-dramas
+    # --------------------------------------------------
 
-    series_id = TEST_SERIES_SLUG
-    episodes = []
-
-    log(f"Scraping series: {series_id}")
-
+    series_list = []
     page = 1
-    seen_urls = set()
+    seen_series = set()
 
     while True:
-        paged_url = (
-            base_series_url
-            if page == 1
-            else f"{base_series_url}page/{page}/"
-        )
+        url = f"{HUM_BASE}/latest-dramas/" if page == 1 else f"{HUM_BASE}/latest-dramas/page/{page}/"
 
+        log(f"Discovering series page {page}")
         try:
-            soup = fetch_soup(paged_url)
+            soup = fetch_soup(url)
         except Exception:
             break
 
-        anchors = soup.find_all("a", href=True)
+        anchors = soup.select("a[href*='/dramas/']")
         found_any = False
 
         for a in anchors:
-            href = a["href"]
-
-            if not href.startswith(HUM_BASE):
+            href = a.get("href", "")
+            if not href.startswith(HUM_BASE + "/dramas/"):
                 continue
 
-            if not EP_URL_RE.search(href):
+            slug = urlparse(href).path.strip("/").split("/")[-1]
+            name = a.get_text(strip=True)
+
+            if not slug or slug in seen_series:
                 continue
 
-            title = a.get_text(strip=True)
-            if not title or "episode" not in title.lower():
-                continue
-
-            if href in seen_urls:
-                continue
-
-            seen_urls.add(href)
+            seen_series.add(slug)
             found_any = True
-
-            ep_slug = urlparse(href).path.strip("/").replace("/", "_")
-
-            episodes.append({
-                "id": ep_slug,
-                "name": title,
+            series_list.append({
+                "id": slug,
+                "name": name,
                 "url": href
             })
 
@@ -131,37 +114,114 @@ def scrape_hum():
 
         page += 1
 
-    # HUM lists latest first → reverse
-    episodes.reverse()
+    log(f"Found {len(series_list)} series")
 
-    if not episodes:
-        log("No valid episodes found — skipping series")
-        return
+    valid_series = []
+
+    # --------------------------------------------------
+    # 2. Scrape episodes for each series
+    # --------------------------------------------------
+
+    for series in series_list:
+        series_id = series["id"]
+        series_name = series["name"]
+        base_series_url = series["url"].rstrip("/") + "/"
+        series_url_with_tab = base_series_url + "#episodes"
+
+        log(f"Scraping episodes for: {series_name}")
+
+        episodes = []
+        page = 1
+        seen_eps = set()
+
+        while True:
+            paged_url = (
+                base_series_url
+                if page == 1
+                else f"{base_series_url}page/{page}/"
+            )
+
+            try:
+                soup = fetch_soup(paged_url)
+            except Exception:
+                break
+
+            found_any = False
+            anchors = soup.find_all("a", href=True)
+
+            for a in anchors:
+                href = a["href"]
+
+                if not href.startswith(HUM_BASE):
+                    continue
+
+                if not EP_URL_RE.search(href):
+                    continue
+
+                title = a.get_text(strip=True)
+                if not title or "episode" not in title.lower():
+                    continue
+
+                if href in seen_eps:
+                    continue
+
+                seen_eps.add(href)
+                found_any = True
+
+                ep_id = urlparse(href).path.strip("/").replace("/", "_")
+
+                episodes.append({
+                    "id": ep_id,
+                    "name": title,
+                    "url": href
+                })
+
+            if not found_any:
+                break
+
+            page += 1
+
+        # HUM lists latest-first → reverse for first episode on top
+        episodes.reverse()
+
+        if not episodes:
+            log(f"Skipping {series_name} (no episodes)")
+            continue
+
+        # --------------------------------------------------
+        # 3. Write series + episodes
+        # --------------------------------------------------
+
+        valid_series.append({
+            "id": series_id,
+            "name": series_name,
+            "url": series_url_with_tab
+        })
+
+        write_json(
+            REPO_ROOT / "series" / series_id / "episodes.json",
+            [{"id": ep["id"], "name": ep["name"]} for ep in episodes]
+        )
+
+        for ep in episodes:
+            write_json(
+                REPO_ROOT / "episode" / ep["id"] / "links.json",
+                [{
+                    "id": "watch",
+                    "name": "Watch on HUM TV",
+                    "url": ep["url"],
+                    "source": SITE_ID
+                }]
+            )
+
+    # --------------------------------------------------
+    # 4. Write channel series list (ONLY valid series)
+    # --------------------------------------------------
 
     write_json(
         REPO_ROOT / "channel" / channel_id / "series.json",
-        [{
-            "id": series_id,
-            "name": "Ilzam‑e‑Ishq",
-            "url": series_url
-        }]
+        valid_series
     )
-
-    write_json(
-        REPO_ROOT / "series" / series_id / "episodes.json",
-        [{"id": ep["id"], "name": ep["name"]} for ep in episodes]
-    )
-
-    for ep in episodes:
-        write_json(
-            REPO_ROOT / "episode" / ep["id"] / "links.json",
-            [{
-                "id": "watch",
-                "name": "Watch on HUM TV",
-                "url": ep["url"],
-                "source": SITE_ID
-            }]
-        )
 
     log("=== HUM TV scraping done ===")
 
