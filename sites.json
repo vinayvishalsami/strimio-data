@@ -14,5 +14,11 @@
   {
     "id": "humtv",
     "name": "HUM TV"
+  },
+  
+  {
+    "id": "vipbox",
+    "name": "VIPBox"
   }
+
 ]
