@@ -144,7 +144,7 @@ def main():
             if channel_id == "ary_on_air":
                 poster_path = series.get("imagePoster")
                 if poster_path:
-                    series_entry["poster"] = ARY_IMAGE_BASE + poster_path.lstrip("/")
+                    series_entry["image"] = ARY_IMAGE_BASE + poster_path.lstrip("/")
 
             series_index.append(series_entry)
 
