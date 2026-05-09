@@ -138,13 +138,10 @@ def main():
                 "name": series_name
             }
 
-            # --------------------------------------------------
-            # ✅ ADD POSTER ONLY FOR ON-AIR
-            # --------------------------------------------------
-            if channel_id == "ary_on_air":
-                poster_path = series.get("imagePoster")
-                if poster_path:
-                    series_entry["image"] = ARY_IMAGE_BASE + poster_path.lstrip("/")
+            # ✅ ADD POSTER FOR ALL ARY SECTIONS
+            poster_path = series.get("imagePoster")
+            if poster_path:
+                series_entry["image"] = ARY_IMAGE_BASE + poster_path.lstrip("/")
 
             series_index.append(series_entry)
 
