@@ -49,16 +49,33 @@ def upsert_site(site_id: str, name: str):
         write_json(sites_path, sites)
 
 def extract_series_image(series_url: str) -> str | None:
+    """
+    Extracts the best possible series image for HUM TV dramas.
+    Priority:
+      1. og:image
+      2. Category hero background image
+      3. First episode thumbnail
+    """
     try:
         soup = fetch_soup(series_url)
 
+        # 1️⃣ OpenGraph image (best + stable)
         og = soup.find("meta", property="og:image")
         if og and og.get("content"):
             return urljoin(HUM_BASE, og["content"])
 
-        img = soup.find("img")
-        if img and img.get("src"):
-            return urljoin(HUM_BASE, img["src"])
+        # 2️⃣ Category hero background image (inline CSS)
+        hero = soup.select_one(".betube__cat_description")
+        if hero:
+            style = hero.get("style", "")
+            m = re.search(r'url\((["\']?)(.*?)\1\)', style)
+            if m:
+                return urljoin(HUM_BASE, m.group(2))
+
+        # 3️⃣ First episode thumbnail (very reliable fallback)
+        ep_img = soup.select_one(".post-thumb img")
+        if ep_img and ep_img.get("src"):
+            return urljoin(HUM_BASE, ep_img["src"])
 
     except Exception as e:
         log(f"Poster extraction failed for {series_url}: {e}")
