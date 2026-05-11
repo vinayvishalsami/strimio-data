@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
     inputs:
       run_movies:
-        description: "Run Movies pipeline only"
         required: true
         default: "true"
 
@@ -18,32 +17,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
           pip install requests beautifulsoup4 lxml
 
       - name: Run Movies scraper
         run: |
           python movies_desicinemas.py
 
-      - name: Commit & push movie data only
+      - name: Commit movie data
         run: |
           git config user.name "strimio-bot"
           git config user.email "bot@strimio.app"
 
-          if git status --porcelain | grep -E "^( M|A ) (site/movies/|movies/|movie/)"; then
-            git add site/movies movies movie
-            git commit -m "Update Bollywood movies data"
-            git push
-          else
-            echo "No movie data changes to commit"
-          fi
+          git add site/movies movies movie
+          git commit -m "Update Bollywood movies data" || echo "No changes"
+          git push
