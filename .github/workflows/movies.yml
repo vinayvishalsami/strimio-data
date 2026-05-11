@@ -1,12 +1,23 @@
-name: Update Movies Data
-
-on:
+name: Update Movies Dataname ✅ Manual runs must explicitly opt-in
   workflow_dispatch:
+    inputs:
+      run_movies:
+        description: "Run Movies pipeline only"
+        required: true
+        default: false
+        type: boolean
+
+  # ✅ Scheduled daily run (safe, isolated)
   schedule:
     - cron: "0 12 * * *"
 
 jobs:
   scrape-movies:
+    # ✅ Allow scheduled runs OR manually approved movie runs
+    if: |
+      github.event_name == 'schedule' ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.run_movies == 'true')
+
     runs-on: ubuntu-latest
 
     steps:
@@ -22,24 +33,15 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install requests beautifulsoup4 lxml
-      
-      - name: Debug repo structure
-        run: |
-              pwd
-              ls -R
 
-      # ✅ ONLY run the movies scraper
-      - name: Run Movies scraper (isolated)
+      - name: Run Movies scraper
         run: |
           python movies_desicinemas.py
 
-      # ✅ Only commit if movies-related files changed
       - name: Commit & push movie data only
         run: |
           git config user.name "strimio-bot"
           git config user.email "bot@strimio.app"
-
-          git status
 
           if git status --porcelain | grep -E "^( M|A ) (site/movies/|movies/|movie/)"; then
             git add site/movies movies movie
@@ -48,3 +50,5 @@ jobs:
           else
             echo "No movie data changes to commit"
           fi
+
+on:
