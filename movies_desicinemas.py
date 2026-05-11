@@ -50,9 +50,31 @@ def scrape_movies():
 
 movies = []
 
+movies = []
+
+articles = soup.select("article")
+
 for art in articles:
     a = art.select_one("a[href]")
     title_el = art.select_one(".Title")
+
+    if not a or not title_el:
+        continue
+
+    text_block = art.get_text(" ", strip=True)
+    year_match = re.search(r"(19|20)\d{2}", text_block)
+
+    if not year_match:
+        continue
+
+    movies.append({
+        "url": a["href"],
+        "title": title_el.get_text(strip=True),
+        "year": int(year_match.group(0))
+    })
+
+    if len(movies) >= MAX_MOVIES:
+        break
 
     if not a or not title_el:
         continue
