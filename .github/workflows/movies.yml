@@ -1,22 +1,19 @@
-name: Update Movies Dataname ✅ Manual runs must explicitly opt-in
+name: Update Movies Data
+
+on:
   workflow_dispatch:
     inputs:
       run_movies:
         description: "Run Movies pipeline only"
         required: true
-        default: false
-        type: boolean
+        default: "true"
 
-  # ✅ Scheduled daily run (safe, isolated)
   schedule:
     - cron: "0 12 * * *"
 
 jobs:
   scrape-movies:
-    # ✅ Allow scheduled runs OR manually approved movie runs
-    if: |
-      github.event_name == 'schedule' ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.run_movies == 'true')
+    if: github.event_name == 'schedule' || github.event.inputs.run_movies == 'true'
 
     runs-on: ubuntu-latest
 
@@ -50,5 +47,3 @@ jobs:
           else
             echo "No movie data changes to commit"
           fi
-
-on:
