@@ -46,29 +46,31 @@ def scrape_movies():
 
     soup = fetch(BOLLYWOOD_URL)
 
-    movie_cards = soup.select(".TPost.B")
-    movies = []
+    articles = soup.select("article")
 
-    for card in movie_cards:
-        a = card.select_one("a")
-        title_el = card.select_one(".Title")
-        year_el = card.select_one(".Year, .Date")
+movies = []
 
-        if not a or not title_el:
-            continue
+for art in articles:
+    a = art.select_one("a[href]")
+    title_el = art.select_one(".Title")
 
-        year_match = re.search(r"(19|20)\\d{2}", card.get_text())
-        if not year_match:
-            continue
+    if not a or not title_el:
+        continue
 
-        movies.append({
-            "url": a["href"],
-            "title": title_el.get_text(strip=True),
-            "year": int(year_match.group(0))
-        })
+    text_block = art.get_text(" ", strip=True)
+    year_match = re.search(r"(19|20)\d{2}", text_block)
 
-        if len(movies) >= MAX_MOVIES:
-            break
+    if not year_match:
+        continue
+
+    movies.append({
+        "url": a["href"],
+        "title": title_el.get_text(strip=True),
+        "year": int(year_match.group(0))
+    })
+
+    if len(movies) >= MAX_MOVIES:
+        break
 
     output_movies = []
 
