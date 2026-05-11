@@ -39,6 +39,7 @@ def slug_from_url(url: str) -> str:
 
 
 def scrape_movies():
+    # Movie categories
     write_json(
         OUTPUT_ROOT / "site" / "movies" / "channels.json",
         [{"id": "bollywood", "name": "Bollywood"}]
@@ -47,52 +48,28 @@ def scrape_movies():
     soup = fetch(BOLLYWOOD_URL)
 
     articles = soup.select("article")
+    movies = []
 
-movies = []
+    for art in articles:
+        a = art.select_one("a[href]")
+        title_el = art.select_one(".Title")
 
-movies = []
+        if not a or not title_el:
+            continue
 
-articles = soup.select("article")
+        text = art.get_text(" ", strip=True)
+        year_match = re.search(r"(19|20)\d{2}", text)
+        if not year_match:
+            continue
 
-for art in articles:
-    a = art.select_one("a[href]")
-    title_el = art.select_one(".Title")
+        movies.append({
+            "url": a["href"],
+            "title": title_el.get_text(strip=True),
+            "year": int(year_match.group(0))
+        })
 
-    if not a or not title_el:
-        continue
-
-    text_block = art.get_text(" ", strip=True)
-    year_match = re.search(r"(19|20)\d{2}", text_block)
-
-    if not year_match:
-        continue
-
-    movies.append({
-        "url": a["href"],
-        "title": title_el.get_text(strip=True),
-        "year": int(year_match.group(0))
-    })
-
-    if len(movies) >= MAX_MOVIES:
-        break
-
-    if not a or not title_el:
-        continue
-
-    text_block = art.get_text(" ", strip=True)
-    year_match = re.search(r"(19|20)\d{2}", text_block)
-
-    if not year_match:
-        continue
-
-    movies.append({
-        "url": a["href"],
-        "title": title_el.get_text(strip=True),
-        "year": int(year_match.group(0))
-    })
-
-    if len(movies) >= MAX_MOVIES:
-        break
+        if len(movies) >= MAX_MOVIES:
+            break
 
     output_movies = []
 
@@ -111,14 +88,14 @@ for art in articles:
         })
 
         links = []
-        for i, box in enumerate(movie_page.select(".OptionBx"), start=1):
+        for idx, box in enumerate(movie_page.select(".OptionBx"), start=1):
             btn = box.select_one("a.Button")
             if not btn:
                 continue
 
             links.append({
-                "id": f"link-{i:02d}",
-                "name": f"Link {i}",
+                "id": f"link-{idx:02d}",
+                "name": f"Link {idx}",
                 "url": btn["href"],
                 "source": "desicinemas"
             })
