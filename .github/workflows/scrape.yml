@@ -1,8 +1,8 @@
-name: YoDesi Scraper (every 2 hours)
+name: YoDesi Scraper (every 4 hours)
 
 on:
   schedule:
-    - cron: "0 */12 * * *"
+    - cron: "0 */4 * * *"
   workflow_dispatch:
 
 permissions:
