@@ -7,10 +7,6 @@ from urllib.parse import urlparse
 import requests
 from bs4 import BeautifulSoup
 
-# ============================================================
-# CONFIG
-# ============================================================
-
 BASE_URL = "https://desicinemas.to"
 BOLLYWOOD_URL = "https://desicinemas.to/category/bollywood-movies/"
 
@@ -25,119 +21,80 @@ HEADERS = {
 session = requests.Session()
 session.headers.update(HEADERS)
 
-# ============================================================
-# HELPERS
-# ============================================================
 
 def fetch(url: str) -> BeautifulSoup:
     time.sleep(SLEEP)
-    res = session.get(url, timeout=30)
-    res.raise_for_status()
-    return BeautifulSoup(res.text, "lxml")
+    r = session.get(url, timeout=30)
+    r.raise_for_status()
+    return BeautifulSoup(r.text, "lxml")
+
 
 def write_json(path: Path, data):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2), encoding="utf-8")
 
+
 def slug_from_url(url: str) -> str:
     return urlparse(url).path.strip("/").split("/")[-1]
 
-# ============================================================
-# SCRAPER
-# ============================================================
 
 def scrape_movies():
-    print("=== Scraping Bollywood movies (page 1, 5 movies) ===")
-
-    # --------------------------------------------------------
-    # 1. Write movie categories (channels)
-    # --------------------------------------------------------
-
     write_json(
         OUTPUT_ROOT / "site" / "movies" / "channels.json",
-        [
-            {
-                "id": "bollywood",
-                "name": "Bollywood"
-            }
-        ]
+        [{"id": "bollywood", "name": "Bollywood"}]
     )
-
-    # --------------------------------------------------------
-    # 2. Fetch Bollywood listing page (page 1 only)
-    # --------------------------------------------------------
 
     soup = fetch(BOLLYWOOD_URL)
 
-    movie_cards = soup.select(".TPost.B a")  # movie cards
+    movie_cards = soup.select(".TPost.B")
     movies = []
 
-    for a in movie_cards:
-        href = a.get("href")
-        title_el = a.select_one(".Title")
+    for card in movie_cards:
+        a = card.select_one("a")
+        title_el = card.select_one(".Title")
+        year_el = card.select_one(".Year, .Date")
 
-        if not href or not title_el:
+        if not a or not title_el:
             continue
 
-        title = title_el.get_text(strip=True)
-
-        # Extract year if present in sibling elements
-        year_match = re.search(r"(19|20)\d{2}", a.parent.get_text())
-        year = int(year_match.group(0)) if year_match else None
-
-        if year is None:
+        year_match = re.search(r"(19|20)\\d{2}", card.get_text())
+        if not year_match:
             continue
 
         movies.append({
-            "title": title,
-            "url": href,
-            "year": year
+            "url": a["href"],
+            "title": title_el.get_text(strip=True),
+            "year": int(year_match.group(0))
         })
 
         if len(movies) >= MAX_MOVIES:
             break
 
-    # --------------------------------------------------------
-    # 3. Visit each movie page
-    # --------------------------------------------------------
-
     output_movies = []
 
     for m in movies:
-        movie_url = m["url"]
-        movie_soup = fetch(movie_url)
+        movie_page = fetch(m["url"])
+        og = movie_page.find("meta", property="og:image")
 
-        # Poster (OG image is best)
-        og = movie_soup.find("meta", property="og:image")
-        poster = og["content"] if og else None
-
-        movie_id = f"{slug_from_url(movie_url)}-{m['year']}"
+        movie_id = f"{slug_from_url(m['url'])}-{m['year']}"
 
         output_movies.append({
             "id": movie_id,
             "name": m["title"],
             "year": m["year"],
             "language": "bollywood",
-            "image": poster
+            "image": og["content"] if og else None
         })
 
-        # ----------------------------------------------------
-        # 4. Extract links
-        # ----------------------------------------------------
-
         links = []
-        link_boxes = movie_soup.select(".OptionBx")
-
-        for idx, box in enumerate(link_boxes, start=1):
+        for i, box in enumerate(movie_page.select(".OptionBx"), start=1):
             btn = box.select_one("a.Button")
-            label = box.select_one(".Optntl")
-
             if not btn:
                 continue
 
             links.append({
-                "id": f"link-{idx:02d}",
-                "name": label.get_text(strip=True) if label else f"Link {idx}",
+                "id": f"link-{i:02d}",
+                "name": f"Link {i}",
                 "url": btn["href"],
                 "source": "desicinemas"
             })
@@ -148,20 +105,11 @@ def scrape_movies():
                 links
             )
 
-    # --------------------------------------------------------
-    # 5. Write movies.json
-    # --------------------------------------------------------
-
     write_json(
         OUTPUT_ROOT / "movies" / "bollywood" / "movies.json",
         output_movies
     )
 
-    print("=== Done: Bollywood movies scraped ===")
-
-# ============================================================
-# MAIN
-# ============================================================
 
 if __name__ == "__main__":
     scrape_movies()
