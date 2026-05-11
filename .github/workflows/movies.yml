@@ -36,6 +36,8 @@ jobs:
           git config user.name "strimio-bot"
           git config user.email "bot@strimio.app"
 
-          git add site/movies movies movie
+          git add site/movies movies || true
+          git add movie || true
+
           git commit -m "Update Bollywood movies data" || echo "No changes"
           git push
