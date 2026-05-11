@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup
 BASE_URL = "https://desicinemas.to"
 BOLLYWOOD_URL = "https://desicinemas.to/category/bollywood-movies/"
 
-OUTPUT_ROOT = Path("strimio-data")
+OUTPUT_ROOT = Path(".")
 SLEEP = 1.0
 MAX_MOVIES = 5
 
