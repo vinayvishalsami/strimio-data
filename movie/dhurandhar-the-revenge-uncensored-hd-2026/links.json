@@ -1,0 +1,32 @@
+[
+  {
+    "id": "link-01",
+    "name": "Link 1",
+    "url": "#",
+    "source": "desicinemas"
+  },
+  {
+    "id": "link-02",
+    "name": "Link 2",
+    "url": "https://groundbanks.net/cinemas.php?id=2792032",
+    "source": "desicinemas"
+  },
+  {
+    "id": "link-03",
+    "name": "Link 3",
+    "url": "https://groundbanks.net/cinemas.php?id=2792033",
+    "source": "desicinemas"
+  },
+  {
+    "id": "link-04",
+    "name": "Link 4",
+    "url": "https://groundbanks.net/cinemas.php?id=2792034",
+    "source": "desicinemas"
+  },
+  {
+    "id": "link-05",
+    "name": "Link 5",
+    "url": "#",
+    "source": "desicinemas"
+  }
+]
