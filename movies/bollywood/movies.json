@@ -1,5 +1,12 @@
 [
   {
+    "id": "indian-institute-of-zombies-low-quality-2026",
+    "name": "Indian Institute of Zombies (Low Quality)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/05/indian-institute-of-zombies-26820-poster.jpg"
+  },
+  {
     "id": "aakhri-sawal-low-quality-2026",
     "name": "Aakhri Sawal (Low Quality)",
     "year": 2026,
@@ -26,12 +33,5 @@
     "year": 2026,
     "language": "bollywood",
     "image": "https://desicinemas.to/wp-content/uploads/2026/03/dhurandhar-the-revenge-26472-poster.jpg"
-  },
-  {
-    "id": "main-actor-nahin-hoon-low-quality-2026",
-    "name": "Main Actor Nahin Hoon (Low Quality)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/05/im-not-an-actor-26783-poster.jpg"
   }
 ]
