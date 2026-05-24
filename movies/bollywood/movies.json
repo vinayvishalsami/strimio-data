@@ -1,5 +1,12 @@
 [
   {
+    "id": "chand-mera-dil-low-quality-2026",
+    "name": "Chand Mera Dil (Low Quality)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/05/chand-mera-dil-26836-poster.jpg"
+  },
+  {
     "id": "system-hd-2026",
     "name": "System (HD)",
     "year": 2026,
@@ -26,12 +33,5 @@
     "year": 2026,
     "language": "bollywood",
     "image": "https://desicinemas.to/wp-content/uploads/2026/05/pati-patni-aur-woh-do-26800-poster.jpg"
-  },
-  {
-    "id": "kartavya-hd-2026",
-    "name": "Kartavya (HD)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/05/kartavya-26795-poster.jpg"
   }
 ]
