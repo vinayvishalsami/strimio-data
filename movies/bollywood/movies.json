@@ -1,5 +1,12 @@
 [
   {
+    "id": "return-of-the-jungle-low-quality-2026",
+    "name": "Return of the Jungle (Low Quality)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/06/return-of-the-jungle-26875-poster.jpg"
+  },
+  {
     "id": "photograph-2019",
     "name": "Photograph (HD)",
     "year": 2019,
@@ -26,12 +33,5 @@
     "year": 2026,
     "language": "bollywood",
     "image": "https://desicinemas.to/wp-content/uploads/2026/05/system-26825-poster.jpg"
-  },
-  {
-    "id": "indian-institute-of-zombies-low-quality-2026",
-    "name": "Indian Institute of Zombies (Low Quality)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/05/indian-institute-of-zombies-26820-poster.jpg"
   }
 ]
