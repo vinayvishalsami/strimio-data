@@ -1,5 +1,26 @@
 [
   {
+    "id": "main-vaapas-aaunga-low-quality-2026",
+    "name": "Main Vaapas Aaunga (Low Quality)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/06/main-vaapas-aaunga-26949-poster.jpg"
+  },
+  {
+    "id": "governor-low-quality-2026",
+    "name": "Governor (Low Quality)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/06/governor-26948-poster.jpg"
+  },
+  {
+    "id": "bharat-bhhagya-viddhaata-low-quality-2026",
+    "name": "Bharat Bhhagya Viddhaata (Low Quality)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/06/bharat-bhhagya-viddhaata-26947-poster.jpg"
+  },
+  {
     "id": "bhooth-bangla-hd-2026",
     "name": "Bhooth Bangla (HD)",
     "year": 2026,
@@ -12,26 +33,5 @@
     "year": 2026,
     "language": "bollywood",
     "image": "https://desicinemas.to/wp-content/uploads/2026/06/bandar-26918-poster.jpg"
-  },
-  {
-    "id": "dacoit-hindi-hd-2026",
-    "name": "Dacoit (Hindi) (HD)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/06/dacoit-26905-poster.jpg"
-  },
-  {
-    "id": "hai-jawani-toh-ishq-hona-hai-low-quality-2026",
-    "name": "Hai Jawani Toh Ishq Hona Hai (Low Quality)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/06/hai-jawani-toh-ishq-hona-hai-26903-poster.jpg"
-  },
-  {
-    "id": "maa-behen-hd-2026",
-    "name": "Maa Behen (HD)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/06/maa-behen-26897-poster.jpg"
   }
 ]
