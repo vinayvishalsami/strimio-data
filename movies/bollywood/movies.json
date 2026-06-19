@@ -1,5 +1,12 @@
 [
   {
+    "id": "cocktail-2-low-quality-2026",
+    "name": "Cocktail 2 (Low Quality)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/06/cocktail-2-26993-poster.jpg"
+  },
+  {
     "id": "main-vaapas-aaunga-low-quality-2026",
     "name": "Main Vaapas Aaunga (Low Quality)",
     "year": 2026,
@@ -26,12 +33,5 @@
     "year": 2026,
     "language": "bollywood",
     "image": "https://desicinemas.to/wp-content/uploads/2026/04/bhooth-bangla-26652-poster.jpg"
-  },
-  {
-    "id": "bandar-low-quality-2026",
-    "name": "Bandar (Low Quality)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/06/bandar-26918-poster.jpg"
   }
 ]
