@@ -20,7 +20,7 @@ COUNTRY = "PK"
 ARY_IMAGE_BASE = "https://node.aryzap.com/public/"
 
 SECTIONS = {
-    "ary_on_air": "DIGITAL: On Air",
+    "ary_on_air": "On Air",
     "ary_popular": "DIGITAL: Popular",
     "ary_archive": "DIGITAL: Archive",
 }
