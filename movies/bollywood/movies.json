@@ -1,5 +1,12 @@
 [
   {
+    "id": "ek-din-hd-2026",
+    "name": "Ek Din (HD)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/07/Ek-Din-Poster.jpg"
+  },
+  {
     "id": "ikka-hd-2026",
     "name": "Ikka (HD)",
     "year": 2026,
@@ -26,12 +33,5 @@
     "year": 2026,
     "language": "bollywood",
     "image": "https://desicinemas.to/wp-content/uploads/2026/05/pati-patni-aur-woh-do-26800-poster.jpg"
-  },
-  {
-    "id": "baby-do-die-do-low-quality-2026",
-    "name": "Baby Do Die Do (Low Quality)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/07/baby-do-die-do-27142-poster.jpg"
   }
 ]
