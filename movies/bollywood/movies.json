@@ -1,5 +1,12 @@
 [
   {
+    "id": "arjun-the-warrior-prince-hd-2012",
+    "name": "Arjun: The Warrior Prince (HD)",
+    "year": 2012,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/07/arjun-the-warrior-prince-27254-poster.jpg"
+  },
+  {
     "id": "ek-din-hd-2026",
     "name": "Ek Din (HD)",
     "year": 2026,
@@ -26,12 +33,5 @@
     "year": 2026,
     "language": "bollywood",
     "image": "https://desicinemas.to/wp-content/uploads/2026/07/Mukhbir-2026-Poster.jpg"
-  },
-  {
-    "id": "pati-patni-aur-woh-do-hd-2026",
-    "name": "Pati Patni Aur Woh Do (HD)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/05/pati-patni-aur-woh-do-26800-poster.jpg"
   }
 ]
