@@ -1,5 +1,19 @@
 [
   {
+    "id": "tera-yaar-hoon-main-low-quality-2026",
+    "name": "Tera Yaar Hoon Main (Low Quality)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/07/tera-yaar-hoon-main-27287-poster.jpg"
+  },
+  {
+    "id": "governor-hd-2026",
+    "name": "Governor (HD)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/06/governor-26948-poster.jpg"
+  },
+  {
     "id": "arjun-the-warrior-prince-hd-2012",
     "name": "Arjun: The Warrior Prince (HD)",
     "year": 2012,
@@ -19,19 +33,5 @@
     "year": 2026,
     "language": "bollywood",
     "image": "https://desicinemas.to/wp-content/uploads/2026/07/ikka-27197-poster.jpg"
-  },
-  {
-    "id": "dhamaal-4-low-quality-2026",
-    "name": "Dhamaal 4 (Low Quality)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/07/dhamaal-4-27192-poster.jpg"
-  },
-  {
-    "id": "mukhbir-the-story-of-a-spy-hd-2026",
-    "name": "Mukhbir - The Story of a Spy (HD)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/07/Mukhbir-2026-Poster.jpg"
   }
 ]
