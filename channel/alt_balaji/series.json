@@ -1,1 +1,346 @@
-[]
+[
+  {
+    "id": "apharan__season_1",
+    "name": "Apharan \u2013 Season 1"
+  },
+  {
+    "id": "baarish__season_1",
+    "name": "Baarish \u2013 Season 1"
+  },
+  {
+    "id": "baarish__season_2",
+    "name": "Baarish \u2013 Season 2"
+  },
+  {
+    "id": "baby_come_naa__season_1",
+    "name": "Baby Come Naa \u2013 Season 1"
+  },
+  {
+    "id": "bang_baang_the_sound_of_crimes__season_1",
+    "name": "Bang Baang: The Sound Of Crimes \u2013 Season 1"
+  },
+  {
+    "id": "bebaakee__season_1",
+    "name": "Bebaakee \u2013 Season 1"
+  },
+  {
+    "id": "bekaaboo__season_1",
+    "name": "Bekaaboo \u2013 Season 1"
+  },
+  {
+    "id": "bekaaboo__season_2",
+    "name": "Bekaaboo \u2013 Season 2"
+  },
+  {
+    "id": "bekaboo__season_3",
+    "name": "Bekaboo \u2013 Season 3"
+  },
+  {
+    "id": "bewafaa_sii_wafaa__season_1",
+    "name": "Bewafaa Sii Wafaa \u2013 Season 1"
+  },
+  {
+    "id": "bicchoo_ka_khel__season_1",
+    "name": "Bicchoo Ka Khel \u2013 Season 1"
+  },
+  {
+    "id": "booo_sabki_phategi__season_1",
+    "name": "Booo Sabki Phategi \u2013 Season 1"
+  },
+  {
+    "id": "bose_dead_or_alive__season_1",
+    "name": "Bose - Dead or Alive \u2013 Season 1"
+  },
+  {
+    "id": "boss_baap_of_special_services__season_1",
+    "name": "Boss Baap of Special Services \u2013 Season 1"
+  },
+  {
+    "id": "boygiri__season_1",
+    "name": "Boygiri \u2013 Season 1"
+  },
+  {
+    "id": "broken_but_beautiful__season_1",
+    "name": "Broken But Beautiful \u2013 Season 1"
+  },
+  {
+    "id": "broken_but_beautiful__season_2",
+    "name": "Broken But Beautiful \u2013 Season 2"
+  },
+  {
+    "id": "broken_but_beautiful__season_3",
+    "name": "Broken But Beautiful \u2013 Season 3"
+  },
+  {
+    "id": "cartel__season_1",
+    "name": "Cartel \u2013 Season 1"
+  },
+  {
+    "id": "class_of_2017__season_1",
+    "name": "Class of 2017 \u2013 Season 1"
+  },
+  {
+    "id": "class_of_2020__season_1",
+    "name": "Class of 2020 \u2013 Season 1"
+  },
+  {
+    "id": "code_m__season_1",
+    "name": "Code M \u2013 Season 1"
+  },
+  {
+    "id": "coldd_lassi_aur_chicken_masala__season_1",
+    "name": "Coldd Lassi Aur Chicken Masala \u2013 Season 1"
+  },
+  {
+    "id": "crashh__season_1",
+    "name": "Crashh \u2013 Season 1"
+  },
+  {
+    "id": "crimes_and_confessions__season_1",
+    "name": "Crimes And Confessions \u2013 Season 1"
+  },
+  {
+    "id": "cyber_squad__season_1",
+    "name": "Cyber Squad \u2013 Season 1"
+  },
+  {
+    "id": "dark_7_white__season_1",
+    "name": "Dark 7 White \u2013 Season 1"
+  },
+  {
+    "id": "dev_dd__season_1",
+    "name": "Dev DD \u2013 Season 1"
+  },
+  {
+    "id": "dev_dd__season_2",
+    "name": "Dev DD \u2013 Season 2"
+  },
+  {
+    "id": "dil_hi_toh_hai__season_1",
+    "name": "Dil Hi Toh Hai \u2013 Season 1"
+  },
+  {
+    "id": "dil_hi_toh_hai__season_2",
+    "name": "Dil Hi Toh Hai \u2013 Season 2"
+  },
+  {
+    "id": "dil_hi_toh_hai__season_3",
+    "name": "Dil Hi Toh Hai \u2013 Season 3"
+  },
+  {
+    "id": "fittrat__season_1",
+    "name": "Fittrat \u2013 Season 1"
+  },
+  {
+    "id": "fixerr__season_1",
+    "name": "Fixerr \u2013 Season 1"
+  },
+  {
+    "id": "fourplay__season_1",
+    "name": "Fourplay \u2013 Season 1"
+  },
+  {
+    "id": "gandii_baat__season_1",
+    "name": "Gandii Baat \u2013 Season 1"
+  },
+  {
+    "id": "gandii_baat__season_2",
+    "name": "Gandii Baat \u2013 Season 2"
+  },
+  {
+    "id": "gandii_baat__season_3",
+    "name": "Gandii Baat \u2013 Season 3"
+  },
+  {
+    "id": "gandii_baat__season_4",
+    "name": "Gandii Baat \u2013 Season 4"
+  },
+  {
+    "id": "gandii_baat__season_5",
+    "name": "Gandii Baat \u2013 Season 5"
+  },
+  {
+    "id": "gandii_baat__season_6",
+    "name": "Gandii Baat \u2013 Season 6"
+  },
+  {
+    "id": "girgit__season_1",
+    "name": "Girgit \u2013 Season 1"
+  },
+  {
+    "id": "hai_taubba__season_1",
+    "name": "Hai Taubba \u2013 Season 1"
+  },
+  {
+    "id": "hai_taubba_chapter_2__season_1",
+    "name": "Hai Taubba Chapter 2 \u2013 Season 1"
+  },
+  {
+    "id": "hai_taubba_chapter_3__season_1",
+    "name": "Hai Taubba Chapter 3 \u2013 Season 1"
+  },
+  {
+    "id": "haq_se__season_1",
+    "name": "Haq Se \u2013 Season 1"
+  },
+  {
+    "id": "helllo_jee__season_1",
+    "name": "Helllo Jee \u2013 Season 1"
+  },
+  {
+    "id": "his_storyy__season_1",
+    "name": "His Storyy \u2013 Season 1"
+  },
+  {
+    "id": "home__season_1",
+    "name": "Home \u2013 Season 1"
+  },
+  {
+    "id": "honey_trap_squad__season_1",
+    "name": "Honey Trap Squad \u2013 Season 1"
+  },
+  {
+    "id": "hum__season_1",
+    "name": "Hum \u2013 Season 1"
+  },
+  {
+    "id": "hum_tum_and_them__season_1",
+    "name": "Hum Tum and Them \u2013 Season 1"
+  },
+  {
+    "id": "it_happened_in_calcutta__season_1",
+    "name": "It Happened In Calcutta \u2013 Season 1"
+  },
+  {
+    "id": "karrle_tu_bhi_mohabbat__season_1",
+    "name": "Karrle Tu Bhi Mohabbat \u2013 Season 1"
+  },
+  {
+    "id": "karrle_tu_bhi_mohabbat__season_2",
+    "name": "Karrle Tu Bhi Mohabbat \u2013 Season 2"
+  },
+  {
+    "id": "karrle_tu_bhi_mohabbat__season_3",
+    "name": "Karrle Tu Bhi Mohabbat \u2013 Season 3"
+  },
+  {
+    "id": "kehne_ko_hum_safar_hain__season_2",
+    "name": "Kehne Ko Hum Safar Hain \u2013 Season 2"
+  },
+  {
+    "id": "kehne_ko_humsafar_hain__season_1",
+    "name": "Kehne Ko Humsafar Hain \u2013 Season 1"
+  },
+  {
+    "id": "kehne_ko_humsafar_hain__season_3",
+    "name": "Kehne Ko Humsafar Hain \u2013 Season 3"
+  },
+  {
+    "id": "lock_upp_reality__season_1",
+    "name": "Lock Upp Reality \u2013 Season 1"
+  },
+  {
+    "id": "lsd_love_scandal_doctors__season_1",
+    "name": "LSD: Love, Scandal & Doctors \u2013 Season 1"
+  },
+  {
+    "id": "mai_hero_boll_raha_hu__season_1",
+    "name": "Mai Hero Boll Raha Hu \u2013 Season 1"
+  },
+  {
+    "id": "medically_yourrs__season_1",
+    "name": "Medically Yourrs \u2013 Season 1"
+  },
+  {
+    "id": "mentalhood__season_1",
+    "name": "Mentalhood \u2013 Season 1"
+  },
+  {
+    "id": "mission_over_mars__season_1",
+    "name": "Mission Over Mars \u2013 Season 1"
+  },
+  {
+    "id": "mum_bhai__season_1",
+    "name": "Mum Bhai \u2013 Season 1"
+  },
+  {
+    "id": "paurashpur__season_1",
+    "name": "Paurashpur \u2013 Season 1"
+  },
+  {
+    "id": "paurashpur__season_2",
+    "name": "Paurashpur \u2013 Season 2"
+  },
+  {
+    "id": "pm_selfiewallie__season_1",
+    "name": "PM Selfiewallie \u2013 Season 1"
+  },
+  {
+    "id": "puncch_beat__season_1",
+    "name": "Puncch Beat \u2013 Season 1"
+  },
+  {
+    "id": "puncch_beat__season_2",
+    "name": "Puncch Beat \u2013 Season 2"
+  },
+  {
+    "id": "ragini_mms_returns__season_1",
+    "name": "Ragini MMS Returns \u2013 Season 1"
+  },
+  {
+    "id": "ragini_mms_returns__season_2",
+    "name": "Ragini MMS Returns \u2013 Season 2"
+  },
+  {
+    "id": "romil_and_jugal__season_1",
+    "name": "Romil and Jugal \u2013 Season 1"
+  },
+  {
+    "id": "talab__season_1",
+    "name": "Talab \u2013 Season 1"
+  },
+  {
+    "id": "the_great_indian_dysfunctional__season_1",
+    "name": "The Great Indian Dysfunctional \u2013 Season 1"
+  },
+  {
+    "id": "the_married_woman__season_1",
+    "name": "The Married Woman \u2013 Season 1"
+  },
+  {
+    "id": "the_test_case__season_1",
+    "name": "The Test Case \u2013 Season 1"
+  },
+  {
+    "id": "the_verdict_state_vs_nanavati__season_1",
+    "name": "The Verdict - State Vs Nanavati \u2013 Season 1"
+  },
+  {
+    "id": "virgin_bhasskar__season_1",
+    "name": "Virgin Bhasskar \u2013 Season 1"
+  },
+  {
+    "id": "virgin_bhasskar__season_2",
+    "name": "Virgin Bhasskar \u2013 Season 2"
+  },
+  {
+    "id": "whos_your_daddy__season_1",
+    "name": "Whos Your Daddy \u2013 Season 1"
+  },
+  {
+    "id": "whos_your_daddy__season_2",
+    "name": "Whos Your Daddy \u2013 Season 2"
+  },
+  {
+    "id": "xxx_uncensored__season_1",
+    "name": "XXX Uncensored \u2013 Season 1"
+  },
+  {
+    "id": "xxx_uncensored__season_2",
+    "name": "XXX Uncensored \u2013 Season 2"
+  },
+  {
+    "id": "zaban_sambhal_ke__season_1",
+    "name": "Zaban Sambhal Ke \u2013 Season 1"
+  }
+]

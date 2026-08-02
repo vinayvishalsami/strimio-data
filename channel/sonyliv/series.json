@@ -1,1 +1,390 @@
-[]
+[
+  {
+    "id": "16__season_1",
+    "name": "16 \u2013 Season 1"
+  },
+  {
+    "id": "36_days__season_1",
+    "name": "36 Days \u2013 Season 1"
+  },
+  {
+    "id": "a_simple_murder__season_1",
+    "name": "A Simple Murder \u2013 Season 1"
+  },
+  {
+    "id": "adrishyam_the_invisible_heroes__season_1",
+    "name": "Adrishyam - The Invisible Heroes \u2013 Season 1"
+  },
+  {
+    "id": "arranged_love__season_1",
+    "name": "Arranged Love \u2013 Season 1"
+  },
+  {
+    "id": "avrodh_the_siege_within__season_1",
+    "name": "Avrodh - The Siege Within \u2013 Season 1"
+  },
+  {
+    "id": "avrodh_the_siege_within__season_2",
+    "name": "Avrodh The Siege Within \u2013 Season 2"
+  },
+  {
+    "id": "bada_naam_karenge__season_1",
+    "name": "Bada Naam Karenge \u2013 Season 1"
+  },
+  {
+    "id": "bar_code__season_1",
+    "name": "Bar Code \u2013 Season 1"
+  },
+  {
+    "id": "bharta__season_1",
+    "name": "Bharta \u2013 Season 1"
+  },
+  {
+    "id": "black_white_gray_love_kills__season_1",
+    "name": "Black, White & Gray - Love Kills \u2013 Season 1"
+  },
+  {
+    "id": "brinda__season_1",
+    "name": "Brinda \u2013 Season 1"
+  },
+  {
+    "id": "chalo_koi_baat_nahi__season_1",
+    "name": "Chalo Koi Baat Nahi \u2013 Season 1"
+  },
+  {
+    "id": "chamak__season_1",
+    "name": "Chamak \u2013 Season 1"
+  },
+  {
+    "id": "chamak_the_conclusion__season_1",
+    "name": "Chamak \u2013 The Conclusion \u2013 Season 1"
+  },
+  {
+    "id": "charlie_chopra_the_mystery_of_solang_valley__season_1",
+    "name": "Charlie Chopra & The Mystery of Solang Valley \u2013 Season 1"
+  },
+  {
+    "id": "chutzpah__season_1",
+    "name": "Chutzpah \u2013 Season 1"
+  },
+  {
+    "id": "college_romance__season_1",
+    "name": "College Romance \u2013 Season 1"
+  },
+  {
+    "id": "college_romance__season_2",
+    "name": "College Romance \u2013 Season 2"
+  },
+  {
+    "id": "college_romance__season_3",
+    "name": "College Romance \u2013 Season 3"
+  },
+  {
+    "id": "court_kacheri__season_1",
+    "name": "Court Kacheri \u2013 Season 1"
+  },
+  {
+    "id": "cubicles__season_2",
+    "name": "Cubicles \u2013 Season 2"
+  },
+  {
+    "id": "cubicles__season_3",
+    "name": "Cubicles \u2013 Season 3"
+  },
+  {
+    "id": "cubicles__season_4",
+    "name": "Cubicles \u2013 Season 4"
+  },
+  {
+    "id": "damaged__season_1",
+    "name": "Damaged \u2013 Season 1"
+  },
+  {
+    "id": "damaged__season_2",
+    "name": "Damaged \u2013 Season 2"
+  },
+  {
+    "id": "dr_arora__season_1",
+    "name": "Dr. Arora \u2013 Season 1"
+  },
+  {
+    "id": "faadu__season_1",
+    "name": "Faadu \u2013 Season 1"
+  },
+  {
+    "id": "family_aaj_kal__season_1",
+    "name": "Family Aaj Kal \u2013 Season 1"
+  },
+  {
+    "id": "freedom_at_midnight__season_1",
+    "name": "Freedom at Midnight \u2013 Season 1"
+  },
+  {
+    "id": "freedom_at_midnight__season_2",
+    "name": "Freedom at Midnight \u2013 Season 2"
+  },
+  {
+    "id": "full_tight__season_1",
+    "name": "Full Tight \u2013 Season 1"
+  },
+  {
+    "id": "garmi__season_1",
+    "name": "Garmi \u2013 Season 1"
+  },
+  {
+    "id": "girls_hostel_2_0__season_1",
+    "name": "Girls Hostel 2.0 \u2013 Season 1"
+  },
+  {
+    "id": "girls_hostel__season_3",
+    "name": "Girls Hostel \u2013 Season 3"
+  },
+  {
+    "id": "good_bad_girl__season_1",
+    "name": "Good Bad Girl \u2013 Season 1"
+  },
+  {
+    "id": "gullak__season_3",
+    "name": "Gullak \u2013 Season 3"
+  },
+  {
+    "id": "gullak__season_4",
+    "name": "Gullak \u2013 Season 4"
+  },
+  {
+    "id": "gullak__season_5",
+    "name": "Gullak \u2013 Season 5"
+  },
+  {
+    "id": "gullak_seaon_2__season_1",
+    "name": "Gullak Seaon 2 \u2013 Season 1"
+  },
+  {
+    "id": "hankaar__season_1",
+    "name": "Hankaar \u2013 Season 1"
+  },
+  {
+    "id": "heartbreak_hotel__season_1",
+    "name": "Heartbreak Hotel \u2013 Season 1"
+  },
+  {
+    "id": "holycross__season_1",
+    "name": "Holycross \u2013 Season 1"
+  },
+  {
+    "id": "jehanabad_of_love_and_war__season_1",
+    "name": "Jehanabad Of Love and War \u2013 Season 1"
+  },
+  {
+    "id": "jl50__season_1",
+    "name": "JL50 \u2013 Season 1"
+  },
+  {
+    "id": "kafas__season_1",
+    "name": "Kafas \u2013 Season 1"
+  },
+  {
+    "id": "kankhajura__season_1",
+    "name": "Kankhajura \u2013 Season 1"
+  },
+  {
+    "id": "kashmakash__season_1",
+    "name": "Kashmakash \u2013 Season 1"
+  },
+  {
+    "id": "kathmandu_connection__season_1",
+    "name": "Kathmandu Connection \u2013 Season 1"
+  },
+  {
+    "id": "kathmandu_connection__season_2",
+    "name": "Kathmandu Connection \u2013 Season 2"
+  },
+  {
+    "id": "lost_and_found__season_1",
+    "name": "Lost and Found \u2013 Season 1"
+  },
+  {
+    "id": "love_bytes__season_1",
+    "name": "Love Bytes \u2013 Season 1"
+  },
+  {
+    "id": "love_bytes__season_2",
+    "name": "Love Bytes \u2013 Season 2"
+  },
+  {
+    "id": "love_jaction__season_1",
+    "name": "Love JAction \u2013 Season 1"
+  },
+  {
+    "id": "maharani__season_1",
+    "name": "Maharani \u2013 Season 1"
+  },
+  {
+    "id": "maharani__season_2",
+    "name": "Maharani \u2013 Season 2"
+  },
+  {
+    "id": "maharani__season_3",
+    "name": "Maharani \u2013 Season 3"
+  },
+  {
+    "id": "maharani__season_4",
+    "name": "Maharani \u2013 Season 4"
+  },
+  {
+    "id": "manvat_murders__season_1",
+    "name": "Manvat Murders \u2013 Season 1"
+  },
+  {
+    "id": "meme_boys__season_1",
+    "name": "Meme Boys \u2013 Season 1"
+  },
+  {
+    "id": "nirmal_pathak_ki_ghar_wapsi__season_1",
+    "name": "Nirmal Pathak Ki Ghar Wapsi \u2013 Season 1"
+  },
+  {
+    "id": "perfect_family__season_1",
+    "name": "Perfect Family \u2013 Season 1"
+  },
+  {
+    "id": "potluck__season_1",
+    "name": "Potluck \u2013 Season 1"
+  },
+  {
+    "id": "potluck__season_2",
+    "name": "Potluck \u2013 Season 2"
+  },
+  {
+    "id": "project_9191__season_1",
+    "name": "Project 9191 \u2013 Season 1"
+  },
+  {
+    "id": "pyar_ishq_rent__season_1",
+    "name": "Pyar Ishq Rent \u2013 Season 1"
+  },
+  {
+    "id": "raat_jawan_hai__season_1",
+    "name": "Raat Jawan Hai \u2013 Season 1"
+  },
+  {
+    "id": "real_kashmir_football_club__season_1",
+    "name": "Real Kashmir Football Club \u2013 Season 1"
+  },
+  {
+    "id": "rocket_boys__season_2",
+    "name": "Rocket Boys \u2013 Season 2"
+  },
+  {
+    "id": "rocket_boys_fiction__season_1",
+    "name": "Rocket Boys Fiction \u2013 Season 1"
+  },
+  {
+    "id": "salt_city__season_1",
+    "name": "Salt City \u2013 Season 1"
+  },
+  {
+    "id": "sandwiched_forever__season_1",
+    "name": "Sandwiched Forever \u2013 Season 1"
+  },
+  {
+    "id": "scam_1992_the_harshad_mehta_story__season_1",
+    "name": "Scam 1992 - The Harshad Mehta Story \u2013 Season 1"
+  },
+  {
+    "id": "scam_2003_the_telgi_story__season_1",
+    "name": "Scam 2003 - The Telgi Story \u2013 Season 1"
+  },
+  {
+    "id": "shantit_kranti__season_1",
+    "name": "Shantit Kranti \u2013 Season 1"
+  },
+  {
+    "id": "shrikant_bashir__season_1",
+    "name": "Shrikant Bashir \u2013 Season 1"
+  },
+  {
+    "id": "tabbar__season_1",
+    "name": "Tabbar \u2013 Season 1"
+  },
+  {
+    "id": "tamil_rockerz__season_1",
+    "name": "Tamil Rockerz \u2013 Season 1"
+  },
+  {
+    "id": "tanaav__season_1",
+    "name": "Tanaav \u2013 Season 1"
+  },
+  {
+    "id": "tanaav__season_2",
+    "name": "Tanaav \u2013 Season 2"
+  },
+  {
+    "id": "the_big_bong_connection__season_1",
+    "name": "The Big Bong Connection \u2013 Season 1"
+  },
+  {
+    "id": "the_chronicles_of_the_4_5_gang_hindi__season_1",
+    "name": "The Chronicles of the 4.5 Gang (Hindi) \u2013 Season 1"
+  },
+  {
+    "id": "the_hunt_the_rajiv_gandhi_assassination_case_reality__season_1",
+    "name": "The Hunt - The Rajiv Gandhi Assassination Case Reality \u2013 Season 1"
+  },
+  {
+    "id": "the_jengaburu_curse__season_1",
+    "name": "The Jengaburu Curse \u2013 Season 1"
+  },
+  {
+    "id": "the_legend_of_karna__season_1",
+    "name": "The Legend of Karna \u2013 Season 1"
+  },
+  {
+    "id": "the_waking_of_a_nation__season_1",
+    "name": "The Waking of a Nation \u2013 Season 1"
+  },
+  {
+    "id": "the_whistleblower__season_1",
+    "name": "The Whistleblower \u2013 Season 1"
+  },
+  {
+    "id": "tryst_with_destiny__season_1",
+    "name": "Tryst With Destiny \u2013 Season 1"
+  },
+  {
+    "id": "undekhi__season_1",
+    "name": "Undekhi \u2013 Season 1"
+  },
+  {
+    "id": "undekhi__season_2",
+    "name": "Undekhi \u2013 Season 2"
+  },
+  {
+    "id": "undekhi__season_3",
+    "name": "Undekhi \u2013 Season 3"
+  },
+  {
+    "id": "undekhi__season_4",
+    "name": "Undekhi \u2013 Season 4"
+  },
+  {
+    "id": "victim_who_is_next__season_1",
+    "name": "Victim Who Is Next \u2013 Season 1"
+  },
+  {
+    "id": "yolo_you_only_live_once__season_1",
+    "name": "YOLO - You Only Live Once \u2013 Season 1"
+  },
+  {
+    "id": "your_honor__season_1",
+    "name": "Your Honor \u2013 Season 1"
+  },
+  {
+    "id": "your_honor__season_2",
+    "name": "Your Honor \u2013 Season 2"
+  },
+  {
+    "id": "zindaginama__season_1",
+    "name": "Zindaginama \u2013 Season 1"
+  }
+]
