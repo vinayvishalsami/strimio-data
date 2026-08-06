@@ -100,64 +100,19 @@
     "url": "https://hum.tv/dramas/sultan-salahuddin-ayyubi-s2/#episodes"
   },
   {
-    "id": "masoom",
-    "name": "Masoom",
-    "url": "https://hum.tv/dramas/masoom/#episodes"
-  },
-  {
-    "id": "laadli",
-    "name": "Laadli",
-    "url": "https://hum.tv/dramas/laadli/#episodes"
-  },
-  {
-    "id": "goonj",
-    "name": "Goonj",
-    "url": "https://hum.tv/dramas/goonj/#episodes"
-  },
-  {
-    "id": "ek-jhooti-kahani",
-    "name": "Ek Jhooti Kahani",
-    "url": "https://hum.tv/dramas/ek-jhooti-kahani/#episodes"
-  },
-  {
-    "id": "ism-e-yaraan",
-    "name": "Ism E Yaraan",
-    "url": "https://hum.tv/dramas/ism-e-yaraan/#episodes"
-  },
-  {
-    "id": "manjhli",
-    "name": "Manjhli",
-    "url": "https://hum.tv/dramas/manjhli/#episodes"
-  },
-  {
-    "id": "shirin-farhad-dramas",
-    "name": "Shirin Farhad",
-    "url": "https://hum.tv/dramas/shirin-farhad-dramas/#episodes"
-  },
-  {
-    "id": "dastakhat",
-    "name": "Dastakhat",
-    "url": "https://hum.tv/dramas/dastakhat/#episodes"
-  },
-  {
-    "id": "raaja-rani",
-    "name": "Raaja Rani",
-    "url": "https://hum.tv/dramas/raaja-rani/#episodes"
-  },
-  {
-    "id": "ilzam-e-ishq",
-    "name": "Ilzam E Ishq",
-    "url": "https://hum.tv/dramas/ilzam-e-ishq/#episodes"
-  },
-  {
-    "id": "pehli-mohabbat",
-    "name": "Pehli Mohabbat",
-    "url": "https://hum.tv/dramas/pehli-mohabbat/#episodes"
-  },
-  {
     "id": "adhi-bewafayi",
     "name": "Adhi Bewafayi",
     "url": "https://hum.tv/dramas/adhi-bewafayi/#episodes"
+  },
+  {
+    "id": "hijr",
+    "name": "Hijr",
+    "url": "https://hum.tv/dramas/hijr/#episodes"
+  },
+  {
+    "id": "meri-tanhai",
+    "name": "Meri Tanhai",
+    "url": "https://hum.tv/dramas/meri-tanhai/#episodes"
   },
   {
     "id": "meem-se-mohabbat",
@@ -528,15 +483,5 @@
     "id": "ishq-e-laa",
     "name": "Ishq-E-Laa",
     "url": "https://hum.tv/dramas/ishq-e-laa/#episodes"
-  },
-  {
-    "id": "parizaad",
-    "name": "Parizaad",
-    "url": "https://hum.tv/dramas/parizaad/#episodes"
-  },
-  {
-    "id": "sang-e-mah",
-    "name": "Sang-E-Mah",
-    "url": "https://hum.tv/dramas/sang-e-mah/#episodes"
   }
 ]
