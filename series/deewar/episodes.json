@@ -40,6 +40,10 @@
     "name": "Deewar \u2013 Episode 10"
   },
   {
+    "id": "deewar-episode-11",
+    "name": "Deewar \u2013 Episode 11"
+  },
+  {
     "id": "deewar-episode-12",
     "name": "Deewar \u2013 Episode 12"
   },
@@ -194,5 +198,13 @@
   {
     "id": "deewar-episode-50",
     "name": "Deewar \u2013 Episode 50"
+  },
+  {
+    "id": "deewar-episode-51",
+    "name": "Deewar \u2013 Episode 51"
+  },
+  {
+    "id": "deewar-episode-52",
+    "name": "Deewar \u2013 Episode 52"
   }
 ]
