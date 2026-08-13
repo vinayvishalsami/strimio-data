@@ -1,5 +1,19 @@
 [
   {
+    "id": "johnny-jumper-hd-2026",
+    "name": "Johnny Jumper (HD)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/08/johnny-jumper-27419-poster.jpg"
+  },
+  {
+    "id": "aakhri-sawal-hd-2026",
+    "name": "Aakhri Sawal (HD)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/05/aakhri-sawal-26812-poster.jpg"
+  },
+  {
     "id": "hanuman-ansh-low-quality-2026",
     "name": "Hanuman Ansh (Low Quality)",
     "year": 2026,
@@ -19,19 +33,5 @@
     "year": 2026,
     "language": "bollywood",
     "image": "https://desicinemas.to/wp-content/uploads/2026/08/aryabhatt-ka-zero-27386-poster.jpg"
-  },
-  {
-    "id": "main-vaapas-aaunga-hd-2026",
-    "name": "Main Vaapas Aaunga (HD)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/06/main-vaapas-aaunga-26949-poster.jpg"
-  },
-  {
-    "id": "dil-deewana-ho-gaya-low-quality-2026",
-    "name": "Dil Deewana Ho Gaya (Low Quality)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/08/dil-deewana-ho-gaya-27374-poster.jpg"
   }
 ]
