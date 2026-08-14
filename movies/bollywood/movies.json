@@ -1,5 +1,19 @@
 [
   {
+    "id": "cocktail-2-hd-2026",
+    "name": "Cocktail 2 (HD)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/06/cocktail-2-26993-poster.jpg"
+  },
+  {
+    "id": "bharat-bhhagya-viddhaata-hd-2026",
+    "name": "Bharat Bhhagya Viddhaata (HD)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/06/bharat-bhhagya-viddhaata-26947-poster.jpg"
+  },
+  {
     "id": "johnny-jumper-hd-2026",
     "name": "Johnny Jumper (HD)",
     "year": 2026,
@@ -19,19 +33,5 @@
     "year": 2026,
     "language": "bollywood",
     "image": "https://desicinemas.to/wp-content/uploads/2026/08/hanuman-ansh-27400-poster.jpg"
-  },
-  {
-    "id": "ohh-my-dog-low-quality-2026",
-    "name": "Ohh My Dog (Low Quality)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/08/ohh-my-dog-27395-poster.jpg"
-  },
-  {
-    "id": "aryabhatt-ka-zero-low-quality-2026",
-    "name": "Aryabhatt Ka Zero (Low Quality)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/08/aryabhatt-ka-zero-27386-poster.jpg"
   }
 ]
