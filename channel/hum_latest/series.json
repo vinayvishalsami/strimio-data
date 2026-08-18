@@ -50,6 +50,21 @@
     "url": "https://hum.tv/dramas/aye-dil-aazma-nahin/#episodes"
   },
   {
+    "id": "musafat",
+    "name": "Musafat",
+    "url": "https://hum.tv/dramas/musafat/#episodes"
+  },
+  {
+    "id": "hadd",
+    "name": "Hadd",
+    "url": "https://hum.tv/dramas/hadd/#episodes"
+  },
+  {
+    "id": "tum-larkay-bhi-na",
+    "name": "Tum Larkay Bhi Na",
+    "url": "https://hum.tv/dramas/tum-larkay-bhi-na/#episodes"
+  },
+  {
     "id": "dekh-zara-pyar-se",
     "name": "Dekh Zara Pyar Se",
     "url": "https://hum.tv/dramas/dekh-zara-pyar-se/#episodes"
@@ -333,6 +348,21 @@
     "id": "mere-damaad",
     "name": "Mere Damaad",
     "url": "https://hum.tv/dramas/mere-damaad/#episodes"
+  },
+  {
+    "id": "bepanah",
+    "name": "Bepanah",
+    "url": "https://hum.tv/dramas/bepanah/#episodes"
+  },
+  {
+    "id": "agar",
+    "name": "Agar",
+    "url": "https://hum.tv/dramas/agar/#episodes"
+  },
+  {
+    "id": "tinkay-ka-sahara",
+    "name": "Tinkay Ka Sahara",
+    "url": "https://hum.tv/dramas/tinkay-ka-sahara/#episodes"
   },
   {
     "id": "meri-shehzadi",
