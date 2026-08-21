@@ -60,26 +60,6 @@
     "url": "https://hum.tv/dramas/hadd/#episodes"
   },
   {
-    "id": "tum-larkay-bhi-na",
-    "name": "Tum Larkay Bhi Na",
-    "url": "https://hum.tv/dramas/tum-larkay-bhi-na/#episodes"
-  },
-  {
-    "id": "dekh-zara-pyar-se",
-    "name": "Dekh Zara Pyar Se",
-    "url": "https://hum.tv/dramas/dekh-zara-pyar-se/#episodes"
-  },
-  {
-    "id": "daam-e-mohabbat",
-    "name": "Daam E Mohabbat",
-    "url": "https://hum.tv/dramas/daam-e-mohabbat/#episodes"
-  },
-  {
-    "id": "muamma",
-    "name": "Muamma",
-    "url": "https://hum.tv/dramas/muamma/#episodes"
-  },
-  {
     "id": "neeli-kothi",
     "name": "Neeli Kothi",
     "url": "https://hum.tv/dramas/neeli-kothi/#episodes"
@@ -158,21 +138,6 @@
     "id": "pehli-mohabbat",
     "name": "Pehli Mohabbat",
     "url": "https://hum.tv/dramas/pehli-mohabbat/#episodes"
-  },
-  {
-    "id": "adhi-bewafayi",
-    "name": "Adhi Bewafayi",
-    "url": "https://hum.tv/dramas/adhi-bewafayi/#episodes"
-  },
-  {
-    "id": "hijr",
-    "name": "Hijr",
-    "url": "https://hum.tv/dramas/hijr/#episodes"
-  },
-  {
-    "id": "meri-tanhai",
-    "name": "Meri Tanhai",
-    "url": "https://hum.tv/dramas/meri-tanhai/#episodes"
   },
   {
     "id": "meem-se-mohabbat",
@@ -255,16 +220,6 @@
     "url": "https://hum.tv/dramas/nafrat/#episodes"
   },
   {
-    "id": "takabbur",
-    "name": "Takabbur",
-    "url": "https://hum.tv/dramas/takabbur/#episodes"
-  },
-  {
-    "id": "dooriyan",
-    "name": "Dooriyan",
-    "url": "https://hum.tv/dramas/dooriyan/#episodes"
-  },
-  {
     "id": "kahain-kis-se",
     "name": "Kahain Kis Se",
     "url": "https://hum.tv/dramas/kahain-kis-se/#episodes"
@@ -338,36 +293,6 @@
     "id": "pyari-mona",
     "name": "Pyari Mona",
     "url": "https://hum.tv/dramas/pyari-mona/#episodes"
-  },
-  {
-    "id": "kacha-dhaga",
-    "name": "Kacha Dhaga",
-    "url": "https://hum.tv/dramas/kacha-dhaga/#episodes"
-  },
-  {
-    "id": "mere-damaad",
-    "name": "Mere Damaad",
-    "url": "https://hum.tv/dramas/mere-damaad/#episodes"
-  },
-  {
-    "id": "bepanah",
-    "name": "Bepanah",
-    "url": "https://hum.tv/dramas/bepanah/#episodes"
-  },
-  {
-    "id": "agar",
-    "name": "Agar",
-    "url": "https://hum.tv/dramas/agar/#episodes"
-  },
-  {
-    "id": "tinkay-ka-sahara",
-    "name": "Tinkay Ka Sahara",
-    "url": "https://hum.tv/dramas/tinkay-ka-sahara/#episodes"
-  },
-  {
-    "id": "meri-shehzadi",
-    "name": "Meri Shehzadi",
-    "url": "https://hum.tv/dramas/meri-shehzadi/#episodes"
   },
   {
     "id": "kaala-doriya",
@@ -453,26 +378,6 @@
     "id": "yaar-na-bichray",
     "name": "Yaar Na Bichray",
     "url": "https://hum.tv/dramas/yaar-na-bichray/#episodes"
-  },
-  {
-    "id": "tanaa-banaa",
-    "name": "Tanaa Banaa",
-    "url": "https://hum.tv/dramas/tanaa-banaa/#episodes"
-  },
-  {
-    "id": "sila-e-mohabbat",
-    "name": "Sila-E-Mohabbat",
-    "url": "https://hum.tv/dramas/sila-e-mohabbat/#episodes"
-  },
-  {
-    "id": "laapata",
-    "name": "Laapata",
-    "url": "https://hum.tv/dramas/laapata/#episodes"
-  },
-  {
-    "id": "hum-kahan-ke-sachay-thay",
-    "name": "Hum Kahan Ke Sachay Thay",
-    "url": "https://hum.tv/dramas/hum-kahan-ke-sachay-thay/#episodes"
   },
   {
     "id": "badnaseeb",
