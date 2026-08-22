@@ -1,5 +1,12 @@
 [
   {
+    "id": "dial-1975-hindi-hd-2026",
+    "name": "Dial 1975 (Hindi) (HD)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/08/dial-1975-27527-poster.jpg"
+  },
+  {
     "id": "the-great-grand-superhero-hd-2026",
     "name": "The Great Grand Superhero (HD)",
     "year": 2026,
@@ -26,12 +33,5 @@
     "year": 2026,
     "language": "bollywood",
     "image": "https://desicinemas.to/wp-content/uploads/2026/08/awarapan-2-27471-poster.jpg"
-  },
-  {
-    "id": "cocktail-2-hd-2026",
-    "name": "Cocktail 2 (HD)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/06/cocktail-2-26993-poster.jpg"
   }
 ]
