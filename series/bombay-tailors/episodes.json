@@ -8,6 +8,22 @@
     "name": "Bombay Tailors \u2013 Episode 02"
   },
   {
+    "id": "deewar-episode-64",
+    "name": "Deewar \u2013 Episode 64"
+  },
+  {
+    "id": "deewar-episode-64-2",
+    "name": "Deewar \u2013 Episode 64"
+  },
+  {
+    "id": "leader-episode-24",
+    "name": "Leader Episode 24"
+  },
+  {
+    "id": "zehar-e-mohabbat-episode-02",
+    "name": "Zehar-e-Mohabbat \u2013 Episode 02"
+  },
+  {
     "id": "bombay-tailors-episode-03",
     "name": "Bombay Tailors \u2013 Episode 03"
   },
@@ -42,5 +58,9 @@
   {
     "id": "bombay-tailors-episode-11",
     "name": "Bombay Tailors \u2013 Episode 11"
+  },
+  {
+    "id": "bombay-tailors-episode-12",
+    "name": "Bombay Tailors \u2013 Episode 12"
   }
 ]
