@@ -1,5 +1,12 @@
 [
   {
+    "id": "gandhari-hd-2026",
+    "name": "Gandhari (HD)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/09/gandhari-27617-poster.jpg"
+  },
+  {
     "id": "babita-singh-reporting-hindi-hd-2026",
     "name": "Babita Singh Reporting (Hindi) (HD)",
     "year": 2026,
@@ -26,12 +33,5 @@
     "year": 2026,
     "language": "bollywood",
     "image": "https://desicinemas.to/wp-content/uploads/2026/06/bandar-26918-poster.jpg"
-  },
-  {
-    "id": "dial-1975-hindi-hd-2026",
-    "name": "Dial 1975 (Hindi) (HD)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/08/dial-1975-27527-poster.jpg"
   }
 ]
