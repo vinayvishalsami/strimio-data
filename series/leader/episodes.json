@@ -56,24 +56,28 @@
     "name": "Leader | Episode 14"
   },
   {
-    "id": "zehar-e-mohabbat-episode-01",
-    "name": "Zehar-e-Mohabbat \u2013 Episode 01"
-  },
-  {
-    "id": "deewar-episode-64",
-    "name": "Deewar \u2013 Episode 64"
-  },
-  {
-    "id": "deewar-episode-64-2",
-    "name": "Deewar \u2013 Episode 64"
-  },
-  {
-    "id": "zehar-e-mohabbat-episode-02",
-    "name": "Zehar-e-Mohabbat \u2013 Episode 02"
-  },
-  {
     "id": "leader-episode-15",
     "name": "Leader | Episode 15"
+  },
+  {
+    "id": "bombay-tailors-episode-16",
+    "name": "Bombay Tailors \u2013 Episode 16"
+  },
+  {
+    "id": "naraz-hai-zindagi-episode-24",
+    "name": "Naraz Hai Zindagi \u2013 Episode 24"
+  },
+  {
+    "id": "naraz-hai-zindagi-episode-25",
+    "name": "Naraz Hai Zindagi \u2013 Episode 25"
+  },
+  {
+    "id": "zanjeerain-episode-36",
+    "name": "Zanjeerain Episode 36"
+  },
+  {
+    "id": "deewar-episode-74",
+    "name": "Deewar \u2013 Episode 74"
   },
   {
     "id": "leader-episode-16",
@@ -110,5 +114,9 @@
   {
     "id": "leader-episode-24",
     "name": "Leader Episode 24"
+  },
+  {
+    "id": "leader-episode-25",
+    "name": "Leader Episode 25"
   }
 ]
