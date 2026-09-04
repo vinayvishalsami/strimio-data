@@ -1,5 +1,12 @@
 [
   {
+    "id": "dhamaal-4-hd-2026",
+    "name": "Dhamaal 4 (HD)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/07/dhamaal-4-27192-poster.jpg"
+  },
+  {
     "id": "gandhari-hd-2026",
     "name": "Gandhari (HD)",
     "year": 2026,
@@ -26,12 +33,5 @@
     "year": 2026,
     "language": "bollywood",
     "image": "https://desicinemas.to/wp-content/uploads/2026/07/alpha-27124-poster.jpg"
-  },
-  {
-    "id": "bandar-hd-2026",
-    "name": "Bandar (HD)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/06/bandar-26918-poster.jpg"
   }
 ]
