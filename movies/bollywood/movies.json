@@ -1,5 +1,12 @@
 [
   {
+    "id": "mirzapur-the-movie-hindi-low-quality-2026",
+    "name": "Mirzapur: The Movie (Hindi) (Low Quality)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/09/mirzapur-the-movie-27642-poster.jpg"
+  },
+  {
     "id": "dhamaal-4-hd-2026",
     "name": "Dhamaal 4 (HD)",
     "year": 2026,
@@ -26,12 +33,5 @@
     "year": 2026,
     "language": "bollywood",
     "image": "https://desicinemas.to/wp-content/uploads/2026/08/nagabandham-the-secret-treasure-27578-poster.jpg"
-  },
-  {
-    "id": "alpha-hd-2026",
-    "name": "Alpha (HD)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/07/alpha-27124-poster.jpg"
   }
 ]
