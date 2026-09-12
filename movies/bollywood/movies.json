@@ -1,5 +1,12 @@
 [
   {
+    "id": "haiwaan-low-quality-2026",
+    "name": "Haiwaan (Low Quality)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/09/haiwaan-27750-poster.jpg"
+  },
+  {
     "id": "mahaprabhu-jagannath-low-quality-2026",
     "name": "Mahaprabhu Jagannath (Low Quality)",
     "year": 2026,
@@ -26,12 +33,5 @@
     "year": 2025,
     "language": "bollywood",
     "image": "https://desicinemas.to/wp-content/uploads/2025/09/love-in-vietnam-24538-poster.jpg"
-  },
-  {
-    "id": "lust-stories-hd-2018",
-    "name": "Lust Stories (HD)",
-    "year": 2018,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/09/lust-stories-27682-poster.jpg"
   }
 ]
