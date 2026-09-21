@@ -1,5 +1,26 @@
 [
   {
+    "id": "hari-ka-om-low-quality-2026",
+    "name": "Hari Ka Om (Low Quality)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/09/hari-ka-om-27851-poster.jpg"
+  },
+  {
+    "id": "vibe-low-quality-2026",
+    "name": "Vibe (Low Quality)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/09/vibe-27838-poster.jpg"
+  },
+  {
+    "id": "daayra-low-quality-2026",
+    "name": "Daayra (Low Quality)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/09/daayra-27837-poster.jpg"
+  },
+  {
     "id": "lust-stories-3-hd-2026",
     "name": "Lust Stories 3 (HD)",
     "year": 2026,
@@ -12,26 +33,5 @@
     "year": 2026,
     "language": "bollywood",
     "image": "https://desicinemas.to/wp-content/uploads/2026/09/best-of-the-best-27827-poster.jpg"
-  },
-  {
-    "id": "the-india-story-hd-2026",
-    "name": "The India Story (HD)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/07/the-india-story-27296-poster.jpg"
-  },
-  {
-    "id": "heer-sara-hindi-hd-2026",
-    "name": "Heer Sara (Hindi) (HD)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/09/heer-sara-27797-poster.jpg"
-  },
-  {
-    "id": "last-man-in-tower-low-quality-2026",
-    "name": "Last Man in Tower (Low Quality)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/09/last-man-in-tower-27763-poster.jpg"
   }
 ]
