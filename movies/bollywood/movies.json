@@ -1,5 +1,12 @@
 [
   {
+    "id": "bombay-stories-hd-2026",
+    "name": "BOMBAY STORIES (HD)",
+    "year": 2026,
+    "language": "bollywood",
+    "image": "https://desicinemas.to/wp-content/uploads/2026/09/bombay-stories-27927-poster.jpg"
+  },
+  {
     "id": "love-lottery-low-quality-2026",
     "name": "Love Lottery (Low Quality)",
     "year": 2026,
@@ -26,12 +33,5 @@
     "year": 2026,
     "language": "bollywood",
     "image": "https://desicinemas.to/wp-content/uploads/2026/09/dont-be-shy-27892-poster.jpg"
-  },
-  {
-    "id": "awarapan-2-hd-2026",
-    "name": "Awarapan 2 (HD)",
-    "year": 2026,
-    "language": "bollywood",
-    "image": "https://desicinemas.to/wp-content/uploads/2026/08/awarapan-2-27471-poster.jpg"
   }
 ]
